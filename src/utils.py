@@ -31,7 +31,7 @@ def clean_name(name):
 
 def get_config_path():
     """ Folder containing the Continuous Organisations' configuration file """
-    return os.environ.get('DERIVE_CONFIG_PATH', os.getcwd() + '../c-orgs/')
+    return os.environ.get('DERIVE_PATH', os.getcwd() + '../c-orgs/')
 
 
 def get_config_file(name = "", check=True):

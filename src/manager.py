@@ -54,10 +54,20 @@ class ContinuousOrganisationManager(object):
         return self.config
 
     def build(self):
+        # save build file
         store = {'abi': self.interface['abi'], 'address': self.address}
         filename = utils.get_build_file(self.name, check=False)
         with open(filename, 'wb') as f:
             pickle.dump(store, f)
+
+        # update config file and set up deploy flag
+        filename = utils.get_config_file(self.name)
+        with open(filename, 'r') as f:
+            c = yaml.load(filename)
+        c['c-org']['deployed'] = False
+        with open(filename, 'w') as f:
+            yaml.dump(c, filename)
+
 
     def compile(self):
         with open(self.config['source'], 'r') as f:

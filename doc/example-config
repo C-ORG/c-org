@@ -1,0 +1,11 @@
+c-org:
+  version: 0.1
+  deployed: false
+  parameters:
+    slope: 1.0
+    alpha: 0.1
+    beta: 0.3
+  addresses:
+    smart-contract: ~
+    owner: ~
+  node-provider: ganache

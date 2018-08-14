@@ -1,0 +1,9 @@
+test-coverage
+__pycache__
+*.pyc
+.coverage
+.DS_Store
+*.swp
+private/
+node_modules/
+build/

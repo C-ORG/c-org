@@ -34,6 +34,10 @@ class ContinuousOrganisationManager(object):
     def __init__(self, name):
         self.name = name
 
+    @property
+    def config(self):
+        return _config['c-org']
+
     def load(self):
         """ Read continuous organisation build file """
         filename = utils.get_build_file(self.name)
@@ -49,8 +53,7 @@ class ContinuousOrganisationManager(object):
         filename = utils.get_config_file(self.name)
         logging.debug("Parsing configuration filename {}".format(filename))
         with open(filename, 'r') as f:
-            c = yaml.load(filename)
-        self.config = c['c-org']
+            self._config = yaml.load(filename)
         return self.config
 
     def build(self):
@@ -63,14 +66,15 @@ class ContinuousOrganisationManager(object):
         # update config file and set up deploy flag
         filename = utils.get_config_file(self.name)
         with open(filename, 'r') as f:
-            c = yaml.load(filename)
-        c['c-org']['deployed'] = False
+            self._config = yaml.load(filename)
+        self._config['c-org']['deployed'] = True
         with open(filename, 'w') as f:
             yaml.dump(c, filename)
 
 
     def compile(self):
-        with open(self.config['source'], 'r') as f:
+        filename = utils.get_build_file(self.name, check=False)
+        with open(filename, 'r') as f:
             source_code = f.read()
         compiled_sol = solc.compile_source(source_code)
         self.id, self.interface = compiled_sol.popitem()

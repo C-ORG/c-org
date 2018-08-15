@@ -21,14 +21,15 @@ import tempfile
 import unittest
 
 from derive.manager import ContinuousOrganisationManager
+import derive.utils as utils
 
 
 class TestContinuousOrganisationManager(unittest.TestCase):
 
     def setUp(self):
         self.workdir = tempfile.TemporaryDirectory()
-        self.c_org_manager = ContinuousOrganisationManager()
-        os.environ.set('DERIVE_PATH', self.workdir)
+        self.c_org_manager = ContinuousOrganisationManager('test')
+        os.environ['DERIVE_PATH'] = self.workdir.name
         os.makedirs(os.path.join(self.workdir.name, "contracts/"))
         os.makedirs(os.path.join(self.workdir.name, "configs/"))
         with open(os.path.join(self.workdir.name, "configs/test.yaml"), 'w') as fd:
@@ -42,7 +43,6 @@ class TestContinuousOrganisationManager(unittest.TestCase):
   addresses:
     smart-contract: ~
     owner: ~
-  node-provider: ganache
 ''', file=fd)
         with open(os.path.join(self.workdir.name, "contracts/test.sol"), 'w') as fd:
             print('''pragma solidity ^0.4.21;
@@ -61,15 +61,35 @@ contract Greeter {
 ''', file=fd)
 
 
+
     def test_parse(self):
-        c_org_manager = ContinuousOrganisationManager('test')
-        config = c_org_manager.parse()
+        config = self.c_org_manager.parse()
         self.assertIn('slope', config.get('parameters'))
         self.assertIn('smart-contract', config.get('addresses'))
-        self.assertEquals(False, config.get('deployed')
+        self.assertEquals(False, config.get('deployed'))
         self.assertNotIn('gamma', config.get('parameters'))
         self.assertNotIn('owner', config)
 
 
+    def test_compile(self):
+        self.c_org_manager.compile()
+        abi = self.c_org_manager.interface['abi']
+        self.assertIn('setGreeting', abi)
+        self.assertNotIn('_greeting', abi)
+
+    def test_deploy(self):
+        self.c_org_manager.compile()
+        self.c_org_manager.deploy()
+        self.assertNotEqual(self.c_org_manager.address, 0x0)
+
     def test_build(self):
-        pass
+        self.c_org_manager.compile()
+        self.c_org_manager.deploy()
+        self.c_org_manager.build()
+        build_file = utils.get_build_file('test')
+        self.assertEqual(self.c_org_manager.config.get('deployed'), True)
+        self.assertEqual(os.path.isfile(build_file), True)
+
+
+if __name__ == '__main__':
+    unittest.main()

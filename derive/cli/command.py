@@ -19,8 +19,7 @@
 
 import logging
 import os
-
-import derive.cli.commands
+import argparse
 import derive.utils as utils
 
 
@@ -80,28 +79,3 @@ class DeriveCommand(argparse.Namespace):
         for name, obj in inspect.getmembers(submodules):
             if inspect.isclass(obj) and issubclass(obj, DeriveCommand):
                 self._add_subparser_from_class(name, obj)
-
-
-
-
-class Derive(DeriveCommand):
-
-    def __init__(self):
-        super().__init__(command_id='',
-                         description='Derivation of Continuous Organisation',
-                         leaf=False)
-
-    def parse_args(self):
-        self._import_subcommands(derive.cli.commands)
-        super().parse_args()
-
-    def main(self):
-        self.parse_args()
-
-        if self.debug:
-            logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:%(message)s')
-            os.environ['G_MESSAGES_DEBUG'] = 'all'
-        else:
-            logging.basicConfig(level=logging.INFO, format='%(message)s')
-
-        self.run_command()

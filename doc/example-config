@@ -8,4 +8,3 @@ c-org:
   addresses:
     smart-contract: ~
     owner: ~
-  node-provider: ganache

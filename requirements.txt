@@ -1,3 +1,4 @@
 cPickle
 solc
-yaml
+PyYaml
+py-solc

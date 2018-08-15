@@ -24,6 +24,5 @@ that contains the version of the smart contract (currently ``version: 0.1``),  t
   addresses:
     smart-contract: ~
     owner: ~
-  node-provider: ganache
-  source: contracts/name.sol
+  name: my_continuous_organisation
 ```

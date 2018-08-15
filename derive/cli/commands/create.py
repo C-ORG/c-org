@@ -15,45 +15,35 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''derive buy command line'''
+'''derive apply command line'''
 
 import logging
-import web3.auto import w3
-from web3 import Web3
+import os
+import sys
 
-import derive.utils as utils
+
+
+from derive.cli.command import DeriveCommand
 from derive.manager import ContinuousOrganisationManager
 
 
-class DeriveBuy(utils.DeriveCommand):
+class DeriveCreate(DeriveCommand):
 
     def __init__(self):
-        super().__init__(command_id='buy',
-                         description='Buy tokens')
-
+        super().__init__(command_id='create',
+                         description='Create a Continuous Organisation')
 
     def run(self):
-        self.parser.add_argument('--account',
-                                 help='Address of the sender',
-                                 type=float)
-        self.parser.add_argument('--amount',
-                                 help='Amount to send',
-                                 type=float)
         self.parser.add_argument('--c-org',
                                  help='Continuous Organisation\'s name',
                                  type=str)
-
         self.parse_args()
+
         self.run_command()
 
-
-    def run_command(self):
+    def run_command():
         c_org_manager = ContinuousOrganisationManager(name)
-        self.contract = c_org_manager.load()
-
-        logging.debug('Sending an amount of {:d} to {}'.
-                       format(self.amount, self.c_org))
-        tx_hash = self.contract.functions.minting().transact({
-                    'from': self.account,
-                    'value': Web3.toWei(self.amount, 'ether')})
-        w3.eth.waitForTransactionReceipt(tx_hash)
+        c_org_manager.parse()
+        c_org_manager.compile()
+        c_org_manager.deploy()
+        c_org_manager.build()

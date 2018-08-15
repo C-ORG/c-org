@@ -19,10 +19,13 @@ import sys
 import os
 import argparse
 import re
-
+try:
+    import cPickle as pickle
+except:
+    import pickle
 import web3
 from web3 import Web3
-import web3.auto import w3
+from web3.auto import w3
 
 
 def clean_name(name):
@@ -44,12 +47,24 @@ def get_config_file(name = "", check=True):
 
 def get_build_path():
     """ Folder containing the Continuous Organisations' configuration file """
-    return os.environ.get('DERIVE_BUILD_PATH', os.getcwd()+'../build/')
+    return os.environ.get('DERIVE_PATH', os.getcwd()+'../build/')
 
 
 def get_build_file(name = "", check=True):
     """ File containing the build of a continuous organisation """
-    path = get_build_path() + clean_name + ".build.pkl"
+    path = get_build_path() + clean_name(name) + ".build.pkl"
+    if check and not os.path.isfile(path):
+        raise IOError("The continuous orginisation's build file does not exist")
+    return path
+
+def get_build_path():
+    """ Folder containing the Continuous Organisations' configuration file """
+    return os.environ.get('DERIVE_PATH', os.getcwd()+'../contracts/')
+
+
+def get_build_file(name = "", check=True):
+    """ File containing the build of a continuous organisation """
+    path = get_build_path() + clean_name(name) + ".sol"
     if check and not os.path.isfile(path):
         raise IOError("The continuous orginisation's build file does not exist")
     return path

@@ -15,35 +15,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''derive apply command line'''
-
-import logging
-import os
-import sys
+'''derive stats command line'''
 
 
-
-import derive.utils as utils
-from derive.manager import ContinuousOrganisationManager
+from derive.cli.command import DeriveCommand
 
 
-class DeriveCreate(utils.DeriveCommand):
+class DeriveStats(DeriveCommand):
 
     def __init__(self):
-        super().__init__(command_id='create',
-                         description='Create a Continuous Organisation')
+        super().__init__(command_id='stats',
+                         description='Provide some statistics')
 
-    def run(self):
-        self.parser.add_argument('--c-org',
-                                 help='Continuous Organisation\'s name',
-                                 type=str)
+
+
+    def run(self):  # pragma: nocover (requires user input)
+        self.parser.add_argument('--config-file',
+                                 help='Apply the config file in argument in addition to current configuration.')
+        self.parser.add_argument('--timeout',
+                                 type=int,
+                                 help="Maximum number of seconds to wait for the user's confirmation")
         self.parse_args()
-
         self.run_command()
 
     def run_command():
-        c_org_manager = ContinuousOrganisationManager(name)
-        c_org_manager.parse()
-        c_org_manager.compile()
-        c_org_manager.deploy()
-        c_org_manager.build()
+        pass

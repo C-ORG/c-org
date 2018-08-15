@@ -18,14 +18,14 @@
 '''derive sell command line'''
 
 import logging
-import web3.auto import w3
+from web3.auto import w3
 from web3 import Web3
 
-import derive.utils as utils
+from derive.cli.command import DeriveCommand
 from derive.manager import ContinuousOrganisationManager
 
 
-class DeriveSell(utils.DeriveCommand):
+class DeriveSell(DeriveCommand):
 
     def __init__(self):
         super().__init__(command_id='sell',

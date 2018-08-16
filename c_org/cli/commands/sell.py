@@ -21,11 +21,11 @@ import logging
 from web3.auto import w3
 from web3 import Web3
 
-from c_org.cli.command import C_OrgCommand
+from c_org.cli.command import COrgCommand
 from c_org.manager import ContinuousOrganisationManager
 
 
-class C_OrgSell(C_OrgCommand):
+class COrgSell(COrgCommand):
 
     def __init__(self):
         super().__init__(command_id='sell',

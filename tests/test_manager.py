@@ -28,8 +28,7 @@ class TestContinuousOrganisationManager(unittest.TestCase):
 
     def setUp(self):
         self.workdir = tempfile.TemporaryDirectory()
-        self.c_org_manager = ContinuousOrganisationManager('test')
-        os.environ['DERIVE_PATH'] = self.workdir.name
+        os.environ['C_ORG_PATH'] = self.workdir.name
         os.makedirs(os.path.join(self.workdir.name, "contracts/"))
         os.makedirs(os.path.join(self.workdir.name, "configs/"))
         with open(os.path.join(self.workdir.name, "configs/test.yaml"), 'w') as fd:
@@ -59,9 +58,11 @@ contract Greeter {
     }
 }
 ''', file=fd)
+        self.c_org_manager = ContinuousOrganisationManager('test')
 
-
-
+    def tearDown(self):
+        self.workdir.cleanup()
+        
     def test_parse(self):
         config = self.c_org_manager.parse()
         self.assertIn('slope', config.get('parameters'))

@@ -34,43 +34,34 @@ def clean_name(name):
 
 def get_config_path():
     """ Folder containing the Continuous Organisations' configuration file """
-    path = os.environ.get('DERIVE_PATH', os.getcwd())
+    path = os.environ.get('C_ORG_PATH', os.getcwd())
     return os.path.join(path,'configs')
 
 
 def get_config_file(name = "", check=True):
     """ File containing a Continuous Organisations' configuration """
-    path = os.path.join(get_config_path(), clean_name(name) + ".yaml")
-    if check and not os.path.isfile(path):
-        raise IOError("The continuous organisation's configuration file {} does not exist".format(path))
-    return path
+    return os.path.join(get_config_path(), clean_name(name) + ".yaml")
 
 
 def get_build_path():
     """ Folder containing the Continuous Organisations' configuration file """
-    path = os.environ.get('DERIVE_PATH', os.getcwd())
+    path = os.environ.get('C_ORG_PATH', os.getcwd())
     return os.path.join(path,'builds/')
 
 
 def get_build_file(name = "", check=True):
     """ File containing the build of a continuous organisation """
-    path = os.path.join(get_build_path(), clean_name(name) + ".build.pkl")
-    if check and not os.path.isfile(path):
-        raise IOError("The continuous organisation's build file {} does not exist".format(path))
-    return path
+    return os.path.join(get_build_path(), clean_name(name) + ".build.pkl")
 
 def get_source_path():
     """ Folder containing the Continuous Organisations' configuration file """
-    path = os.environ.get('DERIVE_PATH', os.getcwd())
+    path = os.environ.get('C_ORG_PATH', os.getcwd())
     return os.path.join(path,'contracts/')
 
 
 def get_source_file(name = "", check=True):
     """ File containing the build of a continuous organisation """
-    path = os.path.join(get_source_path(), clean_name(name) + ".sol")
-    if check and not os.path.isfile(path):
-        raise IOError("The continuous organisation's source {} does not exist".format(path))
-    return path
+    return os.path.join(get_source_path(), clean_name(name) + ".sol")
 
 
 

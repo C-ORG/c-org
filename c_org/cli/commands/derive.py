@@ -23,11 +23,11 @@ import sys
 
 
 
-from c_org.cli.command import C_OrgCommand
+from c_org.cli.command import COrgCommand
 from c_org.manager import ContinuousOrganisationManager
 
 
-class C_OrgCreate(C_OrgCommand):
+class COrgDerive(COrgCommand):
 
     def __init__(self):
         super().__init__(command_id='create',

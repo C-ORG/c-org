@@ -21,8 +21,8 @@ import logging
 import os
 import sys
 
-from c_org.cli.command import C_OrgCommand
+from c_org.cli.command import COrgCommand
 
 
-class C_OrgRevenue(C_OrgCommand):
+class COrgRevenue(COrgCommand):
     pass

@@ -28,7 +28,7 @@ class COrg(COrgCommand):
 
     def __init__(self):
         super().__init__(command_id='',
-                         description='Derivation of Continuous Organisation')
+                         description='Utility for Continuous Organisation')
 
     def parse_args(self):
         self._import_subcommands(c_org.cli.commands)

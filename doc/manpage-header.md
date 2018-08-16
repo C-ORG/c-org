@@ -7,14 +7,14 @@ author:
 
 # NAME
 
-Derive - command line tools to derive Continuous Organisations
+c_org - command line tools to manage Continuous Organisations
 
 # SYNOPSIS
 
-**derive** [ *COMMAND* | help ]
+**c_org** [ *COMMAND* | help ]
 
 # COMMANDS
 
-See **derive help** for a list of available commands on this system.
+See **c_org help** for a list of available commands on this system.
 
 # DESCRIPTION

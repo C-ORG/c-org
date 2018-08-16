@@ -18,10 +18,10 @@
 '''c_org stats command line'''
 
 
-from c_org.cli.command import C_OrgCommand
+from c_org.cli.command import COrgCommand
 
 
-class C_OrgStats(C_OrgCommand):
+class COrgStats(COrgCommand):
 
     def __init__(self):
         super().__init__(command_id='stats',

@@ -44,10 +44,11 @@ class COrgCommand(argparse.Namespace):
                                  help='Enable debug messages')
 
     # @property()
-    # def c_org_manager(self):  # pragma: nocover (called by later commands)
+    # def c_org_manager(self): 
     #     if not self._c_org_manager:
     #         self._c_org_manager = ContinuousOrganisationManager()
     #     return self._c_org_manager
+
 
     def update(self, args):
         self._args = args

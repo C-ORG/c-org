@@ -34,12 +34,14 @@ class ContinuousOrganisationManager(object):
 
     def __init__(self, name):
         self.name = name
+        self.clean_name = utils.clean_name(self.name)
         self._config = None
         w3.eth.defaultAccount = w3.eth.accounts[0]
+        self.check_files()
 
     @property
     def config(self):
-        return self._config['c-org']
+        return self._config.get('c-org')
 
     def load(self):
         """ Read continuous organisation build file """
@@ -51,13 +53,25 @@ class ContinuousOrganisationManager(object):
                                          address=c['address'])
         return self.contract
 
+    def check_files(self):
+        """ Check the existence of folders and create necessary ones """
+        # check existence
+        source = utils.get_source_file(self.name)
+        if not os.path.isfile(source):
+            raise IOError("The continuous organisation's contract's file does not exist: {} ".format(source))
+        config = utils.get_config_file(self.name)
+        if not os.path.isfile(config):
+            raise IOError("The continuous organisation's config file does not exist: {} ".format(config))
+        # create folder
+        build = os.path.join(utils.get_build_path(), self.clean_name)
+        if not os.path.isdir(build):
+            os.makedirs(build)
 
     def parse(self):
         filename = utils.get_config_file(self.name)
         logging.debug("Parsing configuration filename {}".format(filename))
         with open(filename, 'r') as f:
-            print("foo")
-            self._config = yaml.load(filename)
+            self._config = yaml.load(f)
         return self.config
 
     def build(self):
@@ -70,10 +84,10 @@ class ContinuousOrganisationManager(object):
         # update config file and set up deploy flag
         filename = utils.get_config_file(self.name)
         with open(filename, 'r') as f:
-            self._config = yaml.load(filename)
+            self._config = yaml.load(f)
         self._config['c-org']['deployed'] = True
         with open(filename, 'w') as f:
-            yaml.dump(c, filename)
+            yaml.dump(self._config, f)
 
 
     def compile(self):
@@ -84,8 +98,10 @@ class ContinuousOrganisationManager(object):
         self.id, self.interface = compiled_sol.popitem()
 
     def deploy(self):
-        tx_hash = w3.eth.contract(abi=self.interface['abi'],
-                                  bytecode=self.interface['bin']).deploy()
+        self.contract = w3.eth.contract(abi=self.interface['abi'],
+                                  bytecode=self.interface['bin'])
+        #tx_hash =  self.contract.constructor.transact()
+        tx_hash = self.contract.deploy()
         self.address = w3.eth.getTransactionReceipt(tx_hash)['contractAddress']
         return self.address
 

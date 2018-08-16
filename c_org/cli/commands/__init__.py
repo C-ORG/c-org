@@ -15,16 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from c_org.cli.commands.create import C_OrgCreate
-from c_org.cli.commands.buy import C_OrgBuy
-from c_org.cli.commands.sell import C_OrgSell
-from c_org.cli.commands.revenue import C_OrgRevenue
-from c_org.cli.commands.stats import C_OrgStats
+from c_org.cli.commands.derive import COrgDerive
+from c_org.cli.commands.buy import COrgBuy
+from c_org.cli.commands.sell import COrgSell
+from c_org.cli.commands.revenue import COrgRevenue
+from c_org.cli.commands.stats import COrgStats
 
 __all__ = [
-    'C_OrgCreate',
-    'C_OrgBuy',
-    'C_OrgSell',
-    'C_OrgRevenue',
-    'C_OrgStats',
+    'COrgDerive',
+    'COrgBuy',
+    'COrgSell',
+    'COrgRevenue',
+    'COrgStats',
 ]

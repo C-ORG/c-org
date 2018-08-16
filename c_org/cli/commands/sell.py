@@ -28,7 +28,7 @@ from c_org.manager import ContinuousOrganisationManager
 class COrgSell(COrgCommand):
 
     def __init__(self):
-        super().__init__(command_id='sell',
+        super().__init__(command_id='sell',  leaf=True,
                          description='Sell tokens')
 
 

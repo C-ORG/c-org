@@ -25,4 +25,19 @@ from c_org.cli.command import COrgCommand
 
 
 class COrgRevenue(COrgCommand):
-    pass
+
+    def __init__(self):
+        super().__init__(command_id='revenue',  leaf=True,
+                         description='Provide some statistics')
+        self.subcommand = True
+
+
+
+    def run(self):
+        self.func = COrgRevenue.save_revenue
+        self.parse_args()
+        self.run_command()
+
+    @staticmethod
+    def save_revenue():
+        print("Revenue")

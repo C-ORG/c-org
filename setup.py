@@ -16,8 +16,11 @@ setup(name='c_org',
       packages=find_packages(exclude=['tests', 'doc']),
       zip_safe=False,
       include_package_data=True,
-      install_requires = ['cPickle', 'PyYaml', 'py-solc'],
-      scripts=['bin/c-org.sh'],
-      setup_requires=['nose>=1.0'],
-      test_suite='nose.collector'
+      install_requires = ['PyYaml', 'py-solc'],
+      # scripts=['bin/c-org.sh'],
+      entry_points={
+          'console_scripts': ['c_org=c_org:main'],
+      },
+      # setup_requires=['nose>=1.0'],
+      # test_suite='nose.collector'
       )

@@ -18,3 +18,7 @@
 from c_org.cli.core import COrg
 
 __all__ = [COrg]
+
+def main():
+    c_org = COrg()
+    c_org.main()

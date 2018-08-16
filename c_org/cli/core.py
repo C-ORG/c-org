@@ -22,12 +22,12 @@ import os
 import argparse
 import c_org.utils as utils
 from c_org.cli.command import COrgCommand
-
+import c_org.cli.commands
 
 class COrg(COrgCommand):
 
     def __init__(self):
-        super().__init__(command_id='',
+        super().__init__(command_id='',  leaf=False,
                          description='Utility for Continuous Organisation')
 
     def parse_args(self):

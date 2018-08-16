@@ -30,10 +30,11 @@ from c_org.manager import ContinuousOrganisationManager
 class COrgDerive(COrgCommand):
 
     def __init__(self):
-        super().__init__(command_id='create',
+        super().__init__(command_id='derive', leaf=True,
                          description='Create a Continuous Organisation')
 
     def run(self):
+        print("gello")
         self.parser.add_argument('--c-org',
                                  help='Continuous Organisation\'s name',
                                  type=str)

@@ -24,19 +24,14 @@ from c_org.cli.command import COrgCommand
 class COrgStats(COrgCommand):
 
     def __init__(self):
-        super().__init__(command_id='stats',
+        super().__init__(command_id='stats',  leaf=True,
                          description='Provide some statistics')
 
 
 
-    def run(self):  # pragma: nocover (requires user input)
-        self.parser.add_argument('--config-file',
-                                 help='Apply the config file in argument in addition to current configuration.')
-        self.parser.add_argument('--timeout',
-                                 type=int,
-                                 help="Maximum number of seconds to wait for the user's confirmation")
+    def run(self):
         self.parse_args()
-        self.run_command()
+        self.run()
 
     def run_command():
         pass

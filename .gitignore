@@ -11,4 +11,4 @@ bin/
 *.pyc
 /dist/
 *.egg-info
-*.egg
+*.eggs

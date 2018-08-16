@@ -5,17 +5,19 @@ def readme():
         return f.read()
 
 
-setup(name='derive',
+setup(name='c_org',
       version='0.1',
-      url='https://github.com/C-ORG/derive',
+      url='https://github.com/C-ORG/c-org',
       long_description=readme(),
       license='GNU GPL',
       author='Pierre-Louis Guhur',
       author_email='pierre-louis.guhur@laposte.net',
-      description='Derive Continuous Organisation',
-      packages=find_packages(exclude=['tests', 'examples', 'doc']),
+      description='Command line tools to derive Continuous Organisations',
+      packages=find_packages(exclude=['tests', 'doc']),
       zip_safe=False,
-    #   install_requires = ['psutil']
+      include_package_data=True,
+      install_requires = ['cPickle', 'PyYaml', 'py-solc'],
+      scripts=['bin/c-org.sh'],
       setup_requires=['nose>=1.0'],
       test_suite='nose.collector'
       )

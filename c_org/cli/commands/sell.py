@@ -15,35 +15,44 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''derive apply command line'''
+'''c_org sell command line'''
 
 import logging
-import os
-import sys
+from web3.auto import w3
+from web3 import Web3
+
+from c_org.cli.command import C_OrgCommand
+from c_org.manager import ContinuousOrganisationManager
 
 
-
-from derive.cli.command import DeriveCommand
-from derive.manager import ContinuousOrganisationManager
-
-
-class DeriveCreate(DeriveCommand):
+class C_OrgSell(C_OrgCommand):
 
     def __init__(self):
-        super().__init__(command_id='create',
-                         description='Create a Continuous Organisation')
+        super().__init__(command_id='sell',
+                         description='Sell tokens')
+
 
     def run(self):
+        self.parser.add_argument('--account',
+                                 help='Address of the sender',
+                                 type=float)
+        self.parser.add_argument('--amount',
+                                 help='Amount to send',
+                                 type=float)
         self.parser.add_argument('--c-org',
                                  help='Continuous Organisation\'s name',
                                  type=str)
-        self.parse_args()
 
+        self.parse_args()
         self.run_command()
 
-    def run_command():
+
+    def run_command(self):
         c_org_manager = ContinuousOrganisationManager(name)
-        c_org_manager.parse()
-        c_org_manager.compile()
-        c_org_manager.deploy()
-        c_org_manager.build()
+        self.contract = c_org_manager.load()
+
+        logging.debug('Sending an amount of {:d} to {}'.
+                       format(self.amount, self.c_org))
+        tx_hash = self.contract.functions.burning(self.amount) \
+                                         .transact({'from': self.account})
+        w3.eth.waitForTransactionReceipt(tx_hash)

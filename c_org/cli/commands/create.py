@@ -15,32 +15,35 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''derive command line'''
+'''c_org apply command line'''
 
 import logging
 import os
-import argparse
-import derive.utils as utils
-from derive.cli.command import DeriveCommand
+import sys
 
 
-class Derive(DeriveCommand):
+
+from c_org.cli.command import C_OrgCommand
+from c_org.manager import ContinuousOrganisationManager
+
+
+class C_OrgCreate(C_OrgCommand):
 
     def __init__(self):
-        super().__init__(command_id='',
-                         description='Derivation of Continuous Organisation')
+        super().__init__(command_id='create',
+                         description='Create a Continuous Organisation')
 
-    def parse_args(self):
-        self._import_subcommands(derive.cli.commands)
-        super().parse_args()
-
-    def main(self):
+    def run(self):
+        self.parser.add_argument('--c-org',
+                                 help='Continuous Organisation\'s name',
+                                 type=str)
         self.parse_args()
 
-        if self.debug:
-            logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:%(message)s')
-            os.environ['G_MESSAGES_DEBUG'] = 'all'
-        else:
-            logging.basicConfig(level=logging.INFO, format='%(message)s')
-
         self.run_command()
+
+    def run_command():
+        c_org_manager = ContinuousOrganisationManager(name)
+        c_org_manager.parse()
+        c_org_manager.compile()
+        c_org_manager.deploy()
+        c_org_manager.build()

@@ -15,13 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''derive stats command line'''
+'''c_org stats command line'''
 
 
-from derive.cli.command import DeriveCommand
+from c_org.cli.command import C_OrgCommand
 
 
-class DeriveStats(DeriveCommand):
+class C_OrgStats(C_OrgCommand):
 
     def __init__(self):
         super().__init__(command_id='stats',

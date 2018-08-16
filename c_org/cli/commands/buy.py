@@ -15,21 +15,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''derive sell command line'''
+'''c_org buy command line'''
 
 import logging
 from web3.auto import w3
 from web3 import Web3
 
-from derive.cli.command import DeriveCommand
-from derive.manager import ContinuousOrganisationManager
+from c_org.cli.command import C_OrgCommand
+from c_org.manager import ContinuousOrganisationManager
 
 
-class DeriveSell(DeriveCommand):
+class C_OrgBuy(C_OrgCommand):
 
     def __init__(self):
-        super().__init__(command_id='sell',
-                         description='Sell tokens')
+        super().__init__(command_id='buy',
+                         description='Buy tokens')
 
 
     def run(self):
@@ -53,6 +53,7 @@ class DeriveSell(DeriveCommand):
 
         logging.debug('Sending an amount of {:d} to {}'.
                        format(self.amount, self.c_org))
-        tx_hash = self.contract.functions.burning(self.amount) \
-                                         .transact({'from': self.account})
+        tx_hash = self.contract.functions.minting().transact({
+                    'from': self.account,
+                    'value': Web3.toWei(self.amount, 'ether')})
         w3.eth.waitForTransactionReceipt(tx_hash)

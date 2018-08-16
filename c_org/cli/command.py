@@ -15,16 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''derive command line'''
+'''c_org command line'''
 
 import logging
 import os
 import argparse
-import derive.utils as utils
+import c_org.utils as utils
 
 
 
-class DeriveCommand(argparse.Namespace):
+class COrgCommand(argparse.Namespace):
 
     def __init__(self, command_id, description, testing=False):
         self.command_id = command_id
@@ -77,5 +77,5 @@ class DeriveCommand(argparse.Namespace):
     def _import_subcommands(self, submodules):
         import inspect
         for name, obj in inspect.getmembers(submodules):
-            if inspect.isclass(obj) and issubclass(obj, DeriveCommand):
+            if inspect.isclass(obj) and issubclass(obj, COrgCommand):
                 self._add_subparser_from_class(name, obj)

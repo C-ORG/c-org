@@ -7,3 +7,5 @@ __pycache__
 private/
 node_modules/
 build/
+*.egg_info/
+bin/

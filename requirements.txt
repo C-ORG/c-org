@@ -1,4 +1,0 @@
-cPickle
-solc
-PyYaml
-py-solc

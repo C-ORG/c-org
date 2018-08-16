@@ -20,8 +20,8 @@ import os
 import tempfile
 import unittest
 
-from derive.manager import ContinuousOrganisationManager
-import derive.utils as utils
+from c_org.manager import ContinuousOrganisationManager
+import c_org.utils as utils
 
 
 class TestContinuousOrganisationManager(unittest.TestCase):
@@ -66,7 +66,7 @@ contract Greeter {
         config = self.c_org_manager.parse()
         self.assertIn('slope', config.get('parameters'))
         self.assertIn('smart-contract', config.get('addresses'))
-        self.assertEquals(False, config.get('deployed'))
+        self.assertEqual(False, config.get('deployed'))
         self.assertNotIn('gamma', config.get('parameters'))
         self.assertNotIn('owner', config)
 
@@ -74,7 +74,7 @@ contract Greeter {
     def test_compile(self):
         self.c_org_manager.compile()
         abi = self.c_org_manager.interface['abi']
-        self.assertIn('setGreeting', abi)
+        self.assertEqual('setGreeting', abi[0]['name'])
         self.assertNotIn('_greeting', abi)
 
     def test_deploy(self):

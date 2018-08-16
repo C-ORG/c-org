@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''derive configuration manager'''
+'''c_org configuration manager'''
 
 import logging
 import os
@@ -25,18 +25,21 @@ try:
 except:
     import pickle
 import solc
-
-import derive.utils as utils
+from web3 import Web3
+from web3.auto import w3
+import c_org.utils as utils
 
 
 class ContinuousOrganisationManager(object):
 
     def __init__(self, name):
         self.name = name
+        self._config = None
+        w3.eth.defaultAccount = w3.eth.accounts[0]
 
     @property
     def config(self):
-        return _config['c-org']
+        return self._config['c-org']
 
     def load(self):
         """ Read continuous organisation build file """
@@ -53,6 +56,7 @@ class ContinuousOrganisationManager(object):
         filename = utils.get_config_file(self.name)
         logging.debug("Parsing configuration filename {}".format(filename))
         with open(filename, 'r') as f:
+            print("foo")
             self._config = yaml.load(filename)
         return self.config
 
@@ -60,7 +64,7 @@ class ContinuousOrganisationManager(object):
         # save build file
         store = {'abi': self.interface['abi'], 'address': self.address}
         filename = utils.get_build_file(self.name, check=False)
-        with open(filename, 'wb') as f:
+        with open(filename, 'wb+') as f:
             pickle.dump(store, f)
 
         # update config file and set up deploy flag
@@ -73,7 +77,7 @@ class ContinuousOrganisationManager(object):
 
 
     def compile(self):
-        filename = utils.get_build_file(self.name, check=False)
+        filename = utils.get_source_file(self.name, check=False)
         with open(filename, 'r') as f:
             source_code = f.read()
         compiled_sol = solc.compile_source(source_code)

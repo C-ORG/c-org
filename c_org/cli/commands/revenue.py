@@ -15,16 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from derive.cli.commands.create import DeriveCreate
-from derive.cli.commands.buy import DeriveBuy
-from derive.cli.commands.sell import DeriveSell
-from derive.cli.commands.revenue import DeriveRevenue
-from derive.cli.commands.stats import DeriveStats
+'''derive migrate command line'''
 
-__all__ = [
-    'DeriveCreate',
-    'DeriveBuy',
-    'DeriveSell',
-    'DeriveRevenue',
-    'DeriveStats',
-]
+import logging
+import os
+import sys
+
+from c_org.cli.command import C_OrgCommand
+
+
+class C_OrgRevenue(C_OrgCommand):
+    pass

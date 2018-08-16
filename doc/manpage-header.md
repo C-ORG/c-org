@@ -7,7 +7,7 @@ author:
 
 # NAME
 
-derive - Utility to derive Continuous Organisations
+Derive - command line tools to derive Continuous Organisations
 
 # SYNOPSIS
 

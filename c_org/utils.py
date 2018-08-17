@@ -38,7 +38,7 @@ def get_config_path():
     return os.path.join(path,'configs')
 
 
-def get_config_file(name = "", check=True):
+def get_config_file(name = ""):
     """ File containing a Continuous Organisations' configuration """
     return os.path.join(get_config_path(), clean_name(name) + ".yaml")
 
@@ -49,7 +49,7 @@ def get_build_path():
     return os.path.join(path,'builds/')
 
 
-def get_build_file(name = "", check=True):
+def get_build_file(name = ""):
     """ File containing the build of a continuous organisation """
     return os.path.join(get_build_path(), clean_name(name) + ".build.pkl")
 
@@ -59,9 +59,10 @@ def get_source_path():
     return os.path.join(path,'contracts/')
 
 
-def get_source_file(name = "", check=True):
+def get_source_file(version):
     """ File containing the build of a continuous organisation """
-    return os.path.join(get_source_path(), clean_name(name) + ".sol")
+    filename = "ContinuousOrganisation-v{}.sol".format(str(version))
+    return os.path.join(get_source_path(), filename)
 
 
 
@@ -85,3 +86,10 @@ def restricted_unpickle(filename):
     """Helper function analogous to pickle.load()."""
     with open(fileName, 'rb') as f:
         return RestrictedUnpickler(io.BytesIO(f)).load()
+
+
+class ConfigurationError(Exception):
+    """
+    Configuration could not be parsed or has otherwise failed to apply
+    """
+    pass

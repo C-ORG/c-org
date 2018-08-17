@@ -56,9 +56,9 @@ class ContinuousOrganisationManager(object):
     def check_files(self):
         """ Check the existence of folders and create necessary ones """
         # check existence
-        source = utils.get_source_file(self.name)
-        if not os.path.isfile(source):
-            raise IOError("The continuous organisation's contract's file does not exist: {} ".format(source))
+        source = utils.get_source_path()
+        if not os.path.isdir(source):
+            raise IOError("The continuous organisation's contract's folder does not exist: {} ".format(source))
         config = utils.get_config_file(self.name)
         if not os.path.isfile(config):
             raise IOError("The continuous organisation's config file does not exist: {} ".format(config))
@@ -77,21 +77,12 @@ class ContinuousOrganisationManager(object):
     def build(self):
         # save build file
         store = {'abi': self.interface['abi'], 'address': self.address}
-        filename = utils.get_build_file(self.name, check=False)
+        filename = utils.get_build_file(self.name)
         with open(filename, 'wb+') as f:
             pickle.dump(store, f)
 
-        # update config file and set up deploy flag
-        filename = utils.get_config_file(self.name)
-        with open(filename, 'r') as f:
-            self._config = yaml.load(f)
-        self._config['c-org']['deployed'] = True
-        with open(filename, 'w') as f:
-            yaml.dump(self._config, f)
-
-
     def compile(self):
-        filename = utils.get_source_file(self.name, check=False)
+        filename = utils.get_source_file(self.config.get('version'))
         with open(filename, 'r') as f:
             source_code = f.read()
         compiled_sol = solc.compile_source(source_code)
@@ -99,17 +90,8 @@ class ContinuousOrganisationManager(object):
 
     def deploy(self):
         self.contract = w3.eth.contract(abi=self.interface['abi'],
-                                  bytecode=self.interface['bin'])
+                                        bytecode=self.interface['bin'])
         #tx_hash =  self.contract.constructor.transact()
-        tx_hash = self.contract.deploy()
+        tx_hash = self.contract.deploy() #FIXME deprecated
         self.address = w3.eth.getTransactionReceipt(tx_hash)['contractAddress']
         return self.address
-
-
-
-
-class ConfigurationError(Exception):
-    """
-    Configuration could not be parsed or has otherwise failed to apply
-    """
-    pass

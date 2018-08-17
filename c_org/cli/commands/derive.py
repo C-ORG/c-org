@@ -32,19 +32,22 @@ class COrgDerive(COrgCommand):
     def __init__(self):
         super().__init__(command_id='derive', leaf=True,
                          description='Create a Continuous Organisation')
+        self.subcommand = True
 
     def run(self):
-        print("gello")
-        self.parser.add_argument('--c-org',
+        self.parser.add_argument('--name',
                                  help='Continuous Organisation\'s name',
                                  type=str)
+        self.func = self.command_derive
         self.parse_args()
-
         self.run_command()
 
-    def run_command():
-        c_org_manager = ContinuousOrganisationManager(name)
+    def command_derive(self):
+        # deploy smart contract
+        c_org_manager = ContinuousOrganisationManager(self.name)
         c_org_manager.parse()
         c_org_manager.compile()
         c_org_manager.deploy()
         c_org_manager.build()
+
+        # create free tokens

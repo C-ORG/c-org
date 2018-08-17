@@ -23,13 +23,14 @@ import tempfile
 import subprocess
 import yaml
 
-rootdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from .test_base import TestBase
+
 exe_cli = ["c_org"]
 
 os.environ.update({'PYTHONPATH': '.'})
 
 
-class TestArgs(unittest.TestCase):
+class TestArgs(TestBase):
     '''Generic argument parsing tests'''
 
     def test_global_help(self):
@@ -40,7 +41,7 @@ class TestArgs(unittest.TestCase):
 
     def test_command_help(self):
         out = subprocess.check_output(exe_cli + ['derive', '--help'])
-        self.assertIn(b'--c-org', out)
+        self.assertIn(b'--name', out)
 
     def test_no_command(self):
         p = subprocess.Popen(exe_cli, stdout=subprocess.PIPE,

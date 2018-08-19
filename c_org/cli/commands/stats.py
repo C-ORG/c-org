@@ -17,21 +17,39 @@
 
 '''c_org stats command line'''
 
-
+import logging
+from web3 import Web3
+from web3.auto import w3
 from c_org.cli.command import COrgCommand
-
+from c_org.c_org_manager import ContinuousOrganisationManager
 
 class COrgStats(COrgCommand):
 
     def __init__(self):
         super().__init__(command_id='stats',  leaf=True,
                          description='Provide some statistics')
-
+        self.subcommand = True
 
 
     def run(self):
+        self.parser.add_argument('--name',
+                                 help='Continuous Organisation\'s name',
+                                 type=str)
+        self.parser.add_argument('--account',
+                                 help='Your account\'s address',
+                                 type=str)
+        self.func = self.command_stats
         self.parse_args()
-        self.run()
+        self.run_command()
 
-    def run_command():
-        pass
+    def command_stats(self):
+        c_org_manager = ContinuousOrganisationManager(self.name)
+        self.contract = c_org_manager.load()
+        account = w3.eth.defaultAccount = w3.eth.accounts[0]
+        logging.debug('Retrieving the statistics')
+        balance = c_org_manager.get_balance(account)
+        logging.info("Balance: {:.3f} tokens".format(balance))
+        tokens = c_org_manager.get_n_tokens()
+        logging.info("Total tokens: {:.3f} tokens".format(tokens))
+        reserve = c_org_manager.get_sell_reserve()
+        logging.info("Reserve: {:.3f}".format(reserve))

@@ -19,7 +19,7 @@ setup(name='c_org',
       install_requires = ['PyYaml', 'py-solc'],
       # scripts=['bin/c-org.sh'],
       entry_points={
-          'console_scripts': ['c_org=c_org:main'],
+          'console_scripts': ['c_org=c_org.cli:main'],
       },
       # setup_requires=['nose>=1.0'],
       # test_suite='nose.collector'

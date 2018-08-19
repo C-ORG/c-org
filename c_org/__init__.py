@@ -15,10 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from c_org.cli.core import COrg
+#from c_org.cli.core import COrg
 
-__all__ = [COrg]
-
-def main():
-    c_org = COrg()
-    c_org.main()
+#__all__ = [COrg]

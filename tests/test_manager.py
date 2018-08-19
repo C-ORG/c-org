@@ -17,13 +17,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import tempfile
 import unittest
-from c_org.manager import ContinuousOrganisationManager
+from c_org.c_org_manager import ContinuousOrganisationManager
 import c_org.utils as utils
 from .test_base import TestBase
 
-rootdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class TestContinuousOrganisationManager(TestBase):
@@ -47,8 +45,8 @@ class TestContinuousOrganisationManager(TestBase):
         self.c_org_manager.parse()
         self.c_org_manager.compile()
         abi = self.c_org_manager.interface['abi']
-        self.assertEqual('setGreeting', abi[0]['name'])
-        self.assertNotIn('_greeting', abi)
+        self.assertEqual('setAlpha', abi[0]['name'])
+        self.assertNotIn('slope', abi)
 
     def test_deploy(self):
         self.c_org_manager.parse()
@@ -63,6 +61,18 @@ class TestContinuousOrganisationManager(TestBase):
         self.c_org_manager.build()
         build_file = utils.get_build_file('test')
         self.assertEqual(os.path.isfile(build_file), True)
+
+    def test_load(self):
+        self.c_org_manager.parse()
+        self.c_org_manager.compile()
+        self.c_org_manager.deploy()
+        self.c_org_manager.build()
+        contract = self.c_org_manager.load()
+        self.assertNotEqual([], contract.all_functions())
+        setter = contract.get_function_by_signature('setAlpha(uint256)')
+        self.assertNotEqual(setter, None)
+        setter2 = contract.get_function_by_name('setAlpha')
+        self.assertNotEqual(setter, None)
 
 
 if __name__ == '__main__':

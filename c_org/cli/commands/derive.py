@@ -24,7 +24,7 @@ import sys
 
 
 from c_org.cli.command import COrgCommand
-from c_org.manager import ContinuousOrganisationManager
+from c_org.c_org_manager import ContinuousOrganisationManager
 
 
 class COrgDerive(COrgCommand):
@@ -45,9 +45,10 @@ class COrgDerive(COrgCommand):
     def command_derive(self):
         # deploy smart contract
         c_org_manager = ContinuousOrganisationManager(self.name)
-        c_org_manager.parse()
+        config = c_org_manager.parse()
         c_org_manager.compile()
         c_org_manager.deploy()
         c_org_manager.build()
 
         # create free tokens
+        #c_org_manager.free_tokens(config.get('initial_tokens'))

@@ -22,7 +22,7 @@ from web3.auto import w3
 from web3 import Web3
 
 from c_org.cli.command import COrgCommand
-from c_org.manager import ContinuousOrganisationManager
+from c_org.c_org_manager import ContinuousOrganisationManager
 
 
 class COrgBuy(COrgCommand):
@@ -30,30 +30,27 @@ class COrgBuy(COrgCommand):
     def __init__(self):
         super().__init__(command_id='buy', leaf=True,
                          description='Buy tokens')
+        self.subcommand = True
 
 
     def run(self):
         self.parser.add_argument('--account',
                                  help='Address of the sender',
-                                 type=float)
+                                 type=str)
         self.parser.add_argument('--amount',
                                  help='Amount to send',
                                  type=float)
-        self.parser.add_argument('--c-org',
+        self.parser.add_argument('--name',
                                  help='Continuous Organisation\'s name',
                                  type=str)
 
+        self.func = self.command_buy
         self.parse_args()
         self.run_command()
 
-
-    def run_command(self):
-        c_org_manager = ContinuousOrganisationManager(name)
-        self.contract = c_org_manager.load()
-
-        logging.debug('Sending an amount of {:d} to {}'.
-                       format(self.amount, self.c_org))
-        tx_hash = self.contract.functions.minting().transact({
-                    'from': self.account,
-                    'value': Web3.toWei(self.amount, 'ether')})
-        w3.eth.waitForTransactionReceipt(tx_hash)
+    def command_buy(self):
+        c_org_manager = ContinuousOrganisationManager(self.name)
+        contract = c_org_manager.load()
+        logging.debug('Sending an amount of {:.3f} to {}'.
+                       format(self.amount, self.name))
+        c_org_manager.mint(self.amount, self.account)

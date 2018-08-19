@@ -30,13 +30,12 @@ from web3.auto import w3
 import c_org.utils as utils
 
 
-class ContinuousOrganisationManager(object):
+class ContractManager(object):
 
     def __init__(self, name):
         self.name = name
         self.clean_name = utils.clean_name(self.name)
         self._config = None
-        w3.eth.defaultAccount = w3.eth.accounts[0]
         self.check_files()
 
     @property
@@ -47,10 +46,9 @@ class ContinuousOrganisationManager(object):
         """ Read continuous organisation build file """
         filename = utils.get_build_file(self.name)
         logging.debug("Unpickling build file {}".format(filename))
-        with open(filename, 'r') as f:
-            c = pickle.load(f)
+        c = utils.restricted_unpickle(filename)
         self.contract = w3.eth.contract(abi=c['abi'],
-                                         address=c['address'])
+                                        address=c['address'])
         return self.contract
 
     def check_files(self):
@@ -88,10 +86,14 @@ class ContinuousOrganisationManager(object):
         compiled_sol = solc.compile_source(source_code)
         self.id, self.interface = compiled_sol.popitem()
 
+    def param_constructor(self):
+        return []
+
     def deploy(self):
+        w3.eth.defaultAccount = w3.eth.accounts[0]#self.config.get('wallet')
         self.contract = w3.eth.contract(abi=self.interface['abi'],
                                         bytecode=self.interface['bin'])
         #tx_hash =  self.contract.constructor.transact()
-        tx_hash = self.contract.deploy() #FIXME deprecated
+        tx_hash = self.contract.deploy(args=self.param_constructor()) #FIXME deprecated
         self.address = w3.eth.getTransactionReceipt(tx_hash)['contractAddress']
         return self.address

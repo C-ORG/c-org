@@ -84,8 +84,8 @@ class RestrictedUnpickler(pickle.Unpickler):
 
 def restricted_unpickle(filename):
     """Helper function analogous to pickle.load()."""
-    with open(fileName, 'rb') as f:
-        return RestrictedUnpickler(io.BytesIO(f)).load()
+    with open(filename, 'rb') as f:
+        return RestrictedUnpickler(f).load()
 
 
 class ConfigurationError(Exception):

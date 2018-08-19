@@ -1,4 +1,4 @@
-# derive - Command line tools to derive Continuous Organisations
+# c_org - Command line tools to derive Continuous Organisations
 
 
 # Website
@@ -50,4 +50,4 @@ I am wondering how to deal with change in a smart contract, such as it would bre
 
 ## Generating static files
 
-A user interface is required to burn/mint tokens. A library should be generated with the ABI and the address of the smart contract. 
+A user interface is required to burn/mint tokens. A library should be generated with the ABI and the address of the smart contract.

@@ -6,7 +6,7 @@ __pycache__
 *.swp
 private/
 node_modules/
-build/
+builds/
 bin/
 *.pyc
 /dist/

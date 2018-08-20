@@ -33,6 +33,9 @@ os.environ.update({'PYTHONPATH': '.'})
 class TestArgs(TestBase):
     '''Generic argument parsing tests'''
 
+    def setUp(self):
+        self.temp_files()
+        
     def test_global_help(self):
         out = subprocess.check_output(exe_cli + ['--help'])
         self.assertIn(b'Available commands', out)

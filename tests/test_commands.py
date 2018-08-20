@@ -34,21 +34,58 @@ class TestDerive(TestBase):
     def setUp(self):
         self.temp_files()
 
-    def tearDown(self):
-        self.cleanup()
-
     def test_derive(self):
         sys.argv = [sys.argv[0]] + ["derive", "--name", "test"]
         main()
         file_exists = os.path.isfile(os.path.join(self.workdir.name, "builds", "test.build.pkl"))
-        self.assertEqual(file_exists, True)
+        self.assertTrue(file_exists)
         self.c_org_manager = ContinuousOrganisationManager('test')
         contract = self.c_org_manager.load()
-        self.assertNotEqual([], contract.all_functions())
+        self.assertTrue(contract.all_functions())
+
+class TestInit(TestBase):
+
+    def setUp(self):
+        self.temp_files()
+
+    def test_init(self):
+        sys.argv = [sys.argv[0]] + ["init"]
+        main()
+        path = os.path.join(self.workdir.name, ".c-org")
+        self.assertTrue(os.path.isdir(path))
+        
+
+class TestCommandWallet(TestBase):
+
+    def setUp(self):
+        self.temp_files()
+        sys.argv = [sys.argv[0]] + ["init"]
+        main()
+
+    def test_add_wallet(self):
+        sys.argv = [sys.argv[0]] + ["wallet", "add", "name", "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"]
+        main()
+        filename = os.path.join(self.workdir.name, ".c-org", "keys.yaml")
+        self.assertTrue(os.path.isfile(filename))
+        with open(filename, 'r') as f:
+            keys = yaml.load(f)
+        names = [w.get('name') for w in keys.get('wallets')]
+        self.assertIn("name", names)
+
+    def test_rm_wallet(self):
+        sys.argv = [sys.argv[0]] + ["wallet", "add", "name", "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"]
+        main()
+        sys.argv = [sys.argv[0]] + ["wallet", "remove", "name"]
+        main()
+        filename = os.path.join(self.workdir.name, ".c-org", "keys.yaml")
+        with open(filename, 'r') as f:
+            keys = yaml.load(f)
+        names = [w.get('name') for w in keys.get('wallets')]
+        self.assertNotIn("name", names)
 
 
 
-class TestCommands(TestBase):
+class TestOthersCommands(TestBase):
 
     def setUp(self):
         self.temp_files()
@@ -56,11 +93,6 @@ class TestCommands(TestBase):
         # create a smart contract
         sys.argv = [sys.argv[0]] + ["derive", "--name", "test"]
         main()
-
-
-    def tearDown(self):
-        self.cleanup()
-
 
     def test_buy(self):
         sys.argv = [sys.argv[0]] + ["buy", "--name", "test", "--account", self.account, "--amount", "10"]
@@ -80,11 +112,11 @@ class TestCommands(TestBase):
     #     main()
 
     def test_stats(self):
-        sys.argv = [sys.argv[0]] + ["stats", "--name", "test"]
+        sys.argv = [sys.argv[0]] + ["stats", "--name", "test", "--account", self.account]
         main()
 
 
 
 
-#if __name__ == '__main__':
-#    unittest.main()
+if __name__ == '__main__':
+   unittest.main()

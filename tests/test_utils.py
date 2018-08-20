@@ -29,6 +29,9 @@ import pickle
 class TestUtils(TestBase):
     '''Utils tests'''
 
+    def setUp(self):
+        self.temp_files()
+
     def test_clean_name(self):
         a = "2f vbr Ffrg"
         self.assertEqual(utils.clean_name(a), "2fvbrffrg")

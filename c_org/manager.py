@@ -93,7 +93,6 @@ class ContractManager(object):
         w3.eth.defaultAccount = w3.eth.accounts[0]#self.config.get('wallet')
         self.contract = w3.eth.contract(abi=self.interface['abi'],
                                         bytecode=self.interface['bin'])
-        #tx_hash =  self.contract.constructor.transact()
-        tx_hash = self.contract.deploy(args=self.param_constructor()) #FIXME deprecated
+        tx_hash =  self.contract.constructor(*self.param_constructor()).transact()
         self.address = w3.eth.getTransactionReceipt(tx_hash)['contractAddress']
         return self.address

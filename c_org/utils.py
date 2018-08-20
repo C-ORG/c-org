@@ -19,6 +19,7 @@ import sys
 import os
 import argparse
 import re
+import web3
 try:
     import cPickle as pickle
 except:
@@ -60,6 +61,23 @@ def get_source_file(version):
     """ File containing the build of a continuous organisation """
     filename = "ContinuousOrganisation-v{}.sol".format(str(version))
     return os.path.join(get_source_path(), filename)
+
+
+
+
+class Wallet(object):
+
+    def __init__(self, name="", address="", private_key=""):
+        self.private_key = private_key
+        if address:
+            self.address = address
+        else:
+            self.address = web3.eth.Account.privateKeyToAccount(private_key).address
+        self.name = name if name != "" else self.address
+
+    @classmethod
+    def from_dict(cls, dict):
+        return cls(dict.get('name'), dict.get('address'), dict.get('private_key'))
 
 
 

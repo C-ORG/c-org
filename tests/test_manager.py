@@ -30,8 +30,6 @@ class TestContinuousOrganisationManager(TestBase):
         self.temp_files()
         self.c_org_manager = ContinuousOrganisationManager('test')
 
-    def tearDown(self):
-        self.cleanup()
 
     def test_parse(self):
         config = self.c_org_manager.parse()

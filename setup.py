@@ -16,7 +16,7 @@ setup(name='c_org',
       packages=find_packages(exclude=['tests', 'doc']),
       zip_safe=False,
       include_package_data=True,
-      install_requires = ['PyYaml', 'py-solc'],
+      install_requires = ['PyYaml', 'py-solc', 'web3'],
       # scripts=['bin/c-org.sh'],
       entry_points={
           'console_scripts': ['c_org=c_org.cli:main'],

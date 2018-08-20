@@ -19,22 +19,21 @@
 
 import os
 import yaml
-from c_org.utils import Wallet
+from c_org.utils import Wallet, get_corg_file
 
 
 class KeysMixin(object):
-    ''' Manage the file .c-org/keys.yaml containing informations on the wallets and other securities keys '''
-
-
+    ''' Manage the YAML file .c-org/keys.yaml containing informations on the wallets and other securities keys '''
 
 
     @property
     def keys(self):
-        path = os.environ.get('C_ORG_PATH', os.getcwd())
         if not hasattr(self, '_keys'):
-            filename = os.path.join(path, '.c-org', 'keys.yaml')
-            with open(filename, 'r+') as f:
+            filename = get_corg_file()
+            with open(filename, 'r') as f:
                 self._keys = yaml.load(f)
+            if not 'wallets' in self._keys or not self._keys['wallets']:
+                self._keys['wallets'] = []
         return self._keys
 
     def wallet_exists(self, name):
@@ -55,7 +54,6 @@ class KeysMixin(object):
         return
 
     def save(self):
-        path = os.environ.get('C_ORG_PATH', os.getcwd())
-        filename = os.path.join(path, '.c-org', 'keys.yaml')
+        filename = get_corg_file()
         with open(filename, 'w+') as f:
             yaml.dump(self.keys, f)

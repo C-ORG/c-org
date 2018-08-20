@@ -67,7 +67,12 @@ class TestKeysMixin(KeysMixin, TestBase):
         self.remove_wallet('my-wallet')
         self.assertFalse(self.wallet_exists('my-wallet'))
 
+    def test_no_wallet(self):
+        del self.keys['wallets']
+        self.save()
+        self.assertFalse(self.wallet_exists('my-wallet'))
 
+    
 
 if __name__ == '__main__':
     unittest.main()

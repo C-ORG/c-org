@@ -33,7 +33,7 @@ def clean_name(name):
 def get_config_path():
     """ Folder containing the Continuous Organisations' configuration file """
     path = os.environ.get('C_ORG_PATH', os.getcwd())
-    return os.path.join(path,'configs')
+    return os.path.join(path,'')
 
 
 def get_config_file(name = ""):
@@ -42,27 +42,34 @@ def get_config_file(name = ""):
 
 
 def get_build_path():
-    """ Folder containing the Continuous Organisations' configuration file """
+    """ Folder containing the Continuous Organisations' builds """
     path = os.environ.get('C_ORG_PATH', os.getcwd())
-    return os.path.join(path,'builds/')
+    return os.path.join(path,'build/')
 
 
 def get_build_file(name = ""):
     """ File containing the build of a continuous organisation """
-    return os.path.join(get_build_path(), clean_name(name) + ".build.pkl")
+    return os.path.join(get_build_path(), clean_name(name) + ".pkl")
 
 def get_source_path():
-    """ Folder containing the Continuous Organisations' configuration file """
+    """ Folder containing the Continuous Organisations' source code """
     path = os.environ.get('C_ORG_PATH', os.getcwd())
     return os.path.join(path,'contracts/')
 
 
 def get_source_file(version):
-    """ File containing the build of a continuous organisation """
+    """ File containing the source code of a smart contract """
     filename = "ContinuousOrganisation-v{}.sol".format(str(version))
     return os.path.join(get_source_path(), filename)
 
+def get_corg_path():
+    """ Folder containing the Continuous Organisations' configuration file """
+    path = os.environ.get('C_ORG_PATH', os.getcwd())
+    return os.path.join(path,'.c-org/')
 
+def get_corg_file():
+    """ File containing the configuration of a continuous organisation """
+    return os.path.join(get_corg_path(), "keys.yaml")
 
 
 class Wallet(object):

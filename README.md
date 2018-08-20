@@ -17,16 +17,20 @@ The full documentation for `derive` is available in the [doc/derive.md file](../
 ```bash
 pip install .
 python -m solc.install v0.4.24
+# running tests
+python -m unittest discover
 ```
 
 # Use
 
-```bash
-c_org derive --name my_continuous_organisation
-c_org {buy, sell, revenue, stats} --help
+The continuous organisation is built inside a separate folder.
 
-# running tests
-python -m unittest discover
+```bash
+c_org init my_continuous_organisation
+nano params.yaml
+c_org wallet add my_wallet my_private_key
+c_org derive
+c_org {buy, sell, revenue, stats} --help
 ```
 
 # TODO list
@@ -37,7 +41,7 @@ For now, the addresses are just randomly picked from the node provider.
 
 ## Node provider
 
-Everything was tested with `ganache`. Including `infura` and testing on real blockchains is necessary. Similarly, automated tests should use `testrpc` instead of depending on an extern call to `ganache`.
+Everything was tested with `ganache`. Adding `infura` and testing on real blockchains is necessary. Similarly, automated tests should use `testrpc` instead of depending on an extern call to `ganache`.
 
 ## Installation
 

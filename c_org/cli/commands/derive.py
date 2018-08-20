@@ -21,8 +21,6 @@ import logging
 import os
 import sys
 
-
-
 from c_org.cli.command import COrgCommand
 from c_org.c_org_manager import ContinuousOrganisationManager
 

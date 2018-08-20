@@ -30,6 +30,7 @@ from web3.auto import w3
 import c_org.utils as utils
 from c_org.manager import ContractManager
 
+
 class ContinuousOrganisationManager(ContractManager):
 
     def param_constructor(self):

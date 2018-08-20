@@ -18,7 +18,6 @@
 '''c_org stats command line'''
 
 import logging
-from web3 import Web3
 from web3.auto import w3
 from c_org.cli.command import COrgCommand
 from c_org.c_org_manager import ContinuousOrganisationManager
@@ -45,9 +44,8 @@ class COrgStats(COrgCommand):
     def command_stats(self):
         c_org_manager = ContinuousOrganisationManager(self.name)
         self.contract = c_org_manager.load()
-        account = w3.eth.defaultAccount = w3.eth.accounts[0]
         logging.debug('Retrieving the statistics')
-        balance = c_org_manager.get_balance(account)
+        balance = c_org_manager.get_balance(self.account)
         logging.info("Balance: {:.3f} tokens".format(balance))
         tokens = c_org_manager.get_n_tokens()
         logging.info("Total tokens: {:.3f} tokens".format(tokens))

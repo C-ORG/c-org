@@ -18,8 +18,6 @@
 '''c_org buy command line'''
 
 import logging
-from web3.auto import w3
-from web3 import Web3
 
 from c_org.cli.command import COrgCommand
 from c_org.c_org_manager import ContinuousOrganisationManager

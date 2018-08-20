@@ -23,9 +23,6 @@ try:
     import cPickle as pickle
 except:
     import pickle
-import web3
-from web3 import Web3
-from web3.auto import w3
 
 
 def clean_name(name):

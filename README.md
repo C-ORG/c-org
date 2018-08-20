@@ -24,6 +24,9 @@ python -m solc.install v0.4.24
 ```bash
 c_org derive --name my_continuous_organisation
 c_org {buy, sell, revenue, stats} --help
+
+# running tests
+python -m unittest discover
 ```
 
 # TODO list

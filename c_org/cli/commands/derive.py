@@ -33,17 +33,13 @@ class COrgDerive(COrgCommand):
         self.subcommand = True
 
     def run(self):
-        self.parser.add_argument('--name',
-                                 help='Continuous Organisation\'s name',
-                                 type=str)
         self.func = self.command_derive
         self.parse_args()
         self.run_command()
 
     def command_derive(self):
         # deploy smart contract
-        c_org_manager = ContinuousOrganisationManager(self.name)
-        config = c_org_manager.parse()
+        c_org_manager = ContinuousOrganisationManager()
         c_org_manager.compile()
         c_org_manager.deploy()
         c_org_manager.build()

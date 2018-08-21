@@ -5,19 +5,33 @@
 
 https://c-org.co
 
-# Documentation
-
-The full documentation for `derive` is available in the [doc/derive.md file](../master/doc/derive.md)
-
 
 
 # Installation
 
+You need `Python > 3.5.3` because `web3.py` is using `typing`. If you are using an older version of Python, you can use `pyenv` to install a new one. In this case, make sure you activate the virtual environment each time you are using `c_org`.
+
+```bash
+# install pyenv
+curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+# install python 3.6.5
+pyenv install 3.6.5
+# create a virtual environment
+pyenv virtualenv 3.6.5 corg
+# activate it
+pyenv activate corg
+```
+
+
+Then, you can easily install `c_org` with the following commands:
 
 ```bash
 pip install .
 python -m solc.install v0.4.24
-# running tests
+
+# For running tests, you need a local provider:
+# First on a separate terminal, install and run ganache-cli
+# then in the repository, run
 python -m unittest discover
 ```
 

@@ -47,22 +47,22 @@ class COrgInit(COrgCommand):
             os.makedirs(corg)
 
         configs = '''c-org:
-version: 0.1            # the version of the smart contract
-name: {}         # the name of your continuous organization
-summary: 'The 1st continuous organization'
-                      # summary of your organization (optional)
-website: 'https://invest.decusis.com'
-                      # where users can mint/burn tokens (optional)
-wallet: '0x3aebb26a66b328cd8a60415710ce4de147657b0b'
-                      # main wallet of the organization
-slope: 1.0              # slope of the buying curve
-investor_reserve: 0.1   # percentage of invested money put in reserve
-revenue_reserve: 0.3    # percentage of revenues put in reserve
-initial_tokens: 1000000 # the number of tokens initially available
+    version: 0.1            # the version of the smart contract
+    name: {}         # the name of your continuous organization
+    summary: 'The 1st continuous organization'
+                          # summary of your organization (optional)
+    website: 'https://invest.decusis.com'
+                          # where users can mint/burn tokens (optional)
+    wallet: '0x3aebb26a66b328cd8a60415710ce4de147657b0b'
+                          # main wallet of the organization
+    slope: 1.0              # slope of the buying curve
+    investor_reserve: 0.1   # percentage of invested money put in reserve
+    revenue_reserve: 0.3    # percentage of revenues put in reserve
+    initial_tokens: 1000000 # the number of tokens initially available
           '''.format(self.name)
-        with open(utils.get_config_file(self.name), 'w+') as f:
+        with open(utils.get_config_file(), 'w+') as f:
             f.write(configs)
 
         with open(utils.get_corg_file(), 'w+') as f:
             f.write('''infura: ~
-wallets: ~''')
+    wallets: ~''')

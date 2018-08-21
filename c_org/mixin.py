@@ -32,24 +32,26 @@ class KeysMixin(object):
             filename = get_corg_file()
             with open(filename, 'r') as f:
                 self._keys = yaml.load(f)
-            if not 'wallets' in self._keys or not self._keys['wallets']:
-                self._keys['wallets'] = []
         return self._keys
 
+    @property
+    def wallets(self):
+        return self.keys.get('wallets', [])
+
     def wallet_exists(self, name):
-        names = [w.get('name') for w in self.keys.get('wallets')]
+        names = [w.get('name') for w in self.wallets]
         return name in names
 
     def add_wallet(self, wallet):
         if isinstance(wallet, dict):
             wallet = Wallet.from_dict(wallet)
-        self.keys['wallets'].append(vars(wallet))
+        self.wallets.append(vars(wallet))
         self.save()
 
     def remove_wallet(self, name):
-        for wallet in self.keys.get('wallets'):
+        for wallet in self.wallets:
             if wallet.get('name') == name:
-                self.keys.get('wallets').remove(wallet)
+                self.wallets.remove(wallet)
         self.save()
         return
 

@@ -26,6 +26,10 @@ except:
     import pickle
 
 
+
+rootdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 def clean_name(name):
     return re.sub('\W+','', name.lower())
 
@@ -36,9 +40,9 @@ def get_config_path():
     return os.path.join(path,'')
 
 
-def get_config_file(name = ""):
+def get_config_file():
     """ File containing a Continuous Organisations' configuration """
-    return os.path.join(get_config_path(), clean_name(name) + ".yaml")
+    return os.path.join(get_config_path(), "config.yaml")
 
 
 def get_build_path():
@@ -53,8 +57,7 @@ def get_build_file(name = ""):
 
 def get_source_path():
     """ Folder containing the Continuous Organisations' source code """
-    path = os.environ.get('C_ORG_PATH', os.getcwd())
-    return os.path.join(path,'contracts/')
+    return os.path.join(rootdir,'contracts/')
 
 
 def get_source_file(version):

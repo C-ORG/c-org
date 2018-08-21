@@ -32,15 +32,24 @@ import c_org.utils as utils
 
 class ContractManager(object):
 
-    def __init__(self, name):
-        self.name = name
-        self.clean_name = utils.clean_name(self.name)
+    def __init__(self):
         self._config = None
+        self._name = ""
+        self.parse()
+        self.clean_name = utils.clean_name(self.name)
         self.check_files()
 
     @property
     def config(self):
+        if not self._config:
+            self.parse()
         return self._config.get('c-org')
+
+    @property
+    def name(self):
+        if self._name:
+            return self._name
+        return self.config.get('name')
 
     def load(self):
         """ Read continuous organisation build file """
@@ -57,7 +66,7 @@ class ContractManager(object):
         source = utils.get_source_path()
         if not os.path.isdir(source):
             raise IOError("The continuous organisation's contract's folder does not exist: {} ".format(source))
-        config = utils.get_config_file(self.name)
+        config = utils.get_config_file()
         if not os.path.isfile(config):
             raise IOError("The continuous organisation's config file does not exist: {} ".format(config))
         # create folder
@@ -66,7 +75,7 @@ class ContractManager(object):
             os.makedirs(build)
 
     def parse(self):
-        filename = utils.get_config_file(self.name)
+        filename = utils.get_config_file()
         logging.debug("Parsing configuration filename {}".format(filename))
         with open(filename, 'r') as f:
             self._config = yaml.load(f)

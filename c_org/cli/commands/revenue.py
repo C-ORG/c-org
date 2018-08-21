@@ -37,16 +37,13 @@ class COrgRevenue(COrgCommand):
         self.parser.add_argument('--revenue',
                                  help='Revenue to register',
                                  type=float)
-        self.parser.add_argument('--name',
-                                 help='Continuous Organisation\'s name',
-                                 type=str)
 
         self.func = self.command_revenue
         self.parse_args()
         self.run_command()
 
     def command_revenue(self):
-        c_org_manager = ContinuousOrganisationManager(self.name)
+        c_org_manager = ContinuousOrganisationManager()
         self.contract = c_org_manager.load()
         logging.debug('Recording a revenue of {:.3f}'.format(self.revenue))
         c_org_manager.revenue(self.revenue)

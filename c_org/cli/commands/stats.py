@@ -31,21 +31,18 @@ class COrgStats(COrgCommand):
 
 
     def run(self):
-        self.parser.add_argument('--name',
-                                 help='Continuous Organisation\'s name',
-                                 type=str)
-        self.parser.add_argument('--account',
-                                 help='Your account\'s address',
+        self.parser.add_argument('--wallet',
+                                 help='Your wallet\'s name',
                                  type=str)
         self.func = self.command_stats
         self.parse_args()
         self.run_command()
 
     def command_stats(self):
-        c_org_manager = ContinuousOrganisationManager(self.name)
+        c_org_manager = ContinuousOrganisationManager()
         self.contract = c_org_manager.load()
         logging.debug('Retrieving the statistics')
-        balance = c_org_manager.get_balance(self.account)
+        balance = c_org_manager.get_balance(self.wallet)
         logging.info("Balance: {:.3f} tokens".format(balance))
         tokens = c_org_manager.get_n_tokens()
         logging.info("Total tokens: {:.3f} tokens".format(tokens))

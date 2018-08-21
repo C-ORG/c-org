@@ -35,7 +35,7 @@ class TestArgs(TestBase):
 
     def setUp(self):
         self.temp_files()
-        
+
     def test_global_help(self):
         out = subprocess.check_output(exe_cli + ['--help'])
         self.assertIn(b'Available commands', out)
@@ -43,8 +43,8 @@ class TestArgs(TestBase):
         self.assertIn(b'--debug', out)
 
     def test_command_help(self):
-        out = subprocess.check_output(exe_cli + ['derive', '--help'])
-        self.assertIn(b'--name', out)
+        out = subprocess.check_output(exe_cli + ['buy', '--help'])
+        self.assertIn(b'--amount', out)
 
     def test_no_command(self):
         p = subprocess.Popen(exe_cli, stdout=subprocess.PIPE,

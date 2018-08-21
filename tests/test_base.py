@@ -22,7 +22,7 @@ import unittest
 import shutil
 
 import c_org.utils as utils
-
+from c_org.c_org_manager import ContinuousOrganisationManager
 
 rootdir = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,18 +31,17 @@ class TestBase(unittest.TestCase):
     def temp_files(self):
         self.workdir = tempfile.TemporaryDirectory()
         os.environ['C_ORG_PATH'] = self.workdir.name
-        contracts_folder = os.path.join(self.workdir.name, "contracts")
-        contract_file = os.path.join(rootdir, "ressources", "ContinuousOrganisation-v0.1.sol")
-        os.makedirs(contracts_folder)
-        shutil.copy(contract_file, contracts_folder)
-        configs_folder = os.path.join(self.workdir.name, "configs")
-        config_file = os.path.join(rootdir, "ressources", "test.yaml")
-        os.makedirs(configs_folder)
+
+        # ressources
+        configs_folder = utils.get_config_path()
+        config_file = os.path.join(rootdir, "ressources", "config.yaml")
         shutil.copy(config_file, configs_folder)
-        private_folder = os.path.join(self.workdir.name, ".c-org")
+        private_folder = utils.get_corg_path()
         private_file = os.path.join(rootdir, "ressources", ".c-org", "keys.yaml")
         os.makedirs(private_folder)
         shutil.copy(private_file, private_folder)
+        # manager
+        self.c_org_manager = ContinuousOrganisationManager()
 
     def cleanup(self):
         self.workdir.cleanup()

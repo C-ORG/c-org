@@ -32,23 +32,20 @@ class COrgBuy(COrgCommand):
 
 
     def run(self):
-        self.parser.add_argument('--account',
-                                 help='Address of the sender',
+        self.parser.add_argument('--wallet',
+                                 help='Name of the sender\'s wallet',
                                  type=str)
         self.parser.add_argument('--amount',
                                  help='Amount to send',
                                  type=float)
-        self.parser.add_argument('--name',
-                                 help='Continuous Organisation\'s name',
-                                 type=str)
 
         self.func = self.command_buy
         self.parse_args()
         self.run_command()
 
     def command_buy(self):
-        c_org_manager = ContinuousOrganisationManager(self.name)
+        c_org_manager = ContinuousOrganisationManager()
         contract = c_org_manager.load()
         logging.debug('Sending an amount of {:.3f} to {}'.
-                       format(self.amount, self.name))
-        c_org_manager.mint(self.amount, self.account)
+                       format(self.amount, c_org_manager.name))
+        c_org_manager.mint(self.amount, self.wallet)

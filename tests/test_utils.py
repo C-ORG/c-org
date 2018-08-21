@@ -38,23 +38,23 @@ class TestUtils(TestBase):
 
     def test_restricted_unpickle_legal(self):
         a = {"abi": "foo", "address": "bar"}
-        self.workdir = tempfile.TemporaryDirectory()
-        legal = os.path.join(self.workdir.name, "legal.pkl")
+        self.workdir2 = tempfile.TemporaryDirectory()
+        legal = os.path.join(self.workdir2.name, "legal.pkl")
         with open(legal, 'wb+') as f:
             pickle.dump(a, f)
         c = utils.restricted_unpickle(legal)
         self.assertEqual(c, a)
-        self.workdir.cleanup()
+        self.workdir2.cleanup()
 
     @unittest.expectedFailure
     def test_restricted_unpickle_illegal(self):
         b = set(1, 2, 5)
-        self.workdir = tempfile.TemporaryDirectory()
-        illegal = os.path.join(self.workdir.name, "illegal.pkl")
+        self.workdir2 = tempfile.TemporaryDirectory()
+        illegal = os.path.join(self.workdir2.name, "illegal.pkl")
         with open(illegal, 'wb+') as f:
             pickle.dump(b, f)
         utils.restricted_unpickle(illegal)
-        self.workdir.cleanup()
+        self.workdir2.cleanup()
 
 
 if __name__ == '__main__':

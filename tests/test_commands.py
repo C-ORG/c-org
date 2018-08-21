@@ -28,6 +28,9 @@ import c_org
 from .test_base import TestBase
 from c_org.cli import main
 from c_org.c_org_manager import ContinuousOrganisationManager
+import c_org.utils as utils
+
+exe_cli="c_org"
 
 class TestDerive(TestBase):
 
@@ -35,11 +38,10 @@ class TestDerive(TestBase):
         self.temp_files()
 
     def test_derive(self):
-        sys.argv = [sys.argv[0]] + ["derive", "--name", "test"]
+        sys.argv = [exe_cli] + ["derive"]
         main()
-        file_exists = os.path.isfile(os.path.join(self.workdir.name, "builds", "test.build.pkl"))
-        self.assertTrue(file_exists)
-        self.c_org_manager = ContinuousOrganisationManager('test')
+        build_file = utils.get_build_file("decusis")
+        self.assertTrue(os.path.isfile(build_file))
         contract = self.c_org_manager.load()
         self.assertTrue(contract.all_functions())
 
@@ -47,23 +49,23 @@ class TestInit(TestBase):
 
     def setUp(self):
         self.temp_files()
+        os.remove(utils.get_corg_file())
+        os.rmdir(utils.get_corg_path())
 
     def test_init(self):
-        sys.argv = [sys.argv[0]] + ["init"]
+        sys.argv = [exe_cli] + ["init", "test"]
         main()
         path = os.path.join(self.workdir.name, ".c-org")
         self.assertTrue(os.path.isdir(path))
-        
+
 
 class TestCommandWallet(TestBase):
 
     def setUp(self):
         self.temp_files()
-        sys.argv = [sys.argv[0]] + ["init"]
-        main()
 
     def test_add_wallet(self):
-        sys.argv = [sys.argv[0]] + ["wallet", "add", "name", "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"]
+        sys.argv = [exe_cli] + ["wallet", "add", "name", "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"]
         main()
         filename = os.path.join(self.workdir.name, ".c-org", "keys.yaml")
         self.assertTrue(os.path.isfile(filename))
@@ -73,9 +75,9 @@ class TestCommandWallet(TestBase):
         self.assertIn("name", names)
 
     def test_rm_wallet(self):
-        sys.argv = [sys.argv[0]] + ["wallet", "add", "name", "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"]
+        sys.argv = [exe_cli, "wallet", "add", "name", "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"]
         main()
-        sys.argv = [sys.argv[0]] + ["wallet", "remove", "name"]
+        sys.argv = [exe_cli, "wallet", "remove", "name"]
         main()
         filename = os.path.join(self.workdir.name, ".c-org", "keys.yaml")
         with open(filename, 'r') as f:
@@ -89,30 +91,29 @@ class TestOthersCommands(TestBase):
 
     def setUp(self):
         self.temp_files()
-        self.account = w3.eth.accounts[1]
+        self.wallet = w3.eth.accounts[1]
         # create a smart contract
-        sys.argv = [sys.argv[0]] + ["derive", "--name", "test"]
+        sys.argv = [exe_cli] + ["derive"]
         main()
 
     def test_buy(self):
-        sys.argv = [sys.argv[0]] + ["buy", "--name", "test", "--account", self.account, "--amount", "10"]
+        sys.argv = [exe_cli] + ["buy",  "--wallet", self.wallet, "--amount", "10"]
         main()
 
     def test_sell(self):
         # buy 10
-        self.c_org_manager = ContinuousOrganisationManager('test')
         contract = self.c_org_manager.load()
-        self.c_org_manager.mint(10, self.account)
+        self.c_org_manager.mint(10, self.wallet)
         # sell 10
-        sys.argv = [sys.argv[0]] + ["sell", "--name", "test", "--account", self.account, "--amount", "1"]
+        sys.argv = [exe_cli] + ["sell",  "--wallet", self.wallet, "--amount", "1"]
         main()
 
     # def test_revenue(self):
-    #     sys.argv = [sys.argv[0]] + ["revenue", "--name", "test", "--revenue", "10"]
+    #     sys.argv = [exe_cli] + ["revenue",  "--revenue", "10"]
     #     main()
 
     def test_stats(self):
-        sys.argv = [sys.argv[0]] + ["stats", "--name", "test", "--account", self.account]
+        sys.argv = [exe_cli] + ["stats", "--wallet", self.wallet]
         main()
 
 

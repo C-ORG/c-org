@@ -28,7 +28,6 @@ class TestContinuousOrganisationManager(TestBase):
 
     def setUp(self):
         self.temp_files()
-        self.c_org_manager = ContinuousOrganisationManager('test')
 
 
     def test_parse(self):
@@ -57,7 +56,7 @@ class TestContinuousOrganisationManager(TestBase):
         self.c_org_manager.compile()
         self.c_org_manager.deploy()
         self.c_org_manager.build()
-        build_file = utils.get_build_file('test')
+        build_file = utils.get_build_file('decusis')
         self.assertEqual(os.path.isfile(build_file), True)
 
     def test_load(self):

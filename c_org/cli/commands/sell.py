@@ -31,22 +31,20 @@ class COrgSell(COrgCommand):
 
 
     def run(self):
-        self.parser.add_argument('--account',
-                                 help='Address of the sender',
+        self.parser.add_argument('--wallet',
+                                 help='Wallet\'s sender',
                                  type=str)
         self.parser.add_argument('--amount',
                                  help='Tokens\' amount to send',
                                  type=float)
-        self.parser.add_argument('--name',
-                                 help='Continuous Organisation\'s name',
-                                 type=str)
+
         self.func = self.command_sell
         self.parse_args()
         self.run_command()
 
     def command_sell(self):
-        c_org_manager = ContinuousOrganisationManager(self.name)
+        c_org_manager = ContinuousOrganisationManager()
         self.contract = c_org_manager.load()
         logging.debug('Sending an amount of {:.3f} to {}'.
-                       format(self.amount, self.name))
-        c_org_manager.burn(self.amount, self.account)
+                       format(self.amount, c_org_manager.name))
+        c_org_manager.burn(self.amount, self.wallet)

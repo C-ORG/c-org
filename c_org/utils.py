@@ -19,7 +19,9 @@ import sys
 import os
 import argparse
 import re
+import random
 import web3
+from web3.auto import w3
 try:
     import cPickle as pickle
 except:
@@ -33,46 +35,36 @@ rootdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def clean_name(name):
     return re.sub('\W+','', name.lower())
 
-
-def get_config_path():
+def get_c_org_path():
     """ Folder containing the Continuous Organisations' configuration file """
-    path = os.environ.get('C_ORG_PATH', os.getcwd())
-    return os.path.join(path,'')
+    path = os.path.join(os.path.expanduser("~"), '.c-org/')
+    #if not os.path.isdir(path):
+    #    os.makedirs(path)
+    return path
 
+def get_default_path(name):
+    name = clean_name(name)
+    return os.path.join(get_c_org_path(), name)
 
-def get_config_file():
-    """ File containing a Continuous Organisations' configuration """
-    return os.path.join(get_config_path(), "config.yaml")
+def get_source_file():
+    return os.path.join(get_c_org_path(), "contracts", "ContinuousOrganisation.sol")
 
+def get_vault_file():
+    return os.path.join(get_c_org_path(), "vault.yaml")
 
-def get_build_path():
-    """ Folder containing the Continuous Organisations' builds """
-    path = os.environ.get('C_ORG_PATH', os.getcwd())
-    return os.path.join(path,'build/')
+def get_global_params_file():
+    return os.path.join(get_c_org_path(), "global.yaml")
 
+hex = "0123456789ABCDEF"
+def generate_random_private_key():
+    ''' Create a random private key
 
-def get_build_file(name = ""):
-    """ File containing the build of a continuous organisation """
-    return os.path.join(get_build_path(), clean_name(name) + ".pkl")
-
-def get_source_path():
-    """ Folder containing the Continuous Organisations' source code """
-    return os.path.join(rootdir,'contracts/')
-
-
-def get_source_file(version):
-    """ File containing the source code of a smart contract """
-    filename = "ContinuousOrganisation-v{}.sol".format(str(version))
-    return os.path.join(get_source_path(), filename)
-
-def get_corg_path():
-    """ Folder containing the Continuous Organisations' configuration file """
-    path = os.environ.get('C_ORG_PATH', os.getcwd())
-    return os.path.join(path,'.c-org/')
-
-def get_corg_file():
-    """ File containing the configuration of a continuous organisation """
-    return os.path.join(get_corg_path(), "keys.yaml")
+    >>> key = generate_random_private_key()
+    >>> account = web3.eth.Account.privateKeyToAccount(key)
+    >>> account != None
+    True
+    '''
+    return ''.join(random.choices(hex, k=64))
 
 
 class Wallet(object):
@@ -85,10 +77,39 @@ class Wallet(object):
             self.address = web3.eth.Account.privateKeyToAccount(private_key).address
         self.name = name if name != "" else self.address
 
+
+    @property
+    def balance(self):
+        return w3.eth.getBalance(self.address)
+
+    def add_ether(self, amount):
+        ''' Add ether to a wallet. This is only for testing purpose. Of course, this does not work on mainnet.
+
+        >>> a = w3.eth.account.create('test')
+        >>> w = Wallet('test', a.address, a.privateKey)
+        >>> w.add_ether(10)
+        >>> w.balance
+        10'''
+        # sender = w3.eth.accounts[0]
+        sender = w3.eth.coinbase
+        if amount > w3.eth.getBalance(sender):
+            raise ValueError("The sender does not have enough coins.")
+        w3.eth.sendTransaction({'from': sender,
+                                  'to': self.address,
+                                  'value': amount})
+
     @classmethod
     def from_dict(cls, dict):
-        return cls(dict.get('name'), dict.get('address'), dict.get('private_key'))
+        return cls(dict.get('name'),
+                   dict.get('address'),
+                   dict.get('private_key'))
 
+    @staticmethod
+    def to_dict(wallet):
+        return vars(wallet)
+
+    def __repr__(self):
+        return "<class 'Wallet': name={}, address={}, private_key={}>".format(self.name, self.address, self.private_key)
 
 
 class RestrictedUnpickler(pickle.Unpickler):
@@ -118,3 +139,9 @@ class ConfigurationError(Exception):
     Configuration could not be parsed or has otherwise failed to apply
     """
     pass
+
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

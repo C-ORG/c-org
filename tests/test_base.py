@@ -20,28 +20,57 @@ import os
 import tempfile
 import unittest
 import shutil
-
 import c_org.utils as utils
-from c_org.c_org_manager import ContinuousOrganisationManager
+from c_org import ContinuousOrganisationManager
+from c_org.manager import GlobalParams, Vault
 
-rootdir = os.path.dirname(os.path.abspath(__file__))
+
+
 
 class TestBase(unittest.TestCase):
 
+    def init_wallet(self):
+        vault = Vault()
+        self.wallet = vault.create_wallet('test')
+        self.wallet.add_ether(1000000000000000000)
+
     def temp_files(self):
         self.workdir = tempfile.TemporaryDirectory()
-        os.environ['C_ORG_PATH'] = self.workdir.name
+        os.environ['HOME'] = self.workdir.name
+        rootdir = os.path.dirname(os.path.abspath(__file__))
 
         # ressources
-        configs_folder = utils.get_config_path()
-        config_file = os.path.join(rootdir, "ressources", "config.yaml")
-        shutil.copy(config_file, configs_folder)
-        private_folder = utils.get_corg_path()
-        private_file = os.path.join(rootdir, "ressources", ".c-org", "keys.yaml")
-        os.makedirs(private_folder)
-        shutil.copy(private_file, private_folder)
+        c_orgs = utils.get_c_org_path()
+        os.makedirs(c_orgs)
+        contracts = os.path.join(c_orgs, "contracts")
+        os.makedirs(contracts)
+        contract = os.path.join(rootdir,
+                                "ressources",
+                                ".c-org",
+                                "contracts",
+                                "ContinuousOrganisation.sol")
+        shutil.copy(contract, contracts)
+        global_file = os.path.join(rootdir,
+                                   "ressources",
+                                   ".c-org",
+                                   "global.yaml")
+        shutil.copy(global_file, c_orgs)
+        vault_file = os.path.join(rootdir,
+                                  "ressources",
+                                  ".c-org",
+                                  "vault.yaml")
+        shutil.copy(vault_file, c_orgs)
+
         # manager
-        self.c_org_manager = ContinuousOrganisationManager()
+        name = "my-co"
+        c_name = utils.clean_name(name)
+        my_co_path = os.path.join(c_orgs, c_name)
+        os.makedirs(my_co_path)
+        global_params = GlobalParams()
+        global_params.create_or_update(name, my_co_path)
+        config_file = os.path.join(rootdir, "ressources", "config.yaml")
+        shutil.copy(config_file, my_co_path)
+        self.c_org_manager = ContinuousOrganisationManager(name)
 
     def cleanup(self):
         self.workdir.cleanup()

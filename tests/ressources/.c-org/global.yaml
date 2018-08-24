@@ -1,0 +1,5 @@
+c-orgs:
+  - name: 'My C-Org'
+    dir: '$HOME/.corg/my-c-org'
+  - name: 'Super C-Org'
+    dir: '$HOME/src/super-c-org'

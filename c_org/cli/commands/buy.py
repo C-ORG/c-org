@@ -20,8 +20,8 @@
 import logging
 
 from c_org.cli.command import COrgCommand
-from c_org.c_org_manager import ContinuousOrganisationManager
-
+from c_org import ContinuousOrganisationManager
+from c_org.manager import Vault
 
 class COrgBuy(COrgCommand):
 
@@ -38,14 +38,25 @@ class COrgBuy(COrgCommand):
         self.parser.add_argument('--amount',
                                  help='Amount to send',
                                  type=float)
-
+        self.parser.add_argument('name',
+                                 help='Continuous Organisation\'s name',
+                                 type=str,
+                                 metavar="name")
         self.func = self.command_buy
         self.parse_args()
         self.run_command()
 
     def command_buy(self):
-        c_org_manager = ContinuousOrganisationManager()
-        contract = c_org_manager.load()
-        logging.debug('Sending an amount of {:.3f} to {}'.
-                       format(self.amount, c_org_manager.name))
-        c_org_manager.mint(self.amount, self.wallet)
+        vault = Vault()
+        try:
+            wallet = vault.find_wallet(name=self.wallet)
+        except ValueError:
+            return logging.error('The wallet is not recognized. Add a wallet with the wallet command.')
+
+        c_org_manager = ContinuousOrganisationManager(self.name)
+        if not c_org_manager.is_built():
+            return logging.error('The continuous organisation is not deployed.  Run first `c-org deploy --help`.')
+
+        logging.debug('Buying an amount of {:.3f} to {}'.
+                       format(self.amount, self.name))
+        c_org_manager.buy(self.amount, wallet)

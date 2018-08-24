@@ -22,10 +22,10 @@ import os
 import sys
 from c_org.utils import Wallet
 from c_org.cli.command import COrgCommand
-from c_org.c_org_manager import ContinuousOrganisationManager
-from c_org.mixin import KeysMixin
+from c_org import ContinuousOrganisationManager
+from c_org.manager import Vault
 
-class COrgWallet(KeysMixin, COrgCommand):
+class COrgWallet(COrgCommand):
 
     def __init__(self):
         super().__init__(command_id='wallet', leaf=True,
@@ -34,6 +34,12 @@ class COrgWallet(KeysMixin, COrgCommand):
 
     def run(self):
         subparsers = self.parser.add_subparsers(help="Options to manage wallets")
+        parser_create = subparsers.add_parser('create', help='Create a wallet')
+        parser_create.add_argument('name',
+                                   help='wallet\'s name',
+                                   type=str,
+                                   metavar="name")
+        parser_create.set_defaults(func=self.command_create_wallet)
         parser_add = subparsers.add_parser('add', help='Add a wallet')
         parser_add.add_argument('name',
                                  help='wallet\'s name',
@@ -53,23 +59,36 @@ class COrgWallet(KeysMixin, COrgCommand):
         self.parse_args()
         self.run_command()
 
+
     def command_add_wallet(self):
-        if self.wallet_exists(self.name):
-            logging.error("The wallet's name already exists.")
-            return
+        vault = Vault()
+        if vault.exist_wallet(name=self.name):
+            return logging.error("The wallet's name already exists.")
 
         if self.name:
             logging.debug("Adding a wallet with name {}.".format(self.name))
         else:
-            logging.debug("Adding a wallet with address {}.".format(self.address))
+            logging.debug("Adding a wallet with private key")
 
         wallet = Wallet(name=self.name, private_key=self.private_key)
-        self.add_wallet(wallet)
+        vault.store_wallet(wallet)
+        logging.info("The wallet is added.")
+
+
+    def command_create_wallet(self):
+        vault = Vault()
+        if vault.exist_wallet(name=self.name):
+            return logging.error("The wallet's name already exists.")
+        logging.debug("Creating a wallet with name {}.".format(self.name))
+        vault.create_wallet(wallet)
+        logging.info("The wallet is created.")
+
 
     def command_rm_wallet(self):
-        if not self.wallet_exists(self.name):
-            logging.error("The wallet's name can not be found.")
-            return
+        vault = Vault()
+        if not vault.exist_wallet(name=self.name):
+            return logging.error("The wallet's name can not be found.")
 
         logging.debug("Removing a wallet with name {}.".format(self.name))
-        self.remove_wallet(self.name)
+        vault.remove_wallet(self.name)
+        logging.info("The wallet is removed.")

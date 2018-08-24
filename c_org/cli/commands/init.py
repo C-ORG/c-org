@@ -20,7 +20,7 @@
 import logging
 import os
 from c_org.cli.command import COrgCommand
-from c_org.c_org_manager import ContinuousOrganisationManager
+from c_org import ContinuousOrganisationManager
 import c_org.utils as utils
 
 class COrgInit(COrgCommand):
@@ -40,29 +40,16 @@ class COrgInit(COrgCommand):
         self.run_command()
 
     def command_init(self):
-        corg = utils.get_corg_path()
-        if os.path.isdir(corg):
-            logging.error("The folder .c-org already exists.")
-        else:
-            os.makedirs(corg)
-
-        configs = '''c-org:
-    version: 0.1            # the version of the smart contract
-    name: {}         # the name of your continuous organization
-    summary: 'The 1st continuous organization'
-                          # summary of your organization (optional)
-    website: 'https://invest.decusis.com'
-                          # where users can mint/burn tokens (optional)
-    wallet: '0x3aebb26a66b328cd8a60415710ce4de147657b0b'
-                          # main wallet of the organization
-    slope: 1.0              # slope of the buying curve
-    investor_reserve: 0.1   # percentage of invested money put in reserve
-    revenue_reserve: 0.3    # percentage of revenues put in reserve
-    initial_tokens: 1000000 # the number of tokens initially available
+        c_org_manager = ContinuousOrganisationManager(self.name)
+        configs = '''version: 0.1            # the version of the smart contract
+name: {}         # the name of your continuous organisation
+summary: ''             # summary of your organization (optional)
+website: ''             # where users can mint/burn tokens (optional)
+wallet: ''              # main wallet of the organization
+slope: 1.0              # slope of the buying curve
+investor_reserve: 0.1   # percentage of invested money put in reserve
+revenue_reserve: 0.3    # percentage of revenues put in reserve
+initial_tokens: 1000000 # the number of tokens initially available
           '''.format(self.name)
-        with open(utils.get_config_file(), 'w+') as f:
+        with open(c_org_manager.param_file, 'w+') as f:
             f.write(configs)
-
-        with open(utils.get_corg_file(), 'w+') as f:
-            f.write('''infura: ~
-    wallets: ~''')

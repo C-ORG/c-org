@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 #
+# This manages the parameters of a continuous organisation
+#
 # Copyright (C) 2018 Continuous Organisation.
 # Author: Pierre-Louis Guhur <pierre-louis.guhur@laposte.net>
 #
@@ -15,6 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from c_org.c_org import ContinuousOrganisationManager
+'''c-org parameters manager'''
 
-__all__ = [ContinuousOrganisationManager]
+from c_org.manager.base import BaseManager
+
+class LocalParams(BaseManager):
+
+    pass

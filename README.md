@@ -1,4 +1,4 @@
-# c_org - Command line tools to derive Continuous Organisations
+# c-org - Command line tools to manage Continuous Organisations
 
 
 # Website
@@ -9,7 +9,7 @@ https://c-org.co
 
 # Installation
 
-You need `Python > 3.5.3` because `web3.py` is using `typing`. If you are using an older version of Python, you can use `pyenv` to install a new one. In this case, make sure you activate the virtual environment each time you are using `c_org`.
+You need `Python > 3.5.3` because `web3.py` is using `typing`. If you are using an older version of Python, you can use `pyenv` to install a new one. In this case, make sure you activate the virtual environment each time you are using `c-org`.
 
 ```bash
 # install pyenv
@@ -17,13 +17,13 @@ curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer 
 # install python 3.6.5
 pyenv install 3.6.5
 # create a virtual environment
-pyenv virtualenv 3.6.5 corg
+pyenv virtualenv 3.6.5 c-org
 # activate it
-pyenv activate corg
+pyenv activate c-org
 ```
 
 
-Then, you can easily install `c_org` with the following commands:
+Then, you can easily install `c-org` with the following commands:
 
 ```bash
 pip install .
@@ -35,16 +35,32 @@ python -m solc.install v0.4.24
 python -m unittest discover
 ```
 
-# Use
+# Using `c-org`
 
 The continuous organisation is built inside a separate folder.
 
+1. Create a `params.yaml` as given in [example](../master/configs/example.yaml) or run `c-org init`.
+
+2. Create a wallet containing enough gas to deploy the continuous organisation on the ethereum net.
+
 ```bash
-c_org init my_continuous_organisation
-nano params.yaml
-c_org wallet add my_wallet my_private_key
-c_org derive
-c_org {buy, sell, revenue, stats} --help
+c-org wallet create my_wallet
+```
+
+The wallet is store locally and you can re-use it.
+
+3. Deploy the continuous organisation :
+
+```bash
+c-org deploy params.yaml
+```
+
+Several files are generated in `$HOME/.c-org/my-c-org/`, but you can set the destination path with the `--destination` argument.
+
+4. Finally, you can buy, sell, add revenues ou see statistics with the commands:
+
+```bash
+c-org {buy, sell, revenue, stats} --help
 ```
 
 # TODO list

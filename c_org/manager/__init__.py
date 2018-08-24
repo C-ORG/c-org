@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 #
+# The manager class is an abstract class to manage a Continuous Organisation without any blockchain dependancies
+# It is used to be stable and absolutely backward-compatible
+#
 # Copyright (C) 2018 Continuous Organisation.
 # Author: Pierre-Louis Guhur <pierre-louis.guhur@laposte.net>
 #
@@ -15,6 +18,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from c_org.c_org import ContinuousOrganisationManager
+'''c_org configuration manager'''
 
-__all__ = [ContinuousOrganisationManager]
+
+from c_org.manager.vault import Vault
+from c_org.manager.global_params import GlobalParams
+from c_org.manager.local_params import LocalParams
+from c_org.manager.base import BaseManager
+
+__all__ = ['Vault',
+           'GlobalParams',
+           'BaseManager',
+           'LocalParams']

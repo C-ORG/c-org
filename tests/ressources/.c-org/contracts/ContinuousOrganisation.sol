@@ -76,7 +76,7 @@ contract ContinuousOrganisation {
 
     /* Minting and burning tokens */
     // #TODO protection against overflows
-    function minting() public payable {
+    function buy() public payable {
         require(msg.value > 0);
 
         // create tokens
@@ -92,7 +92,7 @@ contract ContinuousOrganisation {
         emit UpdateTokens(nTokens, sellReserve);
     }
 
-    function burning(uint tokens) public {
+    function sell(uint tokens) public {
         // check funds
         require(tokens > 0);
         require(balances[msg.sender] >= tokens);

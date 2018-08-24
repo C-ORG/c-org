@@ -27,36 +27,38 @@ from web3.auto import w3
 import c_org
 from .test_base import TestBase
 from c_org.cli import main
-from c_org.c_org_manager import ContinuousOrganisationManager
+from c_org import ContinuousOrganisationManager
 import c_org.utils as utils
+from c_org.manager import Vault
 
-exe_cli="c_org"
+exe_cli="c-org"
 
-class TestDerive(TestBase):
+class TestDeploy(TestBase):
 
     def setUp(self):
         self.temp_files()
+        self.init_wallet()
 
-    def test_derive(self):
-        sys.argv = [exe_cli] + ["derive"]
+    def test_deploy(self):
+        sys.argv = [exe_cli] + ["deploy", "my-co", "--wallet", self.wallet.name]
         main()
-        build_file = utils.get_build_file("decusis")
-        self.assertTrue(os.path.isfile(build_file))
-        contract = self.c_org_manager.load()
-        self.assertTrue(contract.all_functions())
+        self.assertTrue(os.path.isfile(self.c_org_manager.build_file))
+        contract = self.c_org_manager.contract
+        self.assertTrue(len(contract.find_functions_by_name('buy')))
+
 
 class TestInit(TestBase):
 
     def setUp(self):
         self.temp_files()
-        os.remove(utils.get_corg_file())
-        os.rmdir(utils.get_corg_path())
 
     def test_init(self):
-        sys.argv = [exe_cli] + ["init", "test"]
+        sys.argv = [exe_cli] + ["init", "my-co"]
         main()
-        path = os.path.join(self.workdir.name, ".c-org")
-        self.assertTrue(os.path.isdir(path))
+        with open(self.c_org_manager.param_file, "r") as f:
+            param = yaml.load(f)
+        self.assertTrue('my-co', param.get('name'))
+        self.assertNotIn('buy', param)
 
 
 class TestCommandWallet(TestBase):
@@ -65,47 +67,39 @@ class TestCommandWallet(TestBase):
         self.temp_files()
 
     def test_add_wallet(self):
-        sys.argv = [exe_cli] + ["wallet", "add", "name", "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"]
+        sys.argv = [exe_cli] + ["wallet", "add", "test",
+                                utils.generate_random_private_key()]
         main()
-        filename = os.path.join(self.workdir.name, ".c-org", "keys.yaml")
-        self.assertTrue(os.path.isfile(filename))
-        with open(filename, 'r') as f:
-            keys = yaml.load(f)
-        names = [w.get('name') for w in keys.get('wallets')]
-        self.assertIn("name", names)
+        vault = Vault()
+        self.assertTrue(vault.exist_wallet("test"))
 
     def test_rm_wallet(self):
-        sys.argv = [exe_cli, "wallet", "add", "name", "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"]
+        sys.argv = [exe_cli, "wallet", "add", "name",
+                    utils.generate_random_private_key()]
         main()
         sys.argv = [exe_cli, "wallet", "remove", "name"]
         main()
-        filename = os.path.join(self.workdir.name, ".c-org", "keys.yaml")
-        with open(filename, 'r') as f:
-            keys = yaml.load(f)
-        names = [w.get('name') for w in keys.get('wallets')]
-        self.assertNotIn("name", names)
+        vault = Vault()
+        self.assertFalse(vault.exist_wallet("test"))
+
+    def test_create_wallet(self):
+        pass #TODO
 
 
-
-class TestOthersCommands(TestBase):
+class TestOtherCommands(TestBase):
 
     def setUp(self):
         self.temp_files()
-        self.wallet = w3.eth.accounts[1]
-        # create a smart contract
-        sys.argv = [exe_cli] + ["derive"]
-        main()
+        self.init_wallet()
+        self.c_org_manager.deploy(self.wallet)
 
     def test_buy(self):
-        sys.argv = [exe_cli] + ["buy",  "--wallet", self.wallet, "--amount", "10"]
+        sys.argv = [exe_cli] + [ "buy", "my-co",  "--wallet", self.wallet.name, "--amount", "0.1"]
         main()
 
     def test_sell(self):
-        # buy 10
-        contract = self.c_org_manager.load()
-        self.c_org_manager.mint(10, self.wallet)
-        # sell 10
-        sys.argv = [exe_cli] + ["sell",  "--wallet", self.wallet, "--amount", "1"]
+        self.c_org_manager.buy(0.1, self.wallet)
+        sys.argv = [exe_cli] + ["sell", "my-co", "--wallet", self.wallet.name, "--amount", "1"]
         main()
 
     # def test_revenue(self):
@@ -113,7 +107,8 @@ class TestOthersCommands(TestBase):
     #     main()
 
     def test_stats(self):
-        sys.argv = [exe_cli] + ["stats", "--wallet", self.wallet]
+        self.c_org_manager.buy(0.1, self.wallet)
+        sys.argv = [exe_cli] + ["stats", "my-co", "--wallet", self.wallet.name]
         main()
 
 

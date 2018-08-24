@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from c_org.cli.commands.derive import COrgDerive
+from c_org.cli.commands.deploy import COrgDeploy
 from c_org.cli.commands.buy import COrgBuy
 from c_org.cli.commands.sell import COrgSell
 from c_org.cli.commands.revenue import COrgRevenue
@@ -24,7 +24,7 @@ from c_org.cli.commands.wallet import COrgWallet
 from c_org.cli.commands.init import COrgInit
 
 __all__ = [
-    'COrgDerive',
+    'COrgDeploy',
     'COrgBuy',
     'COrgSell',
     'COrgRevenue',

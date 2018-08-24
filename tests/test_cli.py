@@ -25,7 +25,7 @@ import yaml
 
 from .test_base import TestBase
 
-exe_cli = ["c_org"]
+exe_cli = ["c-org"]
 
 os.environ.update({'PYTHONPATH': '.'})
 
@@ -39,7 +39,7 @@ class TestArgs(TestBase):
     def test_global_help(self):
         out = subprocess.check_output(exe_cli + ['--help'])
         self.assertIn(b'Available commands', out)
-        self.assertIn(b'derive', out)
+        self.assertIn(b'sell', out)
         self.assertIn(b'--debug', out)
 
     def test_command_help(self):

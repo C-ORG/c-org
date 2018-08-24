@@ -20,7 +20,8 @@
 import logging
 from web3.auto import w3
 from c_org.cli.command import COrgCommand
-from c_org.c_org_manager import ContinuousOrganisationManager
+from c_org import ContinuousOrganisationManager
+from c_org.manager import Vault
 
 class COrgStats(COrgCommand):
 
@@ -34,15 +35,28 @@ class COrgStats(COrgCommand):
         self.parser.add_argument('--wallet',
                                  help='Your wallet\'s name',
                                  type=str)
+        self.parser.add_argument('name',
+                                 help='Continuous Organisation\'s name',
+                                 type=str,
+                                 metavar="name")
         self.func = self.command_stats
         self.parse_args()
         self.run_command()
 
     def command_stats(self):
-        c_org_manager = ContinuousOrganisationManager()
-        self.contract = c_org_manager.load()
+        vault = Vault()
+        try:
+            wallet = vault.find_wallet(name=self.wallet)
+        except ValueError:
+            return logging.error('The wallet is not recognized. Add a wallet with the wallet command.')
+
+        c_org_manager = ContinuousOrganisationManager(self.name)
+        if not c_org_manager.is_built():
+            return logging.error('The continuous organisation is not deployed.  Run first `c-org deploy --help`.')
+
+
         logging.debug('Retrieving the statistics')
-        balance = c_org_manager.get_balance(self.wallet)
+        balance = c_org_manager.get_balance(wallet)
         logging.info("Balance: {:.3f} tokens".format(balance))
         tokens = c_org_manager.get_n_tokens()
         logging.info("Total tokens: {:.3f} tokens".format(tokens))

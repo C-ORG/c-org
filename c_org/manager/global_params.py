@@ -38,8 +38,11 @@ class GlobalParams(BaseManager):
     @property
     def names(self):
         '''
-        >>> b.data = {'c-orgs': [{'name':'foo'}, {'name':'bar'}]}
-        >>> b.names
+        Return the list of Continuous Organisations' names.
+
+        >>> g = GlobalParams(os.path.join(get_c_org_path(), "global.yaml"))
+        >>> g.data = {'c-orgs': [{'name':'foo'}, {'name':'bar'}]}
+        >>> g.names
         ['foo', 'bar']
         '''
         return [co.get('name') for co in self.c_orgs]
@@ -47,8 +50,9 @@ class GlobalParams(BaseManager):
     def find_by_name(self, name):
         ''' Return the path to a continuous organisation whose name is givenself.
 
-        >>> b.data = {'c-orgs': [{'name':'foo', 'dir':'/dev/'},{'name':'bar', 'dir':'/homes/'}]}
-        >>> b.find_by_name('foo')
+        >>> g = GlobalParams(os.path.join(get_c_org_path(), "global.yaml"))
+        >>> g.data = {'c-orgs': [{'name':'foo', 'dir':'/dev/'},{'name':'bar', 'dir':'/homes/'}]}
+        >>> g.find_by_name('foo')
         '/dev/'
         '''
         for co in self.c_orgs:
@@ -58,12 +62,13 @@ class GlobalParams(BaseManager):
     def create_or_update(self, name, dir):
         ''' Create a continuous organisation folder or update the folder in the database (the files are not moved nor suppressed)
 
-        >>> b.data = {'c-orgs': []}
-        >>> b.create_or_update('foo', '/dev/')
-        >>> b.data
+        >>> g = GlobalParams(os.path.join(get_c_org_path(), "global.yaml"))
+        >>> g.data = {'c-orgs': []}
+        >>> g.create_or_update('foo', '/dev/')
+        >>> g.data
         {'c-orgs': [{'name': 'foo', 'dir': '/dev/'}]}
-        >>> b.create_or_update('foo', '/etc/')
-        >>> b.data
+        >>> g.create_or_update('foo', '/etc/')
+        >>> g.data
         {'c-orgs': [{'name': 'foo', 'dir': '/etc/'}]}
         '''
         if self.exists(name, "name", "c-orgs"):
@@ -75,12 +80,4 @@ class GlobalParams(BaseManager):
 if __name__ == "__main__":
     import doctest
     import tempfile
-    workdir = tempfile.TemporaryDirectory()
-    os.environ['HOME'] = workdir.name
-    os.makedirs(os.path.join(workdir.name, ".c-org"))
-    filename = os.path.join(workdir.name, ".c-org", "global.yaml")
-    with open(filename, "w+") as f:
-        f.write('c-orgs:')
-    b = GlobalParams()
-    doctest.testmod(extraglobs={'b': b})
-    workdir.cleanup()
+    doctest.testmod()

@@ -46,8 +46,8 @@ class Vault(BaseManager):
         '''
         Create a wallet given its name.
 
-        >>> w = v.create_wallet("my-wallet")
-        >>> v.exist_wallet('my-wallet')
+        >>> w = Vault().create_wallet("my-wallet")
+        >>> Vault().exist_wallet('my-wallet')
         True
         '''
         account = w3.eth.account.create(name)
@@ -62,8 +62,10 @@ class Vault(BaseManager):
         '''
         Store a wallet given as a dict or a Wallet instance.
 
-        >>> v.store_wallet(wallet)
-        >>> v.exist_wallet(wallet.name)
+        >>> wallet = Vault().create_wallet('test')
+        >>> Vault().remove_wallet(wallet.name)
+        >>> Vault().store_wallet(wallet)
+        >>> Vault().exist_wallet(wallet.name)
         True
         '''
         if isinstance(wallet, Wallet):
@@ -76,9 +78,8 @@ class Vault(BaseManager):
         '''
         Find a wallet given its name, its address or its private_key
 
-        >>> v.store_wallet(wallet)
-        >>> w = v.find_wallet(name="safe")
-        >>> wallet.address == w.address
+        >>> w = Vault().create_wallet("safe")
+        >>> Vault().find_wallet(name="safe") != None
         True
         '''
         if name:
@@ -97,8 +98,8 @@ class Vault(BaseManager):
         '''
         Check if a wallet exists in the vault given its name.
 
-        >>> w = v.create_wallet('test')
-        >>> v.exist_wallet('test')
+        >>> w = Vault().create_wallet('test')
+        >>> Vault().exist_wallet('test')
         True
         '''
         return self.exists(name, 'name', 'wallets')
@@ -107,6 +108,7 @@ class Vault(BaseManager):
         '''
         Remove a wallet given its name.
 
+        >>> v = Vault()
         >>> v.data =  {'wallets': [{'private_key': '', 'address': '', 'name': 'to-remove'}]}
         >>> v.remove_wallet('to-remove')
         >>> v.data
@@ -126,10 +128,10 @@ if __name__ == "__main__":
     filename = os.path.join(workdir.name, ".c-org", "vault.yaml")
     with open(filename, "w+") as f:
         f.write('''infura: ~
-wallets: ~''')
+wallets: []''')
     os.environ['HOME'] = workdir.name
     v = Vault()
-    v.data = {'wallets':[]}
+    # v.data = {'wallets':[]}
     doctest.testmod(extraglobs={'v': v,
                                 'wallet': Wallet(name="safe",
                                                  private_key=private_key)})

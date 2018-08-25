@@ -32,7 +32,7 @@ python -m solc.install v0.4.24
 # For running tests, you need a local provider:
 # First on a separate terminal, install and run ganache-cli
 # then in this repository, run
-python -m unittest discover
+py.test
 ```
 
 # Using `c-org`

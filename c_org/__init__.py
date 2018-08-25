@@ -17,4 +17,4 @@
 
 from c_org.c_org import ContinuousOrganisationManager
 
-__all__ = [ContinuousOrganisationManager]
+__all__ = ['ContinuousOrganisationManager']

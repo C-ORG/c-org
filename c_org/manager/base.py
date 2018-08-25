@@ -52,6 +52,7 @@ class BaseManager(object):
 
     def save(self):
         '''
+        >>> b = BaseManager(os.path.join(get_c_org_path(), "vault.yaml"))
         >>> b.data = {'wallets': [{'name': 'bar'}]}
         >>> b.filename = "test.txt"
         >>> b.save()
@@ -64,6 +65,7 @@ class BaseManager(object):
 
     def load(self):
         '''
+        >>> b = BaseManager(os.path.join(get_c_org_path(), "vault.yaml"))
         >>> b.data = {'wallets': [{'name': 'bar'}]}
         >>> b.save()
         >>> b.data = {}
@@ -83,6 +85,7 @@ class BaseManager(object):
 
     def get(self, key, *keys, data=None, default=None):
         '''
+        >>> b = BaseManager(os.path.join(get_c_org_path(), "vault.yaml"))
         >>> b.data = {'safe': {'wallets': [{'name':'bar'}]}}
         >>> b.get('safe', 'wallets')
         [{'name': 'bar'}]
@@ -95,6 +98,7 @@ class BaseManager(object):
 
     def set(self, old_value, value, cmp, *keys, data=None):
         '''
+        >>> b = BaseManager(os.path.join(get_c_org_path(), "vault.yaml"))
         >>> b.data = {'wallets':[{'name':'foo'}]}
         >>> b.set('foo', 'bar', 'name', 'wallets')
         >>> b.data
@@ -108,6 +112,7 @@ class BaseManager(object):
 
     def exists(self, value, cmp, *keys):
         '''
+        >>> b = BaseManager(os.path.join(get_c_org_path(), "vault.yaml"))
         >>> b.data = {'wallets':[{'name':'foo'},{'name':'bar'}]}
         >>> b.exists('bar', 'name', 'wallets')
         True
@@ -120,6 +125,7 @@ class BaseManager(object):
 
     def add(self, element, key, *keys):
         '''
+        >>> b = BaseManager(os.path.join(get_c_org_path(), "vault.yaml"))
         >>> b.data = {'wallets':[]}
         >>> b.add({'name': 'bar'}, 'wallets')
         >>> b.data
@@ -131,6 +137,7 @@ class BaseManager(object):
 
     def remove(self, value, cmp, *keys):
         '''
+        >>> b = BaseManager(os.path.join(get_c_org_path(), "vault.yaml"))
         >>> b.data = {'wallets':[{'name':'foo'},{'name':'bar'}]}
         >>> b.remove('bar', 'name', 'wallets')
         >>> b.data
@@ -145,5 +152,4 @@ class BaseManager(object):
 
 if __name__ == "__main__":
     import doctest
-    filename = os.path.join(get_c_org_path(), "vault.yaml")
-    doctest.testmod(extraglobs={'b': BaseManager(filename)})
+    doctest.testmod()

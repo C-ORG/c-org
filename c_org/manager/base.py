@@ -81,7 +81,7 @@ class BaseManager(object):
     def __exit__(self):
         self.save()
 
-    def get(self, key, *keys, data=None):
+    def get(self, key, *keys, data=None, default=None):
         '''
         >>> b.data = {'safe': {'wallets': [{'name':'bar'}]}}
         >>> b.get('safe', 'wallets')
@@ -91,7 +91,7 @@ class BaseManager(object):
             data = self.data
         if keys:
             return self.get(*keys, data=data.get(key))
-        return data.get(key)
+        return data.get(key, default)
 
     def set(self, old_value, value, cmp, *keys, data=None):
         '''

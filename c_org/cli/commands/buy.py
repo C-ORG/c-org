@@ -60,3 +60,6 @@ class COrgBuy(COrgCommand):
         logging.debug('Buying an amount of {:.3f} to {}'.
                        format(self.amount, self.name))
         c_org_manager.buy(self.amount, wallet)
+
+        balance = c_org_manager.get_balance(wallet)
+        logging.info("Great! Your buy tokens! Your balance is now {:d}".format(balance))

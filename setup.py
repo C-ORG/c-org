@@ -12,14 +12,14 @@ def check_files():
     contracts = os.path.join(c_org, "contracts")
     if not os.path.isdir(contracts):
         os.makedirs(contracts)
-        rootdir = os.path.dirname(os.path.abspath(__file__))
+    rootdir = os.path.dirname(os.path.abspath(__file__))
     contract = os.path.join(rootdir, "contracts", "ContinuousOrganisation.sol")
     shutil.copy(contract, contracts)
     with open(os.path.join(c_org, "vault.yaml"), 'w+') as f:
         f.write('''infura: ~
-wallets: ~''')
+wallets: []''')
     with open(os.path.join(c_org, "global.yaml"), 'w+') as f:
-        f.write('c-orgs:')
+        f.write('c-orgs: []')
 
 
 class PostDevelopCommand(develop):

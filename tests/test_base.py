@@ -29,7 +29,10 @@ from c_org.manager import GlobalParams, Vault
 
 class TestBase(unittest.TestCase):
 
-    def init_wallet(self):
+    def generate_wallet(self):
+        if not self.has_temporary_files():
+            self.temp_files()
+
         vault = Vault()
         self.wallet = vault.create_wallet('test')
         self.wallet.add_ether(1000000000000000000)
@@ -37,9 +40,13 @@ class TestBase(unittest.TestCase):
     def temp_files(self):
         self.workdir = tempfile.TemporaryDirectory()
         os.environ['HOME'] = self.workdir.name
-        rootdir = os.path.dirname(os.path.abspath(__file__))
+        self._temporary = True
 
-        # ressources
+    def generate_c_org(self):
+        if not self.has_temporary_files():
+            self.temp_files()
+
+        rootdir = os.path.dirname(os.path.abspath(__file__))
         c_orgs = utils.get_c_org_path()
         os.makedirs(c_orgs)
         contracts = os.path.join(c_orgs, "contracts")
@@ -61,19 +68,27 @@ class TestBase(unittest.TestCase):
                                   "vault.yaml")
         shutil.copy(vault_file, c_orgs)
 
-        # manager
+    def has_temporary_files(self):
+        return hasattr(self, '_temporary') and self._temporary
+
+    def generate_manager(self):
+        if not self.has_temporary_files():
+            self.temp_files()
+
         name = "my-co"
         c_name = utils.clean_name(name)
-        my_co_path = os.path.join(c_orgs, c_name)
+        my_co_path = os.path.join(utils.get_c_org_path(), c_name)
         os.makedirs(my_co_path)
         global_params = GlobalParams()
         global_params.create_or_update(name, my_co_path)
+        rootdir = os.path.dirname(os.path.abspath(__file__))
         config_file = os.path.join(rootdir, "ressources", "config.yaml")
         shutil.copy(config_file, my_co_path)
         self.c_org_manager = ContinuousOrganisationManager(name)
 
     def cleanup(self):
-        self.workdir.cleanup()
+        if self.has_temporary_files():
+            self.workdir.cleanup()
 
     def tearDown(self):
         self.cleanup()

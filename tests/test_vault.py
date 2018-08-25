@@ -31,7 +31,8 @@ class TestVault(TestBase):
     '''Vault tests'''
 
     def setUp(self):
-        self.temp_files()
+        self.generate_c_org()
+        self.generate_wallet()
         self.v = Vault()
 
     def test_vault(self):

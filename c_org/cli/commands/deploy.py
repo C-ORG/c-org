@@ -49,8 +49,13 @@ class COrgDeploy(COrgCommand):
         self.run_command()
 
     def command_deploy(self):
+        global_params = GlobalParams()
         if not self.output:
-            self.output = utils.get_default_path(self.name)
+            self.output = global_params.find_by_name(self.name)
+            if not self.output:
+                self.output = utils.get_default_path(self.name)
+        global_params.create_or_update(self.name, self.output)
+
 
         try:
             v = Vault()
@@ -58,12 +63,11 @@ class COrgDeploy(COrgCommand):
         except ValueError:
             return logging.error('The wallet is not recognized. Add a wallet with the wallet command.')
 
-        global_params = GlobalParams()
-        global_params.create_or_update(self.name, self.output)
-
         c_org_manager = ContinuousOrganisationManager(self.name)
         c_org_manager.deploy(wallet)
 
 
         # create free tokens
         #c_org_manager.free_tokens(config.get('initial_tokens'))
+
+        logging.info("Great! Your continuous organisation exists!")

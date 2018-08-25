@@ -36,8 +36,9 @@ exe_cli="c-org"
 class TestDeploy(TestBase):
 
     def setUp(self):
-        self.temp_files()
-        self.init_wallet()
+        self.generate_c_org()
+        self.generate_manager()
+        self.generate_wallet()
 
     def test_deploy(self):
         sys.argv = [exe_cli] + ["deploy", "my-co", "--wallet", self.wallet.name]
@@ -50,21 +51,27 @@ class TestDeploy(TestBase):
 class TestInit(TestBase):
 
     def setUp(self):
-        self.temp_files()
+        self.generate_c_org()
+        self.name = "my-co"
+        c_name = utils.clean_name(self.name)
+        self.my_co_path = os.path.join(utils.get_c_org_path(), c_name)
+        os.makedirs(self.my_co_path)
 
     def test_init(self):
-        sys.argv = [exe_cli] + ["init", "my-co"]
+        sys.argv = [exe_cli] + ["init", self.name, "--dir", self.my_co_path]
         main()
-        with open(self.c_org_manager.param_file, "r") as f:
+        c_org_manager = ContinuousOrganisationManager(self.name)
+        with open(c_org_manager.param_file, "r") as f:
             param = yaml.load(f)
-        self.assertTrue('my-co', param.get('name'))
+        self.assertEqual(self.name, param.get('name'))
         self.assertNotIn('buy', param)
 
 
 class TestCommandWallet(TestBase):
 
     def setUp(self):
-        self.temp_files()
+        self.generate_c_org()
+        self.generate_manager()
 
     def test_add_wallet(self):
         sys.argv = [exe_cli] + ["wallet", "add", "test",
@@ -89,8 +96,9 @@ class TestCommandWallet(TestBase):
 class TestOtherCommands(TestBase):
 
     def setUp(self):
-        self.temp_files()
-        self.init_wallet()
+        self.generate_c_org()
+        self.generate_manager()
+        self.generate_wallet()
         self.c_org_manager.deploy(self.wallet)
 
     def test_buy(self):

@@ -31,15 +31,15 @@ python -m solc.install v0.4.24
 
 # For running tests, you need a local provider:
 # First on a separate terminal, install and run ganache-cli
-# then in the repository, run
+# then in this repository, run
 python -m unittest discover
 ```
 
 # Using `c-org`
 
-The continuous organisation is built inside a separate folder.
+The continuous organisation called `NAME` is built inside a separate folder. By default, this folder is `DIRECTORY = $HOME/.c-org/NAME`.
 
-1. Create a `params.yaml` as given in [example](../master/configs/example.yaml) or run `c-org init`.
+1. Create a `config.yaml` as given in [example](../master/configs/example.yaml) or run `c-org init` to generate one.
 
 2. Create a wallet containing enough gas to deploy the continuous organisation on the ethereum net.
 
@@ -52,10 +52,9 @@ The wallet is store locally and you can re-use it.
 3. Deploy the continuous organisation :
 
 ```bash
-c-org deploy params.yaml
+c-org deploy NAME [--output DIRECTORY]
 ```
 
-Several files are generated in `$HOME/.c-org/my-c-org/`, but you can set the destination path with the `--destination` argument.
 
 4. Finally, you can buy, sell, add revenues ou see statistics with the commands:
 
@@ -65,17 +64,10 @@ c-org {buy, sell, revenue, stats} --help
 
 # TODO list
 
-## Include wallets
-
-For now, the addresses are just randomly picked from the node provider.
 
 ## Node provider
 
 Everything was tested with `ganache`. Adding `infura` and testing on real blockchains is necessary. Similarly, automated tests should use `testrpc` instead of depending on an extern call to `ganache`.
-
-## Installation
-
-Installation is quite basic for now and it does not check for python version, solc and other dependencies.
 
 ## Documentation
 
@@ -87,4 +79,4 @@ I am wondering how to deal with change in a smart contract, such as it would bre
 
 ## Generating static files
 
-A user interface is required to burn/mint tokens. A library should be generated with the ABI and the address of the smart contract.
+A user interface is required to burn/mint tokens. User interfaces will be developed in separated repository and a link to this repository will be given as a parameter in `params.yaml`.

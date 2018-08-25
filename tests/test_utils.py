@@ -30,7 +30,7 @@ class TestUtils(TestBase):
     '''Utils tests'''
 
     def setUp(self):
-        self.temp_files()
+        self.generate_c_org()
 
     def test_clean_name(self):
         a = "2f vbr Ffrg"

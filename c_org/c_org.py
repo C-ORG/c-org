@@ -46,7 +46,6 @@ class ContinuousOrganisationManager(object):
             os.makedirs(self.folder)
         if not os.path.isfile(self.param_file):
             logging.debug("Creating the config file of the continuous organisation.")
-            print("foo : " + self.param_file)
             open(self.param_file, "a").close()
         self.params = LocalParams(self.param_file)
         self._contract = None

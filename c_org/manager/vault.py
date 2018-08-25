@@ -36,7 +36,7 @@ class Vault(BaseManager):
 
     @property
     def wallets(self):
-        return self.get('wallets')
+        return self.get('wallets', default=[])
 
     @property
     def names(self):

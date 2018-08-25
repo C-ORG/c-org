@@ -22,6 +22,8 @@ import os
 from c_org.cli.command import COrgCommand
 from c_org import ContinuousOrganisationManager
 import c_org.utils as utils
+from c_org.manager import GlobalParams
+
 
 class COrgInit(COrgCommand):
 
@@ -35,11 +37,18 @@ class COrgInit(COrgCommand):
                                  help='Continuous Organisation\'s name',
                                  type=str,
                                  metavar="name")
+        self.parser.add_argument('--output',
+                                  help='Folder to save the continuous organisation',
+                                  type=str)
         self.parse_args()
         self.func = self.command_init
         self.run_command()
 
     def command_init(self):
+        directory = self.output if self.output else os.getcwd() 
+        global_params = GlobalParams()
+        global_params.create_or_update(self.name, directory)
+
         c_org_manager = ContinuousOrganisationManager(self.name)
         configs = '''version: 0.1            # the version of the smart contract
 name: {}         # the name of your continuous organisation
@@ -53,3 +62,5 @@ initial_tokens: 1000000 # the number of tokens initially available
           '''.format(self.name)
         with open(c_org_manager.param_file, 'w+') as f:
             f.write(configs)
+
+        logging.info("Please configure your continuous organisation in the file {}".format(c_org_manager.param_file))

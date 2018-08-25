@@ -28,11 +28,9 @@ from .test_base import TestBase
 class TestContinuousOrganisationManager(TestBase):
 
     def setUp(self):
-        self.temp_files()
-        vault = Vault()
-        self.wallet = vault.create_wallet('test')
-        self.wallet.add_ether(10000000000000000000)
-
+        self.generate_c_org()
+        self.generate_manager()
+        self.generate_wallet()
 
     def test_local_params(self):
         self.assertIn('slope', self.c_org_manager.params.data)

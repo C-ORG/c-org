@@ -58,3 +58,6 @@ class COrgSell(COrgCommand):
 
         logging.debug('Selling an amount of {:.3f}'.format(self.amount))
         c_org_manager.sell(self.amount, wallet)
+
+        balance = c_org_manager.get_balance(wallet)
+        logging.info("Your sell tokens! Your balance is now {:d}".format(balance))

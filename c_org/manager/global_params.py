@@ -33,7 +33,7 @@ class GlobalParams(BaseManager):
 
     @property
     def c_orgs(self):
-        return self.get('c-orgs')
+        return self.get('c-orgs', default=[])
 
     @property
     def names(self):

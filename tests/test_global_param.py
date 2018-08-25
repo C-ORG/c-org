@@ -32,13 +32,13 @@ class TestGlobalParam(TestBase):
     '''Param mixin tests'''
 
     def setUp(self):
-        self.temp_files()
+        self.generate_c_org()
         self.g = GlobalParams()
 
     def test_names(self):
         self.assertNotIn('c-orgs', self.g.names)
         self.assertIn('My C-Org', self.g.names)
-        self.assertEqual(self.g.names, ['My C-Org', 'Super C-Org', 'my-co'])
+        self.assertEqual(self.g.names, ['My C-Org', 'Super C-Org'])
 
     def test_save(self):
         self.g.data = ['foo']

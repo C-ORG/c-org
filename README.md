@@ -28,10 +28,21 @@ Then, you can easily install `c-org` with the following commands:
 ```bash
 pip install .
 python -m solc.install v0.4.24
+```
 
-# For running tests, you need a local provider:
-# First on a separate terminal, install and run ganache-cli
-# then in this repository, run
+# Testing
+
+For running tests, you need a local provider. First, download and install [node.js](https://nodejs.org/en/). Then install and run `ganache-cli`:
+
+```bash
+npm install -g ganache-cli
+ganache-cli
+```
+
+Finally, on a separate terminal, run `py.test`:
+
+```bash
+cd /path/to/c-org/
 py.test
 ```
 
@@ -39,7 +50,7 @@ py.test
 
 The continuous organisation called `NAME` is built inside a separate folder. By default, this folder is `DIRECTORY = $HOME/.c-org/NAME`.
 
-1. Create a `config.yaml` as given in [example](../master/configs/example.yaml) or run `c-org init` to generate one.
+1. Create a `config.yaml` as given in [example](../master/example.yaml) or run `c-org init` to generate one.
 
 2. Create a wallet containing enough gas to deploy the continuous organisation on the ethereum net.
 

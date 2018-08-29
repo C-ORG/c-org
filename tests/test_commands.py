@@ -77,20 +77,20 @@ class TestCommandWallet(TestBase):
         sys.argv = [exe_cli] + ["wallet", "add", "test",
                                 utils.generate_random_private_key()]
         main()
-        vault = Vault()
-        self.assertTrue(vault.exist_wallet("test"))
+        self.assertTrue(Vault().exist_wallet("test"))
 
     def test_rm_wallet(self):
-        sys.argv = [exe_cli, "wallet", "add", "name",
-                    utils.generate_random_private_key()]
-        main()
+        Vault().create_wallet(name="name")
+        self.assertTrue(Vault().exist_wallet("name"))
         sys.argv = [exe_cli, "wallet", "remove", "name"]
         main()
-        vault = Vault()
-        self.assertFalse(vault.exist_wallet("test"))
+        self.assertFalse(Vault().exist_wallet("name"))
 
     def test_create_wallet(self):
-        pass #TODO
+        sys.argv = [exe_cli, "wallet", "create", "my-wallet"]
+        main()
+        self.assertTrue(Vault().exist_wallet("my-wallet"))
+
 
 
 class TestOtherCommands(TestBase):
@@ -110,9 +110,9 @@ class TestOtherCommands(TestBase):
         sys.argv = [exe_cli] + ["sell", "my-co", "--wallet", self.wallet.name, "--amount", "1"]
         main()
 
-    # def test_revenue(self):
-    #     sys.argv = [exe_cli] + ["revenue",  "--revenue", "10"]
-    #     main()
+    def test_revenue(self):
+        sys.argv = [exe_cli] + ["revenue",  "my-co", "--revenue", "0.1"]
+        main()
 
     def test_stats(self):
         self.c_org_manager.buy(0.1, self.wallet)

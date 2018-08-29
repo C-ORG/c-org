@@ -55,7 +55,7 @@ setup(name='c_org',
       packages=find_packages(exclude=['tests', 'doc']),
       zip_safe=False,
       include_package_data=True,
-      install_requires = ['PyYaml', 'py-solc', 'web3'],
+      install_requires = ['PyYaml', 'py-solc', 'web3', 'pytest'],
       entry_points={
           'console_scripts': ['c-org=c_org.cli:main'],
       },

@@ -33,8 +33,7 @@ class TestBase(unittest.TestCase):
         if not self.has_temporary_files():
             self.temp_files()
 
-        vault = Vault()
-        self.wallet = vault.create_wallet('test')
+        self.wallet = Vault().create_wallet('test')
         self.wallet.add_ether(1000000000000000000)
 
     def temp_files(self):

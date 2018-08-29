@@ -39,6 +39,7 @@ class ContinuousOrganisationManager(object):
     def __init__(self, name):
         self.global_params = GlobalParams()
         self.folder = self.global_params.find_by_name(name)
+        print(self.folder)
         if not self.folder: # the CO is not recognized
             self.folder = utils.get_default_path(name)
             self.global_params.create_or_update(name, self.folder)

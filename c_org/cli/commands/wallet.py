@@ -80,7 +80,7 @@ class COrgWallet(COrgCommand):
         if vault.exist_wallet(name=self.name):
             return logging.error("The wallet's name already exists.")
         logging.debug("Creating a wallet with name {}.".format(self.name))
-        vault.create_wallet(self.name)
+        wallet = vault.create_wallet(self.name)
         logging.info("The wallet is created. Please add some ethers to its address {}. You can use Metamask for that (see https://youtu.be/-uJjfn4wizE)".format(wallet.address))
 
 

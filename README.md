@@ -22,12 +22,28 @@ pyenv virtualenv 3.6.5 c-org
 pyenv activate c-org
 ```
 
+You also need to [install `solc`](https://solidity.readthedocs.io/en/v0.4.24/installing-solidity.html) to compile Solidity smart contract:
+```bash
+# On Ubuntu:
+sudo add-apt-repository ppa:ethereum/ethereum
+sudo apt-get update
+sudo apt-get install solc
+
+# On other Linux distros:
+sudo snap install solc
+
+# On macOS:
+brew update
+brew upgrade
+brew tap ethereum/ethereum
+brew install solidity
+```
+
 
 Then, you can easily install `c-org` with the following commands:
 
 ```bash
-pip install .
-python -m solc.install v0.4.24
+pip install -e .
 ```
 
 # Testing
@@ -55,15 +71,15 @@ The continuous organisation called `NAME` is built inside a separate folder. By 
 2. Create a wallet containing enough gas to deploy the continuous organisation on the ethereum net.
 
 ```bash
-c-org wallet create my_wallet
+c-org wallet create NAME
 ```
 
-The wallet is store locally and you can re-use it.
+The wallet is store locally and you can re-use it. Add some ethers on it. For example, you can use [Metamask](https://medium.com/verasity/how-to-transfer-ethereum-to-metamask-wallet-security-67ff0a415c88) for that.
 
 3. Deploy the continuous organisation :
 
 ```bash
-c-org deploy NAME [--output DIRECTORY]
+c-org deploy /path/to/config.yaml [--wallet NAME]
 ```
 
 

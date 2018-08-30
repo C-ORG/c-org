@@ -24,7 +24,7 @@ import sys
 from c_org.cli.command import COrgCommand
 from c_org import ContinuousOrganisationManager
 import c_org.utils as utils
-from c_org.manager import Vault, GlobalParams
+from c_org.manager import Vault, GlobalParams, LocalParams
 
 class COrgDeploy(COrgCommand):
 
@@ -34,13 +34,10 @@ class COrgDeploy(COrgCommand):
         self.subcommand = True
 
     def run(self):
-        self.parser.add_argument('name',
-                                 help='Continuous Organisation\'s name',
+        self.parser.add_argument('output',
+                                 help='Path to config.yaml',
                                  type=str,
-                                 metavar="name")
-        self.parser.add_argument('--output',
-                                  help='Folder to save the continuous organisation',
-                                  type=str)
+                                 metavar="path")
         self.parser.add_argument('--wallet',
                                   help='Name of the wallet',
                                   type=str)
@@ -49,21 +46,25 @@ class COrgDeploy(COrgCommand):
         self.run_command()
 
     def command_deploy(self):
-        global_params = GlobalParams()
-        if not self.output:
-            self.output = global_params.find_by_name(self.name)
-            if not self.output:
-                self.output = utils.get_default_path(self.name)
-        global_params.create_or_update(self.name, self.output)
+        if os.path.isdir(self.output):
+            self.output = os.path.join(self.output, "config.yaml")
 
+        if not os.path.isfile(self.output):
+            return logging.error('The path is not valid. Please add a path to the config.yaml file.')
+        dirname = os.path.dirname(os.path.abspath(self.output))
 
-        try:
-            v = Vault()
-            wallet = v.find_wallet(name=self.wallet)
-        except ValueError:
-            return logging.error('The wallet is not recognized. Add a wallet with the wallet command.')
+        if not self.wallet:
+            return logging.error('No wallet has been specified. Please add --wallet NAME. Add a wallet with the wallet command.')
+        else:
+            try:
+                wallet = Vault().find_wallet(name=self.wallet)
+            except ValueError:
+                return logging.error('The wallet is not recognized. Add a wallet with the wallet command.')
 
-        c_org_manager = ContinuousOrganisationManager(self.name)
+        name = LocalParams(self.output).name
+        GlobalParams().create_or_update(name, dirname)
+
+        c_org_manager = ContinuousOrganisationManager(name)
         c_org_manager.deploy(wallet)
 
 

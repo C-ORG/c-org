@@ -23,4 +23,13 @@ from c_org.manager.base import BaseManager
 
 class LocalParams(BaseManager):
 
-    pass
+    @property
+    def name(self):
+        """ Return the path to the continuous organisation's config.yaml file
+
+        >>> l = LocalParams()
+        >>> l._data = {'name': "My C-Org"}
+        >>> l.name
+        'My C-Org'
+        """
+        return self.get('name')

@@ -78,7 +78,7 @@ class TestNewIssuer(TestBase):
         self.assertEqual(init_ether, wallet.balance)
 
         # Edith deploys her continuous organisation
-        sys.argv = [exe_cli] + ["deploy", "my-co", "--wallet", wallet.name, "--output", os.getcwd()]
+        sys.argv = [exe_cli] + ["deploy", "config.yaml", "--wallet", wallet.name, "--output", os.getcwd()]
         main()
         self.assertTrue(os.path.isfile("build.yaml"))
 

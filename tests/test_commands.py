@@ -41,7 +41,8 @@ class TestDeploy(TestBase):
         self.generate_wallet()
 
     def test_deploy(self):
-        sys.argv = [exe_cli] + ["deploy", "my-co", "--wallet", self.wallet.name]
+        config_file = os.path.join(self.my_co_path, "config.yaml")
+        sys.argv = [exe_cli] + ["deploy", config_file, "--wallet", self.wallet.name]
         main()
         self.assertTrue(os.path.isfile(self.c_org_manager.build_file))
         contract = self.c_org_manager.contract

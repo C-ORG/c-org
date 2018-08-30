@@ -134,7 +134,12 @@ def restricted_unpickle(filename):
         return RestrictedUnpickler(f).load()
 
 
-class ConfigurationError(Exception):
+
+class BaseError(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
+class ConfigurationError(BaseError):
     """
     Configuration could not be parsed or has otherwise failed to apply
     """

@@ -76,13 +76,13 @@ class TestBase(unittest.TestCase):
 
         name = "my-co"
         c_name = utils.clean_name(name)
-        my_co_path = os.path.join(utils.get_c_org_path(), c_name)
-        os.makedirs(my_co_path)
+        self.my_co_path = os.path.join(utils.get_c_org_path(), c_name)
+        os.makedirs(self.my_co_path)
         global_params = GlobalParams()
-        global_params.create_or_update(name, my_co_path)
+        global_params.create_or_update(name, self.my_co_path)
         rootdir = os.path.dirname(os.path.abspath(__file__))
         config_file = os.path.join(rootdir, "ressources", "config.yaml")
-        shutil.copy(config_file, my_co_path)
+        shutil.copy(config_file, self.my_co_path)
         self.c_org_manager = ContinuousOrganisationManager(name)
 
     def cleanup(self):

@@ -33,6 +33,8 @@ class Vault(BaseManager):
 
     @property
     def filename(self):
+        if self._filename:
+            return self._filename
         return get_vault_file()
 
     @property
@@ -99,8 +101,8 @@ class Vault(BaseManager):
         '''
         Check if a wallet exists in the vault given its name.
 
-        >>> w = Vault().create_wallet('test')
-        >>> Vault().exist_wallet('test')
+        >>> w = Vault().create_wallet('test-exist')
+        >>> Vault().exist_wallet('test-exist')
         True
         '''
         return self.exists(name, 'name', 'wallets')

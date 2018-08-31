@@ -95,7 +95,6 @@ class TestCommandWallet(TestBase):
     def test_list_wallet(self):
         Vault().create_wallet(name="test-list")
         with self.assertLogs() as cm:
-            # out = subprocess.check_output([exe_cli, 'wallet', 'list'])
             sys.argv = [exe_cli, "wallet", "list"]
             main()
         self.assertIn(True, ['test-list' in i for i in cm.output])

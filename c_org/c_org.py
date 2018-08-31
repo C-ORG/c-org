@@ -199,8 +199,11 @@ const abi = {};'''.format(address, str(interface['abi'])))
 
     # STATISTICS
     # --------------------------------------------------------------------------
-    def get_balance(self, sender):
-        return self.contract.functions.getBalance().call({'from': sender.address})
+    def get_balance(self, sender, to_ether=True):
+        balance = self.contract.functions.getBalance().call({'from': sender.address})
+        # if to_ether:
+            # return Web3.fromWei(balance, 'ether')
+        return balance
 
     def get_n_tokens(self):
         return self.contract.functions.getNumTokens().call()

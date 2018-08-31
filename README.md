@@ -95,6 +95,10 @@ c-org {buy, sell, revenue, stats} --help
 
 Everything was tested with `ganache`. Adding `infura` and local ethereum node support is necessary. Similarly, automated tests should use `testrpc` instead of depending on an extern call to `ganache`.
 
+## Wallet
+
+The local admin wallet creation process is highly insecure right now. Level 0 (minimum) is to encrypt it with a user provided passphrase. Then, using the ethereum-go API to support using an already created local wallet would be great. In the future (once WalletConnect is functional), implementing a command-line version of WalletConnect to allow users to securely use their favorite wallet would be ideal.
+
 ## Documentation
 
 As the API is not stable yet, the documentation is not written. Instead, the user should use `--help` argument.

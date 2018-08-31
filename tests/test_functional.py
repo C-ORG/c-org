@@ -73,8 +73,12 @@ class TestNewIssuer(TestBase):
         # Edith creates a wallet and adds Ether on it
         sys.argv = [exe_cli] + ["wallet", "create", "edith-wallet"]
         main()
+        self.assertTrue(Vault().exist_wallet("edith-wallet"))
+
+        # Edith adds some ethers on it
+        sys.argv = [exe_cli] + ["wallet", "add_ether", "edith-wallet"]
+        main()
         wallet = Vault().find_wallet(name="edith-wallet")
-        wallet.add_ether(init_ether)
         self.assertEqual(init_ether, wallet.balance)
 
         # Edith deploys her continuous organisation

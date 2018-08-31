@@ -46,6 +46,9 @@ class COrgSell(COrgCommand):
         self.run_command()
 
     def command_sell(self):
+        if not isinstance(self.amount, float) or self.amount < 0:
+            return logging.error("Please add a positive amount to sell.")
+
         vault = Vault()
         try:
             wallet = vault.find_wallet(name=self.wallet)

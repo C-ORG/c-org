@@ -25,13 +25,13 @@ import yaml
 from web3 import Web3
 from web3.auto import w3
 import c_org
-from .test_base import TestBase
+from .test_base import TestBase, exe_cli, init_ether
 from c_org.cli import main
 from c_org import ContinuousOrganisationManager
 import c_org.utils as utils
 from c_org.manager import Vault
 
-exe_cli="c-org"
+
 
 class TestDeploy(TestBase):
 
@@ -99,6 +99,11 @@ class TestCommandWallet(TestBase):
             main()
         self.assertIn(True, ['test-list' in i for i in cm.output])
 
+    def test_add_ether_wallet(self):
+        wallet = Vault().create_wallet(name="test-add-ether")
+        sys.argv = [exe_cli, "wallet", "add_ether", "test-add-ether"]
+        main()
+        self.assertEqual(init_ether, wallet.balance)
 
 
 class TestOtherCommands(TestBase):

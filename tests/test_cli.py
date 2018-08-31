@@ -23,9 +23,7 @@ import tempfile
 import subprocess
 import yaml
 
-from .test_base import TestBase
-
-exe_cli = ["c-org"]
+from .test_base import TestBase, exe_cli
 
 os.environ.update({'PYTHONPATH': '.'})
 
@@ -34,17 +32,17 @@ class TestArgs(TestBase):
     '''Generic argument parsing tests'''
 
     def test_global_help(self):
-        out = subprocess.check_output(exe_cli + ['--help'])
+        out = subprocess.check_output([exe_cli, '--help'])
         self.assertIn(b'Available commands', out)
         self.assertIn(b'sell', out)
         self.assertIn(b'--debug', out)
 
     def test_command_help(self):
-        out = subprocess.check_output(exe_cli + ['buy', '--help'])
+        out = subprocess.check_output([exe_cli, 'buy', '--help'])
         self.assertIn(b'--amount', out)
 
     def test_no_command(self):
-        p = subprocess.Popen(exe_cli, stdout=subprocess.PIPE,
+        p = subprocess.Popen([exe_cli], stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         (out, err) = p.communicate()
         self.assertEqual(out, b'')

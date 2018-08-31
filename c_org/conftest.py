@@ -17,12 +17,8 @@ def _docdir(request):
 wallets: []
 ''')
         global_file = c_org.join("global.yaml")
-        vault.write('''c-orgs: []
+        global_file.write('''c-orgs: []
         ''')
-        # print(vault.check())
-        # print(str(vault.realpath))
-        # Chdir only for the duration of the test.
-        #with tmpdir.as_cwd():
         os.environ['HOME'] = str(c_org.dirpath())
         yield
 

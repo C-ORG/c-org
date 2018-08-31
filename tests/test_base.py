@@ -25,16 +25,18 @@ from c_org import ContinuousOrganisationManager
 from c_org.manager import GlobalParams, Vault
 
 
-
+init_ether = 2000000000000000000
+exe_cli = "c-org"
 
 class TestBase(unittest.TestCase):
+
 
     def generate_wallet(self):
         if not self.has_temporary_files():
             self.temp_files()
 
         self.wallet = Vault().create_wallet('test')
-        self.wallet.add_ether(1000000000000000000)
+        self.wallet.add_ether(init_ether)
 
     def temp_files(self):
         self.workdir = tempfile.TemporaryDirectory()

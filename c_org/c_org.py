@@ -39,12 +39,10 @@ class ContinuousOrganisationManager(object):
     def __init__(self, name):
         self.global_params = GlobalParams()
         self.folder = self.global_params.find_by_name(name)
-        print(self.folder)
         if not self.folder: # the CO is not recognized
             self.folder = utils.get_default_path(name)
             self.global_params.create_or_update(name, self.folder)
         if not os.path.isdir(self.folder):
-            print(self.folder)
             os.makedirs(self.folder)
         if not os.path.isfile(self.param_file):
             logging.debug("Creating the config file of the continuous organisation.")

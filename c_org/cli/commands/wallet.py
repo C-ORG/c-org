@@ -25,6 +25,8 @@ from c_org.cli.command import COrgCommand
 from c_org import ContinuousOrganisationManager
 from c_org.manager import Vault
 
+init_ether = 2000000000000000000
+
 class COrgWallet(COrgCommand):
 
     def __init__(self):
@@ -62,6 +64,13 @@ class COrgWallet(COrgCommand):
         parser_list = subparsers.add_parser('list', help='Lists stored wallets')
         parser_list.set_defaults(func=self.command_list_wallet)
 
+        parser_add_ether = subparsers.add_parser('add_ether', help='Add ether (only for testing purpose)')
+        parser_add_ether.add_argument('name',
+                                      help='wallet\'s name',
+                                      type=str,
+                                      metavar="name")
+        parser_add_ether.set_defaults(func=self.command_add_ether_wallet)
+
         self.parse_args()
         self.run_command()
 
@@ -87,7 +96,7 @@ class COrgWallet(COrgCommand):
             return logging.error("The wallet's name already exists.")
         logging.debug("Creating a wallet with name {}.".format(self.name))
         wallet = vault.create_wallet(self.name)
-        logging.info("The wallet is created. Please add some ethers to its address {}. You can use Metamask for that (see https://youtu.be/-uJjfn4wizE)".format(wallet.address))
+        logging.info("The wallet is created. Please add some ethers to its address {}. You can use Metamask for that (see https://youtu.be/-uJjfn4wizE).".format(wallet.address))
 
 
     def command_rm_wallet(self):
@@ -102,3 +111,11 @@ class COrgWallet(COrgCommand):
     def command_list_wallet(self):
         for i, wallet in enumerate(Vault().wallets):
             logging.info("[{}] at {}".format(wallet['name'], wallet['address']))
+
+    def command_add_ether_wallet(self):
+        try:
+            wallet = Vault().find_wallet(name=self.name)
+        except ValueError:
+            return logging.error("The wallet's name can not be found.")
+        wallet.add_ether(2000000000000000000)
+        logging.info("Some ethers have been added.")

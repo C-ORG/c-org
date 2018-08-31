@@ -40,7 +40,7 @@ brew install solidity
 ```
 
 
-Then, you can easily install `c-org` with the following commands:
+Then, you can easily install `c-org` with the following command (make sure you have the latest version of pip installed):
 
 ```bash
 pip install -e .

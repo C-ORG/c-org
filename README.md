@@ -1,9 +1,14 @@
-# c-org - Command line tools to manage Continuous Organisations
+# c-org
+
+![c-org status](https://img.shields.io/badge/status-alpha-yellow.svg)
+[![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/ContinuousOrg)
+
+`c-org` is the command line tool used to create and interact with Continuous Organizations
 
 
-# Website
+# About Continuous Organizations
 
-https://c-org.co
+To learn more about Continuous Organizations, please visit: https://c-org.co
 
 
 # Installation
@@ -88,25 +93,11 @@ c-org deploy /path/to/config.yaml [--wallet NAME]
 c-org {buy, sell, revenue, stats} --help
 ```
 
-# TODO list
+# TODO
 
 
-## Node provider
-
-Everything was tested with `ganache`. Adding `infura` and local ethereum node support is necessary. Similarly, automated tests should use `testrpc` instead of depending on an extern call to `ganache`.
-
-## Wallet
-
-The local admin wallet creation process is highly insecure right now. Level 0 (minimum) is to encrypt it with a user provided passphrase. Then, using the ethereum-go API to support using an already created local wallet would be great. In the future (once WalletConnect is functional), implementing a command-line version of WalletConnect to allow users to securely use their favorite wallet would be ideal.
-
-## Documentation
-
-As the API is not stable yet, the documentation is not written. Instead, the user should use `--help` argument.
-
-## Versioning
-
-I am wondering how to deal with change in a smart contract, such as it would break the API. I am considering for now a factory pattern to instance the API corresponding to the version.
-
-## Generating static files
-
-A user interface is required to burn/mint tokens. User interfaces will be developed in separated repository and a link to this repository will be given as a parameter in `params.yaml`.
+* **Node provider**. Everything was tested with `ganache`. Adding `infura` and local ethereum node support is necessary. Similarly, automated tests should use `testrpc` instead of depending on an extern call to `ganache`.
+* **Wallet**. The local admin wallet creation process is highly insecure right now. Level 0 (minimum) is to encrypt it with a user provided passphrase. Then, using the ethereum-go API to support using an already created local wallet would be great. In the future (once WalletConnect is functional), implementing a command-line version of WalletConnect to allow users to securely use their favorite wallet would be ideal.
+* **Documentation**. As the API is not stable yet, the documentation is not written. Instead, the user should use `--help` argument.
+* **Versioning**. I am wondering how to deal with change in a smart contract, such as it would break the API. I am considering for now a factory pattern to instance the API corresponding to the version.
+* **Generating static files**. A user interface is required to burn/mint tokens. User interfaces will be developed in separated repository and a link to this repository will be given as a parameter in `params.yaml`.

@@ -21,6 +21,7 @@
 
 import os
 from web3.auto import w3
+from web3 import Web3
 from c_org.manager.base import BaseManager
 from c_org.utils import Wallet, get_c_org_path, get_vault_file
 
@@ -53,7 +54,7 @@ class Vault(BaseManager):
         account = w3.eth.account.create(name)
         if self.exist_wallet(name):
             raise ValueError("The wallet\'s name already exists.")
-        wallet = Wallet(name, account.address, account.privateKey)
+        wallet = Wallet(name, account.address, account.privateKey.hex())
         w_dict = Wallet.to_dict(wallet)
         self.add(w_dict, 'wallets')
         return wallet

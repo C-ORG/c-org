@@ -40,6 +40,7 @@ class COrgWallet(COrgCommand):
                                    type=str,
                                    metavar="name")
         parser_create.set_defaults(func=self.command_create_wallet)
+
         parser_add = subparsers.add_parser('add', help='Add a wallet')
         parser_add.add_argument('name',
                                  help='wallet\'s name',
@@ -50,12 +51,17 @@ class COrgWallet(COrgCommand):
                                  type=str,
                                  metavar="privateKey")
         parser_add.set_defaults(func=self.command_add_wallet)
+
         parser_rm = subparsers.add_parser('remove', help='Remove a wallet')
         parser_rm.add_argument('name',
                                    help='wallet\'s name',
                                    type=str,
                                    metavar="name")
         parser_rm.set_defaults(func=self.command_rm_wallet)
+
+        parser_list = subparsers.add_parser('list', help='Lists stored wallets')
+        parser_list.set_defaults(func=self.command_list_wallet)
+
         self.parse_args()
         self.run_command()
 
@@ -92,3 +98,7 @@ class COrgWallet(COrgCommand):
         logging.debug("Removing a wallet with name {}.".format(self.name))
         vault.remove_wallet(self.name)
         logging.info("The wallet is removed.")
+
+    def command_list_wallet(self):
+        for i, wallet in enumerate(Vault().wallets):
+            logging.info("[{}] at {}".format(wallet['name'], wallet['address']))

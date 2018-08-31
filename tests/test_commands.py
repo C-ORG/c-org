@@ -23,7 +23,7 @@ import tempfile
 import subprocess
 import yaml
 from web3 import Web3
-from web3.auto import w3
+
 import c_org
 from .test_base import TestBase, exe_cli, init_ether
 from c_org.cli import main
@@ -31,6 +31,9 @@ from c_org import ContinuousOrganisationManager
 import c_org.utils as utils
 from c_org.manager import Vault
 
+from web3.auto import w3
+# from web3.providers.eth_tester import EthereumTesterProvider
+# w3 = Web3(EthereumTesterProvider(backend=MockBackend()))
 
 
 class TestDeploy(TestBase):

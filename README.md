@@ -6,7 +6,6 @@
 https://c-org.co
 
 
-
 # Installation
 
 You need `Python > 3.5.3` because `web3.py` is using `typing`. If you are using an older version of Python, you can use `pyenv` to install a new one. In this case, make sure you activate the virtual environment each time you are using `c-org`.
@@ -25,7 +24,7 @@ pyenv activate c-org
 You also need to [install `solc`](https://solidity.readthedocs.io/en/v0.4.24/installing-solidity.html) to compile Solidity smart contract:
 ```bash
 # On Ubuntu:
-sudo add-apt-repository ppa:ethereum/ethereum
+sudo add-apt-repository ppa:ethereum/ethereum # requires python-software-properties installed
 sudo apt-get update
 sudo apt-get install solc
 
@@ -68,15 +67,15 @@ The continuous organisation called `NAME` is built inside a separate folder. By 
 
 1. Create a `config.yaml` as given in [example](../master/example.yaml) or run `c-org init` to generate one.
 
-2. Create a wallet containing enough gas to deploy the continuous organisation on the ethereum net.
+2. Create a wallet containing enough gas to deploy the continuous organisation on the ethereum blockchain. Please note that this wallet is the admin wallet, used to deploy the smart-contract, it is **not** the wallet of the Continuous Organization (which is specified in the config.yaml file).
 
 ```bash
 c-org wallet create NAME
 ```
 
-The wallet is store locally and you can re-use it. Add some ethers on it. For example, you can use [Metamask](https://medium.com/verasity/how-to-transfer-ethereum-to-metamask-wallet-security-67ff0a415c88) for that.
+The wallet is stored locally and you can re-use it. Add some ethers to it. If you're using ganache, you can use Metamask set on the localhost network to do that. Otherwise, use your favorite wallet to transfer some ethers (~ 0.1 eth) to it.
 
-3. Deploy the continuous organisation :
+3. Deploy the continuous organisation:
 
 ```bash
 c-org deploy /path/to/config.yaml [--wallet NAME]
@@ -94,7 +93,7 @@ c-org {buy, sell, revenue, stats} --help
 
 ## Node provider
 
-Everything was tested with `ganache`. Adding `infura` and testing on real blockchains is necessary. Similarly, automated tests should use `testrpc` instead of depending on an extern call to `ganache`.
+Everything was tested with `ganache`. Adding `infura` and local ethereum node support is necessary. Similarly, automated tests should use `testrpc` instead of depending on an extern call to `ganache`.
 
 ## Documentation
 

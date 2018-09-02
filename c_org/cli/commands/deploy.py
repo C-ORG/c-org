@@ -65,10 +65,16 @@ class COrgDeploy(COrgCommand):
         GlobalParams().create_or_update(name, dirname)
 
         c_org_manager = ContinuousOrganisationManager(name)
-        c_org_manager.deploy(wallet)
 
+        try:
+            c_org_manager.deploy(wallet)
+        except ValueError as e:
+            err = e.args[0]
+            logging.error('''Oops... Something wrong happened!
 
-        # create free tokens
-        #c_org_manager.free_tokens(config.get('initial_tokens'))
+{}'''.format(err['message']))
+            if err['code'] == -32000:
+                logging.error('The specified wallet has insufficient funds to deploy your Continuous Organization, please send ~0.1eth to {}'.format(wallet.address))
+            return
 
         logging.info("Great! Your continuous organisation exists!")

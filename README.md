@@ -64,7 +64,6 @@ For running tests, you need a local provider. First, download and install [node.
 
 ```bash
 npm install -g ganache-cli
-ganache-cli
 ```
 
 Finally, on a separate terminal, run `py.test`:
@@ -74,7 +73,10 @@ cd /path/to/c-org/
 py.test
 ```
 
+The tests suite is launching `ganache-cli`, but you might want to launch it by yourself if you want to check your Continuous Organisation before launching it on `mainnet`.
+
 # Usage
+=======
 
 The continuous organisation called `NAME` is built inside a separate folder. By default, this folder is `DIRECTORY = $HOME/.c-org/NAME`.
 

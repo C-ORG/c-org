@@ -54,32 +54,15 @@ class TestDeploy(TestBase):
     def test_no_enough_funds(self):
         config_file = os.path.join(self.my_co_path, "config.yaml")
         wallet = Vault().create_wallet('poor-wallet')
-        commmand = [exe_cli, "deploy", config_file, "--wallet", wallet.name]
+        command = [exe_cli, "deploy", config_file, "--wallet", wallet.name]
         p = subprocess.Popen(command,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         (out, err) = p.communicate()
         self.assertEqual(out, b'')
-        self.assertIn(wallet.address, err)
+        self.assertIn(wallet.address.encode('utf-8'), err)
 
 
-class TestInit(TestBase):
-
-    def setUp(self):
-        self.generate_c_org()
-        self.name = "my-co"
-        c_name = utils.clean_name(self.name)
-        self.my_co_path = os.path.join(utils.get_c_org_path(), c_name)
-        os.makedirs(self.my_co_path)
-
-    def test_init(self):
-        sys.argv = [exe_cli] + ["init", self.name, "--dir", self.my_co_path]
-        main()
-        c_org_manager = ContinuousOrganisationManager(self.name)
-        with open(c_org_manager.param_file, "r") as f:
-            param = yaml.load(f)
-        self.assertEqual(self.name, param.get('name'))
-        self.assertNotIn('buy', param)
 
 
 class TestCommandWallet(TestBase):

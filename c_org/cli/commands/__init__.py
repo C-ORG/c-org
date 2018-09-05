@@ -21,7 +21,7 @@ from c_org.cli.commands.sell import COrgSell
 from c_org.cli.commands.revenue import COrgRevenue
 from c_org.cli.commands.stats import COrgStats
 from c_org.cli.commands.wallet import COrgWallet
-from c_org.cli.commands.init import COrgInit
+# from c_org.cli.commands.init import COrgInit
 
 __all__ = [
     'COrgDeploy',
@@ -29,6 +29,6 @@ __all__ = [
     'COrgSell',
     'COrgRevenue',
     'COrgStats',
-    'COrgWallet',
-    'COrgInit'
+    'COrgWallet'
+    # 'COrgInit'
 ]

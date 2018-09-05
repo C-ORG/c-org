@@ -6,6 +6,14 @@
 `c-org` is the command line tool used to create and interact with Continuous Organizations
 
 
+## Table of Contents
+
+- [About Continuous Organizations](#about-continuous-organizations)
+- [Installation](#installation)
+- [Testing](#testing)
+- [Usage](#usage)
+- [Todo](#todo)
+
 # About Continuous Organizations
 
 To learn more about Continuous Organizations, please visit: https://c-org.co
@@ -66,7 +74,7 @@ cd /path/to/c-org/
 py.test
 ```
 
-# Using `c-org`
+# Usage
 
 The continuous organisation called `NAME` is built inside a separate folder. By default, this folder is `DIRECTORY = $HOME/.c-org/NAME`.
 

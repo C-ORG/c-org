@@ -5,8 +5,10 @@
   "dependencies": {
     "@material-ui/core": "^3.1.2",
     "@material-ui/icons": "^3.0.1",
+    "plotly.js": "^1.41.3",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-plotly.js": "^2.2.0",
     "react-scripts": "2.0.4"
   },
   "scripts": {

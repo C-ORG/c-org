@@ -44,7 +44,7 @@ def get_c_org_path():
 
 def get_default_path(name):
     name = clean_name(name)
-    return os.path.join(get_c_org_path(), name)
+    return os.path.join(get_c_org_path(), "ui", , name)
 
 
 def get_source_file():

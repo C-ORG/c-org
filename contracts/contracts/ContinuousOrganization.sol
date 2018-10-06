@@ -1,8 +1,10 @@
 pragma solidity ^0.4.24;
 
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 contract ContinuousOrganization is Ownable {
+    using SafeMath for uint256;
 
     /* The parameters of the Continuous Organisation. All are multiplied by 1000 */
     uint slope = 1000; // parametrize the buying linear curve

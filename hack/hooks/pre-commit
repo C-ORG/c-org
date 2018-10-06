@@ -1,4 +1,5 @@
 #!/bin/sh
 
-files=$(git ls-files -m)
-[ -n "$files" ] && yapf -i $files
+set -e
+
+( cd ui; yarn lint ; yarn prettier-check )

@@ -9,8 +9,8 @@ help() {
 
 init() {
 	# add git pre-commit if not present
-	if [ ! -e .git/hooks/pre-commit -a ! -L .git/hooks/pre-commit ]; then
-		ln -s ./hack/hooks/pre-commit .git/hooks/pre-commit
+	if [ ! -e .git/hooks/pre-commit ]; then
+		cp ./hack/hooks/pre-commit .git/hooks/pre-commit
 	fi
 }
 

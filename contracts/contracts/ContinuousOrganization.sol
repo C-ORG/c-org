@@ -1,6 +1,8 @@
 pragma solidity ^0.4.24;
 
-contract ContinuousOrganization {
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+
+contract ContinuousOrganization is Ownable {
 
     /* The parameters of the Continuous Organisation. All are multiplied by 1000 */
     uint slope = 1000; // parametrize the buying linear curve
@@ -10,35 +12,28 @@ contract ContinuousOrganization {
     /* The tokens of the Continuous Organisation */
     uint nTokens = 0;
     mapping(address => uint) public balances;
-    address public owner; // owner of the smart contract
     uint public sellReserve = 0;
-
-
-    /* Permission rights */
-    modifier isOwner(address sender) { require(sender == owner); _; }
 
     /* Events */
     event UpdateTokens(uint tokens, uint sellReserve);
-
 
     /* This is the constructor. Solidity does not implement float number so we have to multiply constants by 1000 and rounding them before creating the smart contract.
     */
     constructor(uint paramA, uint paramAlpha, uint paramBeta) public {
         require(paramAlpha < 1001 && paramBeta < 1001);
-        owner = msg.sender;
         slope = paramA;
         alpha = paramAlpha;
         beta = paramBeta;
     }
 
     /* Getters and setters */
-    function setSlope(uint paramSlope) public isOwner(msg.sender) {
+    function setSlope(uint paramSlope) public onlyOwner {
         slope = paramSlope;
     }
-    function setAlpha(uint paramAlpha) public isOwner(msg.sender) {
+    function setAlpha(uint paramAlpha) public onlyOwner {
         alpha = paramAlpha;
     }
-    function setBeta(uint paramBeta) public isOwner(msg.sender) {
+    function setBeta(uint paramBeta) public onlyOwner {
         beta = paramBeta;
     }
     function getBalance()
@@ -108,7 +103,7 @@ contract ContinuousOrganization {
 
     function revenue()
         public
-        isOwner(msg.sender)
+        onlyOwner
         payable {
 
         require(msg.value > 0);
@@ -127,7 +122,7 @@ contract ContinuousOrganization {
 
     function freeTokens(uint amount)
         public
-        isOwner(msg.sender) {
+        onlyOwner {
 
         require(amount > 0);
         nTokens += amount;

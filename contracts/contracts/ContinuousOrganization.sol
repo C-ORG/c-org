@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-contract ContinuousOrganisation {
+contract ContinuousOrganization {
 
     /* The parameters of the Continuous Organisation. All are multiplied by 1000 */
     uint slope = 1000; // parametrize the buying linear curve
@@ -112,15 +112,15 @@ contract ContinuousOrganisation {
         payable {
 
         require(msg.value > 0);
-        uint revenue = msg.value;
+        uint rev = msg.value;
         // create tokens
-        uint tokens = sqrt(2*revenue*1000/slope + nTokens*nTokens) - nTokens;
+        uint tokens = sqrt(2*rev*1000/slope + nTokens*nTokens) - nTokens;
         balances[owner] += tokens;
         nTokens += tokens;
 
         // redistribute tokens
-        sellReserve += beta*revenue;
-        owner.transfer((1-beta)*revenue/1000);
+        sellReserve += beta*rev;
+        owner.transfer((1-beta)*rev/1000);
 
         emit UpdateTokens(nTokens, sellReserve);
     }

@@ -57,8 +57,8 @@ contract ContinuousOrganization is Ownable {
 
 
     /* Babylonian method for square root. See: https://ethereum.stackexchange.com/a/2913 */
-    function sqrt(uint x)
-        public
+    function _sqrt(uint x)
+        internal
         pure
         returns (uint y) {
         uint z = (x + 1) / 2;
@@ -76,7 +76,7 @@ contract ContinuousOrganization is Ownable {
 
         // create tokens
         uint invest = msg.value;
-        uint tokens = sqrt(2*invest*1000/slope + nTokens*nTokens) - nTokens;
+        uint tokens = _sqrt(2*invest*1000/slope + nTokens*nTokens) - nTokens;
         balances[msg.sender] += tokens;
         nTokens += tokens;
 
@@ -109,7 +109,7 @@ contract ContinuousOrganization is Ownable {
         require(msg.value > 0);
         uint rev = msg.value;
         // create tokens
-        uint tokens = sqrt(2*rev*1000/slope + nTokens*nTokens) - nTokens;
+        uint tokens = _sqrt(2*rev*1000/slope + nTokens*nTokens) - nTokens;
         balances[owner] += tokens;
         nTokens += tokens;
 

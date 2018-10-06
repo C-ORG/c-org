@@ -14,7 +14,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''c_org command line'''
 
 import logging
@@ -24,9 +23,7 @@ import argparse
 import c_org.utils as utils
 
 
-
 class COrgCommand(argparse.Namespace):
-
     def __init__(self, command_id, description, testing=False, leaf=False):
         self.command_id = command_id
         self.description = description
@@ -40,31 +37,32 @@ class COrgCommand(argparse.Namespace):
         self.leaf_command = leaf
         self.commandclass = None
 
-        self.parser = argparse.ArgumentParser(prog="%s %s" % (sys.argv[0], command_id),
-                                              description=description,
-                                              add_help=True)
-        self.parser.add_argument('--debug', action='store_true',
-                                 help='Enable debug messages')
+        self.parser = argparse.ArgumentParser(
+            prog="%s %s" % (sys.argv[0], command_id),
+            description=description,
+            add_help=True)
+        self.parser.add_argument(
+            '--debug', action='store_true', help='Enable debug messages')
 
         if not leaf:
-            self.subparsers = self.parser.add_subparsers(title='Available commands',
-                                                         metavar='', dest='subcommand')
-            p_help = self.subparsers.add_parser('help',
-                                                description='Show this help message',
-                                                help='Show this help message')
+            self.subparsers = self.parser.add_subparsers(
+                title='Available commands', metavar='', dest='subcommand')
+            p_help = self.subparsers.add_parser(
+                'help',
+                description='Show this help message',
+                help='Show this help message')
             p_help.set_defaults(func=self.print_usage)
-
 
     def update(self, args):
         self._args = args
 
     def parse_args(self):
-        ns, self._args = self.parser.parse_known_args(args=self._args, namespace=self)
+        ns, self._args = self.parser.parse_known_args(
+            args=self._args, namespace=self)
 
         if not self.subcommand:
             print('You need to specify a command', file=sys.stderr)
             self.print_usage()
-
 
     def print_usage(self):
         self.parser.print_help(file=sys.stderr)
@@ -76,9 +74,7 @@ class COrgCommand(argparse.Namespace):
         unpickle = utils.restricted_unpickle()
         self.address = unpickle['address']
         self.abi = unpickle['abi']
-        self.contact = w3.eth.contract(address=self.address,
-                                       abi=self.abi)
-
+        self.contact = w3.eth.contract(address=self.address, abi=self.abi)
 
     def _add_subparser_from_class(self, name, commandclass):
         instance = commandclass()
@@ -91,13 +87,13 @@ class COrgCommand(argparse.Namespace):
             if not os.environ.get('ENABLE_TEST_COMMANDS', None):
                 return
 
-        p = self.subparsers.add_parser(instance.command_id,
-                                       description=instance.description,
-                                       help=instance.description,
-                                       add_help=False)
+        p = self.subparsers.add_parser(
+            instance.command_id,
+            description=instance.description,
+            help=instance.description,
+            add_help=False)
         p.set_defaults(func=instance.run, commandclass=instance)
         self.subcommands[name]['parser'] = p
-
 
     def _import_subcommands(self, submodules):
         import inspect

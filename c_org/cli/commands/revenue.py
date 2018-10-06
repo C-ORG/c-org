@@ -14,7 +14,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''storing a revenue'''
 
 import logging
@@ -24,23 +23,23 @@ from c_org import ContinuousOrganisationManager
 from c_org.cli.command import COrgCommand
 from c_org.manager import Vault
 
-class COrgRevenue(COrgCommand):
 
+class COrgRevenue(COrgCommand):
     def __init__(self):
-        super().__init__(command_id='revenue',  leaf=True,
-                         description='Provide some statistics')
+        super().__init__(
+            command_id='revenue',
+            leaf=True,
+            description='Provide some statistics')
         self.subcommand = True
 
-
-
     def run(self):
-        self.parser.add_argument('--revenue',
-                                 help='Revenue to register',
-                                 type=float)
-        self.parser.add_argument('name',
-                                 help='Continuous Organisation\'s name',
-                                 type=str,
-                                 metavar="name")
+        self.parser.add_argument(
+            '--revenue', help='Revenue to register', type=float)
+        self.parser.add_argument(
+            'name',
+            help='Continuous Organisation\'s name',
+            type=str,
+            metavar="name")
         self.func = self.command_revenue
         self.parse_args()
         self.run_command()

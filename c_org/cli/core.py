@@ -14,7 +14,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''c_org command line'''
 
 import logging
@@ -24,11 +23,13 @@ import c_org.utils as utils
 from c_org.cli.command import COrgCommand
 import c_org.cli.commands
 
-class Core(COrgCommand):
 
+class Core(COrgCommand):
     def __init__(self):
-        super().__init__(command_id='',  leaf=False,
-                         description='Utility for Continuous Organisation')
+        super().__init__(
+            command_id='',
+            leaf=False,
+            description='Utility for Continuous Organisation')
 
     def parse_args(self):
         self._import_subcommands(c_org.cli.commands)
@@ -38,7 +39,8 @@ class Core(COrgCommand):
         self.parse_args()
 
         if self.debug:
-            logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:%(message)s')
+            logging.basicConfig(
+                level=logging.DEBUG, format='%(levelname)s:%(message)s')
             os.environ['G_MESSAGES_DEBUG'] = 'all'
         else:
             logging.basicConfig(level=logging.INFO, format='%(message)s')

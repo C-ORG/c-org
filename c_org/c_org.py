@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''c-org manager'''
 
 import logging
@@ -33,19 +32,18 @@ import c_org.utils as utils
 from c_org.manager import *
 
 
-
 class ContinuousOrganisationManager(object):
-
     def __init__(self, name):
         self.global_params = GlobalParams()
         self.folder = self.global_params.find_by_name(name)
-        if not self.folder: # the CO is not recognized
+        if not self.folder:  # the CO is not recognized
             self.folder = utils.get_default_path(name)
             self.global_params.create_or_update(name, self.folder)
         if not os.path.isdir(self.folder):
             os.makedirs(self.folder)
         if not os.path.isfile(self.param_file):
-            logging.debug("Creating the config file of the continuous organisation.")
+            logging.debug(
+                "Creating the config file of the continuous organisation.")
             open(self.param_file, "a").close()
         self.params = LocalParams(self.param_file)
         self._contract = None
@@ -66,14 +64,16 @@ class ContinuousOrganisationManager(object):
                 with open(self.build_file, 'r') as f:
                     self._interface = yaml.load(f)
             except FileNotFoundError:
-                raise utils.ConfigurationError("The build file does not exist. {}".format(self.build_file))
+                raise utils.ConfigurationError(
+                    "The build file does not exist. {}".format(
+                        self.build_file))
         return self._interface
 
     @property
     def contract(self):
         if not self._contract:
-            self._contract = w3.eth.contract(abi=self.interface['abi'],
-                                             address=self.interface['address'])
+            self._contract = w3.eth.contract(
+                abi=self.interface['abi'], address=self.interface['address'])
         return self._contract
 
     def is_built(self):
@@ -95,8 +95,7 @@ class ContinuousOrganisationManager(object):
         return compiled_sol
 
     def _store_build(self, interface, address):
-        store = {'abi': interface['abi'],
-                 'address': address}
+        store = {'abi': interface['abi'], 'address': address}
         with open(self.build_file, 'w+') as f:
             yaml.dump(store, f)
         build_file_js = os.path.join(self.folder, "config.js")
@@ -105,17 +104,17 @@ class ContinuousOrganisationManager(object):
 const abi = {};'''.format(address, str(interface['abi'])))
 
     def _deploy_contract(self, wallet, contract):
-        slope =  int(self.params.get('slope')*1000)
-        alpha = int(self.params.get('investor_reserve')*1000)
-        beta = int(self.params.get('revenue_reserve')*1000)
+        slope = int(self.params.get('slope') * 1000)
+        alpha = int(self.params.get('investor_reserve') * 1000)
+        beta = int(self.params.get('revenue_reserve') * 1000)
         nonce = w3.eth.getTransactionCount(wallet.address)
         transaction = contract.constructor(slope, alpha, beta) \
                               .buildTransaction({'gas': 4712388,
                                                  'gasPrice': 100000,
                                                  'from': wallet.address,
                                                  'nonce': nonce})
-        tx_sign = w3.eth.account.signTransaction(transaction,
-                                                 private_key=wallet.private_key)
+        tx_sign = w3.eth.account.signTransaction(
+            transaction, private_key=wallet.private_key)
         tx_hash = w3.eth.sendRawTransaction(tx_sign.rawTransaction)
         address = w3.eth.getTransactionReceipt(tx_hash)['contractAddress']
         return address
@@ -124,26 +123,29 @@ const abi = {};'''.format(address, str(interface['abi'])))
         ''' Deploy a Continuous Organisation '''
         compiled_sol = self._compile()
         id, interface = compiled_sol.popitem()
-        contract = w3.eth.contract(abi=interface['abi'],
-                                   bytecode=interface['bin'])
+        contract = w3.eth.contract(
+            abi=interface['abi'], bytecode=interface['bin'])
         address = self._deploy_contract(wallet, contract)
         self._store_build(interface, address)
         self._generate_ui()
 
-
-
     # SELL
     # --------------------------------------------------------------------------
     def sell(self, tokens, wallet):
-        tokens = int(tokens) #FIXME what is a wei for our tokens?
+        tokens = int(tokens)  #FIXME what is a wei for our tokens?
         nonce = w3.eth.getTransactionCount(wallet.address)
         transaction = self.contract.functions.sell(tokens).buildTransaction({
-                        'gas': 4712388,
-                        'gasPrice': 100000,
-                        'from': wallet.address,
-                        'nonce': nonce})
-        tx_sign = w3.eth.account.signTransaction(transaction,
-                                                 private_key=wallet.private_key)
+            'gas':
+            4712388,
+            'gasPrice':
+            100000,
+            'from':
+            wallet.address,
+            'nonce':
+            nonce
+        })
+        tx_sign = w3.eth.account.signTransaction(
+            transaction, private_key=wallet.private_key)
         tx_hash = w3.eth.sendRawTransaction(tx_sign.rawTransaction)
         tx_receipt = w3.eth.getTransactionReceipt(tx_hash)['contractAddress']
         return tx_receipt
@@ -154,13 +156,19 @@ const abi = {};'''.format(address, str(interface['abi'])))
         wei = Web3.toWei(amount, 'ether')
         nonce = w3.eth.getTransactionCount(wallet.address)
         transaction = self.contract.functions.buy().buildTransaction({
-                        'from': wallet.address,
-                        'gas': 4712388,
-                        'gasPrice': 100000,
-                        'nonce': nonce,
-                        'value': wei})
-        tx_sign = w3.eth.account.signTransaction(transaction,
-                                                 private_key=wallet.private_key)
+            'from':
+            wallet.address,
+            'gas':
+            4712388,
+            'gasPrice':
+            100000,
+            'nonce':
+            nonce,
+            'value':
+            wei
+        })
+        tx_sign = w3.eth.account.signTransaction(
+            transaction, private_key=wallet.private_key)
         tx_hash = w3.eth.sendRawTransaction(tx_sign.rawTransaction)
         tx_receipt = w3.eth.getTransactionReceipt(tx_hash)['contractAddress']
         return tx_receipt
@@ -171,13 +179,19 @@ const abi = {};'''.format(address, str(interface['abi'])))
         wei = Web3.toWei(amount, 'ether')
         nonce = w3.eth.getTransactionCount(wallet.address)
         transaction = self.contract.functions.revenue().buildTransaction({
-                        'from': wallet.address,
-                        'gas': 4712388,
-                        'gasPrice': 100000,
-                        'nonce': nonce,
-                        'value': wei})
-        tx_sign = w3.eth.account.signTransaction(transaction,
-                                                 private_key=wallet.private_key)
+            'from':
+            wallet.address,
+            'gas':
+            4712388,
+            'gasPrice':
+            100000,
+            'nonce':
+            nonce,
+            'value':
+            wei
+        })
+        tx_sign = w3.eth.account.signTransaction(
+            transaction, private_key=wallet.private_key)
         tx_hash = w3.eth.sendRawTransaction(tx_sign.rawTransaction)
         tx_receipt = w3.eth.getTransactionReceipt(tx_hash)['contractAddress']
         return tx_receipt
@@ -186,13 +200,15 @@ const abi = {};'''.format(address, str(interface['abi'])))
     # --------------------------------------------------------------------------
     def free_tokens(self, tokens, wallet):
         nonce = w3.eth.getTransactionCount(wallet.address)
-        transaction = self.contract.functions.freeTokens(tokens).buildTransaction({
-                        'from': wallet.address,
-                        'gas': 4712388,
-                        'gasPrice': 100000,
-                        'nonce': nonce})
-        tx_sign = w3.eth.account.signTransaction(transaction,
-                                                 private_key=wallet.private_key)
+        transaction = self.contract.functions.freeTokens(
+            tokens).buildTransaction({
+                'from': wallet.address,
+                'gas': 4712388,
+                'gasPrice': 100000,
+                'nonce': nonce
+            })
+        tx_sign = w3.eth.account.signTransaction(
+            transaction, private_key=wallet.private_key)
         tx_hash = w3.eth.sendRawTransaction(tx_sign.rawTransaction)
         tx_receipt = w3.eth.getTransactionReceipt(tx_hash)['contractAddress']
         return tx_receipt
@@ -200,9 +216,12 @@ const abi = {};'''.format(address, str(interface['abi'])))
     # STATISTICS
     # --------------------------------------------------------------------------
     def get_balance(self, sender, to_ether=True):
-        balance = self.contract.functions.getBalance().call({'from': sender.address})
+        balance = self.contract.functions.getBalance().call({
+            'from':
+            sender.address
+        })
         # if to_ether:
-            # return Web3.fromWei(balance, 'ether')
+        # return Web3.fromWei(balance, 'ether')
         return balance
 
     def get_n_tokens(self):

@@ -16,13 +16,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''c-org parameters manager'''
 
 from c_org.manager.base import BaseManager
 
-class LocalParams(BaseManager):
 
+class LocalParams(BaseManager):
     @property
     def name(self):
         """ Return the path to the continuous organisation's config.yaml file

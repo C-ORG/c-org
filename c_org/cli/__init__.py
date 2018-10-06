@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from c_org.cli.core import Core
 
+
 def main():
     c_org = Core()
     c_org.main()

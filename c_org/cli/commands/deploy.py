@@ -14,7 +14,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''c_org apply command line'''
 
 import logging
@@ -26,21 +25,20 @@ from c_org import ContinuousOrganisationManager
 import c_org.utils as utils
 from c_org.manager import Vault, GlobalParams, LocalParams
 
-class COrgDeploy(COrgCommand):
 
+class COrgDeploy(COrgCommand):
     def __init__(self):
-        super().__init__(command_id='deploy', leaf=True,
-                         description='Create a Continuous Organisation')
+        super().__init__(
+            command_id='deploy',
+            leaf=True,
+            description='Create a Continuous Organisation')
         self.subcommand = True
 
     def run(self):
-        self.parser.add_argument('output',
-                                 help='Path to config.yaml',
-                                 type=str,
-                                 metavar="path")
-        self.parser.add_argument('--wallet',
-                                  help='Name of the wallet',
-                                  type=str)
+        self.parser.add_argument(
+            'output', help='Path to config.yaml', type=str, metavar="path")
+        self.parser.add_argument(
+            '--wallet', help='Name of the wallet', type=str)
         self.func = self.command_deploy
         self.parse_args()
         self.run_command()
@@ -50,19 +48,25 @@ class COrgDeploy(COrgCommand):
             self.output = os.path.join(self.output, "config.yaml")
 
         if not os.path.isfile(self.output):
-            return logging.error('The path is not valid. Please add a path to the config.yaml file.')
+            return logging.error(
+                'The path is not valid. Please add a path to the config.yaml file.'
+            )
         dirname = os.path.dirname(os.path.abspath(self.output))
 
         if not self.wallet:
             try:
                 wallet = Vault().default_wallet()
             except ValueError:
-                return logging.error('No wallet has been specified. Please add option--wallet NAME, or add a wallet with the wallet command.')
+                return logging.error(
+                    'No wallet has been specified. Please add option--wallet NAME, or add a wallet with the wallet command.'
+                )
         else:
             try:
                 wallet = Vault().find_wallet(name=self.wallet)
             except ValueError:
-                return logging.error('The wallet is not recognized. Add a wallet with the wallet command.')
+                return logging.error(
+                    'The wallet is not recognized. Add a wallet with the wallet command.'
+                )
 
         name = LocalParams(self.output).name
         GlobalParams().create_or_update(name, dirname)
@@ -77,7 +81,9 @@ class COrgDeploy(COrgCommand):
 
 {}'''.format(err['message']))
             if err['code'] == -32000:
-                logging.error('The specified wallet has insufficient funds to deploy your Continuous Organization, please send ~0.1eth to {}'.format(wallet.address))
+                logging.error(
+                    'The specified wallet has insufficient funds to deploy your Continuous Organization, please send ~0.1eth to {}'
+                    .format(wallet.address))
             return
 
         logging.info("Great! Your continuous organisation exists!")

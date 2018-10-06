@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''c-org vault manager'''
 
 import os
@@ -26,10 +25,8 @@ from c_org.manager.base import BaseManager
 from c_org.utils import Wallet, get_c_org_path, get_vault_file
 
 
-
 class Vault(BaseManager):
     ''' Manage the YAML file ~/.c-org/vault.yaml containing the wallets and other securities keys '''
-
 
     @property
     def filename(self):
@@ -77,7 +74,6 @@ class Vault(BaseManager):
             raise ValueError("The wallet\'s name already exists.")
         self.add(wallet, 'wallets')
 
-
     def default_wallet(self):
         '''
         Retrieve the default wallet (the one named `default` or any wallet)
@@ -95,7 +91,6 @@ class Vault(BaseManager):
         if self.exist_wallet(name="default"):
             return self.find_wallet(name="default")
         return self.find_wallet(self.wallets[0]['name'])
-
 
     def find_wallet(self, name="", address="", private_key=""):
         '''
@@ -140,8 +135,6 @@ class Vault(BaseManager):
         self.remove(name, 'name', 'wallets')
 
 
-
-
 if __name__ == "__main__":
     import doctest
     import tempfile
@@ -155,7 +148,8 @@ wallets: []''')
     os.environ['HOME'] = workdir.name
     v = Vault()
     # v.data = {'wallets':[]}
-    doctest.testmod(extraglobs={'v': v,
-                                'wallet': Wallet(name="safe",
-                                                 private_key=private_key)})
+    doctest.testmod(extraglobs={
+        'v': v,
+        'wallet': Wallet(name="safe", private_key=private_key)
+    })
     workdir.cleanup()

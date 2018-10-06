@@ -24,11 +24,7 @@ from c_org.cli.commands.wallet import COrgWallet
 # from c_org.cli.commands.init import COrgInit
 
 __all__ = [
-    'COrgDeploy',
-    'COrgBuy',
-    'COrgSell',
-    'COrgRevenue',
-    'COrgStats',
+    'COrgDeploy', 'COrgBuy', 'COrgSell', 'COrgRevenue', 'COrgStats',
     'COrgWallet'
     # 'COrgInit'
 ]

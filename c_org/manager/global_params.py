@@ -16,16 +16,15 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''c-org global params'''
 
 import os
 from c_org.manager.base import BaseManager
 from c_org.utils import get_c_org_path, get_global_params_file
 
+
 class GlobalParams(BaseManager):
     ''' Manage the YAML file ~/.c-org/global.yaml containing global informations on the CO's folders '''
-
 
     @property
     def filename(self):

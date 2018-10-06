@@ -47,19 +47,8 @@ const styles = theme => ({
 });
 
 class PermanentDrawer extends React.Component {
-  state = {
-    anchor: 'left',
-  };
-
-  handleChange = event => {
-    this.setState({
-      anchor: event.target.value,
-    });
-  };
-
   render() {
     const { classes } = this.props;
-    const { anchor } = this.state;
 
     const drawer = (
       <Drawer
@@ -67,53 +56,35 @@ class PermanentDrawer extends React.Component {
         classes={{
           paper: classes.drawerPaper,
         }}
-        anchor={anchor}
+        anchor='left'
       >
         <div className={classes.toolbar} />
+
         <Divider />
+		<List>Menu1</List>
         <Divider />
+		<List>Menu2</List>
       </Drawer>
     );
 
-    let before = null;
-    let after = null;
-
-    if (anchor === 'left') {
-      before = drawer;
-    } else {
-      after = drawer;
-    }
-
     return (
       <div className={classes.root}>
-        <TextField
-          id="permanent-anchor"
-          select
-          label="Anchor"
-          value={anchor}
-          onChange={this.handleChange}
-          margin="normal"
-        >
-          <MenuItem value="left">left</MenuItem>
-          <MenuItem value="right">right</MenuItem>
-        </TextField>
         <div className={classes.appFrame}>
           <AppBar
             position="absolute"
-            className={classNames(classes.appBar, classes[`appBar-${anchor}`])}
+            className={classNames(classes.appBar, classes[`appBar-left`])}
           >
             <Toolbar>
               <Typography variant="title" color="inherit" noWrap>
-                Permanent drawer
+                Continuous Organizations
               </Typography>
             </Toolbar>
           </AppBar>
-          {before}
+          {drawer}
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <Typography>{'You think water moves fast? You should see ice.'}</Typography>
           </main>
-          {after}
         </div>
       </div>
     );

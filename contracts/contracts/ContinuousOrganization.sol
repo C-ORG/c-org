@@ -1,8 +1,8 @@
 pragma solidity ^0.4.24;
 
-import "./openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "./openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "./openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 
 contract ContinuousOrganization is Ownable, StandardToken {
     using SafeMath for uint256;
@@ -130,12 +130,6 @@ contract ContinuousOrganization is Ownable, StandardToken {
         sellReserve_ += reserve;
         owner.transfer(invest - reserve);
 
-        // add sender to look up table if the sender is not already in
-        bool found = false;
-        for(uint256 i; i < addresses.length; i++) {
-            dupe[keys[i]] = map[keys[i]];
-        }
-
         emit TokensPurchased(
             msg.sender,
             invest,
@@ -172,7 +166,7 @@ contract ContinuousOrganization is Ownable, StandardToken {
         uint256 tokens = _etherToToken(invest);
         _mint(msg.sender, tokens);
 
-        dividends_ += tokens;
+        dividendBank_ += tokens;
 
         emit DividendsPurchased(
             msg.sender,
@@ -184,7 +178,7 @@ contract ContinuousOrganization is Ownable, StandardToken {
     // redistribute tokens to hodlers
     function askDividend() public {
 
-        uint256 dividend = balanceOf(msg.sender)*dividends_/totalSupply_;
+        uint256 dividend = balanceOf(msg.sender)*dividendBank_/totalSupply_;
     }
 
 

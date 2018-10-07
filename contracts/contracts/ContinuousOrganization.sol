@@ -1,8 +1,11 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+//import "./openzeppelin-solidity/contracts/math/SafeMath.sol";
+//import "./openzeppelin-solidity/contracts/ownership/Ownable.sol";
+//import "./openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+import "contracts/contracts/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "contracts/contracts/openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "contracts/contracts/openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 
 contract ContinuousOrganization is Ownable, StandardToken {
     using SafeMath for uint256;
@@ -179,11 +182,11 @@ contract ContinuousOrganization is Ownable, StandardToken {
     }
 
     // redistribute tokens to hodlers
-    function askDividend() public {
+    function askDividend(address claimer) public {
 
-        uint256 dividend = balanceOf(msg.sender)*balanceOf(address(this))/totalSupply_;
+        uint256 dividend = balanceOf(claimer)*balanceOf(address(this))/totalSupply_;
         _burn(address(this), dividend);
-        _mint(msg.sender, dividend);
+        _mint(claimer, dividend);
     }
 
 

@@ -21,6 +21,7 @@
 import logging
 import os
 import yaml
+import json
 try:
     import cPickle as pickle
 except:
@@ -30,6 +31,7 @@ from web3 import Web3
 from c_org.providers import w3
 import c_org.utils as utils
 from c_org.manager import *
+import subprocess
 
 class ContinuousOrganisationManager(object):
     def __init__(self, name):
@@ -87,11 +89,37 @@ class ContinuousOrganisationManager(object):
     def _generate_ui(self):
         pass
 
+
+    def _parse_compiler_output(self, stdoutdata):
+        # from py-solc:main.py
+
+        output = json.loads(stdoutdata)
+
+        if "contracts" not in output:
+            return {}
+
+        contracts = output['contracts']
+        sources = output['sources']
+
+        for source, data in contracts.items():
+            data['abi'] = json.loads(data['abi'])
+            data['ast'] = sources[source.split(':')[0]]['AST']
+
+        return contracts
+
     def _compile(self):
         with open(utils.get_source_file(), 'r') as f:
             source_code = f.read()
-        compiled_sol = solc.compile_source(source_code)
-        return compiled_sol
+        # compiled_sol = solc.compile_source(source_code, allow_empty=True)
+        # subprocess.call()
+        proc = subprocess.Popen('solc --combined-json abi,asm,ast,bin,bin-runtime,clone-bin,devdoc,interface,opcodes,userdoc contracts/contracts/ContinuousOrganization.sol', shell=True,
+                                stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+
+        stdoutdata, stderrdata = proc.communicate(None)
+        contracts = self._parse_compiler_output(stdoutdata)
+        return contracts
 
     def _store_build(self, interface, address):
         store = {'abi': interface['abi'], 'address': address}
@@ -108,16 +136,16 @@ const abi = {};'''.format(address, str(interface['abi'])))
         beta = int(self.params.get('revenue_reserve') * 1000)
         nonce = w3.eth.getTransactionCount(wallet.address)
         transaction = contract.constructor(slope, alpha, beta) \
-                              .buildTransaction({'gas': 4712388,
-                                                 'gasPrice': 100000,
-                                                 'from': wallet.address,
+                              .buildTransaction({'from': wallet.address,
+                               'gas': '0x5208', 'gasPrice': '0x4A817C800',
                                                  'nonce': nonce})
+        print("nonce %s" % nonce)
         tx_sign = w3.eth.account.signTransaction(
             transaction, private_key=wallet.private_key)
+        print("nonce %s" % nonce)
         tx_hash = w3.eth.sendRawTransaction(tx_sign.rawTransaction)
-        print("toto tx_hash %s" % tx_hash)
+        print("nonce %s" % nonce)
         receipt = w3.eth.waitForTransactionReceipt(tx_hash, timeout=120)
-        print("toto receipt %s" % receipt)
         address = receipt['contractAddress']
         return address
 

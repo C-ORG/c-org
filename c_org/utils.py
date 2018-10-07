@@ -48,8 +48,8 @@ def get_default_path(name):
 
 
 def get_source_file():
-    return os.path.join(get_c_org_path(), "contracts",
-                        "ContinuousOrganisation.sol")
+    return os.path.join("contracts", "contracts",
+                        "ContinuousOrganization.sol")
 
 
 def get_vault_file():

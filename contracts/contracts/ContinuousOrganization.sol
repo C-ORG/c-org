@@ -189,7 +189,6 @@ contract ContinuousOrganization is Ownable, StandardToken {
 
     function revenue()
         public
-        onlyOwner
         payable {
 
         require(msg.value > 0);

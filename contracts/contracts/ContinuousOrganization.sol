@@ -34,6 +34,11 @@ contract ContinuousOrganization is Ownable, StandardToken {
         uint256 value,
         uint256 amount
     );
+    event DividendsPurchased(
+        address indexed purchaser,
+        uint256 value,
+        uint256 amount
+    );
 
     /* This is the constructor. Solidity does not implement float number so we have to multiply constants by 1000 and rounding them before creating the smart contract.
     */
@@ -98,15 +103,15 @@ contract ContinuousOrganization is Ownable, StandardToken {
         buy();
     }
 
-    function _tokenToEther(uint256 token)
+    function _tokenToEther(uint256 tokens)
         internal
         returns (uint256 y) {
 
-        uint256 ratio = tokens*sellReserve/totalSupply_/totalSupply_;
+        uint256 ratio = tokens*sellReserve_/totalSupply_/totalSupply_;
         y = ratio * (2 * totalSupply_ - tokens);
     }
 
-    function _etherToToken(uint256 y)
+    function _etherToToken(uint256 invest)
         internal
         returns (uint256 token) {
 

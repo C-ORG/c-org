@@ -22,7 +22,16 @@ contract ContinuousOrganization is Ownable, StandardToken {
     uint256 private sellReserve_ = 0;
 
     /* Events */
-    event UpdateTokens(uint tokens, uint sellReserve);
+    event TokensPurchased(
+        address indexed purchaser,
+        uint256 value,
+        uint256 amount
+    );
+    event TokensSold(
+        address indexed seller,
+        uint256 value,
+        uint256 amount
+    );
 
     /* This is the constructor. Solidity does not implement float number so we have to multiply constants by 1000 and rounding them before creating the smart contract.
     */
@@ -106,7 +115,11 @@ contract ContinuousOrganization is Ownable, StandardToken {
         sellReserve_ += reserve;
         owner.transfer(invest - reserve);
 
-        emit UpdateTokens(totalSupply_, sellReserve_);
+        emit TokensPurchased(
+            msg.sender,
+            invest,
+            tokens
+        );
     }
 
     function sell(uint tokens) public {
@@ -122,7 +135,11 @@ contract ContinuousOrganization is Ownable, StandardToken {
         withdraw /= 1000;
         msg.sender.transfer(withdraw);
 
-        emit UpdateTokens(totalSupply_, sellReserve_);
+        emit TokensSold(
+            msg.sender,
+            withdraw,
+            tokens
+        );
     }
 
     function revenue()
@@ -139,7 +156,5 @@ contract ContinuousOrganization is Ownable, StandardToken {
         // redistribute tokens
         sellReserve_ += beta*rev;
         owner.transfer((1-beta)*rev/1000);
-
-        emit UpdateTokens(totalSupply_, sellReserve_);
     }
 }

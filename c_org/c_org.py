@@ -111,7 +111,6 @@ class ContinuousOrganisationManager(object):
         with open(utils.get_source_file(), 'r') as f:
             source_code = f.read()
         # compiled_sol = solc.compile_source(source_code, allow_empty=True)
-        # subprocess.call()
         proc = subprocess.Popen('solc --combined-json abi,asm,ast,bin,bin-runtime,clone-bin,devdoc,interface,opcodes,userdoc contracts/contracts/ContinuousOrganization.sol', shell=True,
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE,
@@ -139,12 +138,9 @@ const abi = {};'''.format(address, str(interface['abi'])))
                               .buildTransaction({'from': wallet.address,
                                'gas': '0x5208', 'gasPrice': '0x4A817C800',
                                                  'nonce': nonce})
-        print("nonce %s" % nonce)
         tx_sign = w3.eth.account.signTransaction(
             transaction, private_key=wallet.private_key)
-        print("nonce %s" % nonce)
         tx_hash = w3.eth.sendRawTransaction(tx_sign.rawTransaction)
-        print("nonce %s" % nonce)
         receipt = w3.eth.waitForTransactionReceipt(tx_hash, timeout=120)
         address = receipt['contractAddress']
         return address

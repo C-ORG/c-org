@@ -14,9 +14,9 @@ contract ContinuousOrganization is Ownable, StandardToken {
     uint8 public constant decimals = 18;
 
     /* The parameters of the Continuous Organisation. All are multiplied by 1000 */
-    uint slope = 1000; // parametrize the buying linear curve
-    uint alpha = 100; // fraction put into selling reserves when investors buy
-    uint beta = 300; // fraction put into selling reserves when the CO has revenues
+    uint public slope; // parametrize the buying linear curve
+    uint public alpha; // fraction put into selling reserves when investors buy
+    uint public beta; // fraction put into selling reserves when the CO has revenues
 
     /* The tokens of the Continuous Organisation */
     uint256 private sellReserve_ = 0;
@@ -46,15 +46,6 @@ contract ContinuousOrganization is Ownable, StandardToken {
     }
 
     /* Getters and setters */
-    function setSlope(uint paramSlope) public onlyOwner {
-        slope = paramSlope;
-    }
-    function setAlpha(uint paramAlpha) public onlyOwner {
-        alpha = paramAlpha;
-    }
-    function setBeta(uint paramBeta) public onlyOwner {
-        beta = paramBeta;
-    }
     function sellReserve()
         public
         view
@@ -88,16 +79,21 @@ contract ContinuousOrganization is Ownable, StandardToken {
     }
 
     /* Babylonian method for square root. See: https://ethereum.stackexchange.com/a/2913 */
-    function _sqrt(uint x)
+    function _sqrt(uint256 x)
         internal
         pure
-        returns (uint y) {
-        uint z = (x + 1) / 2;
+        returns (uint256 y) {
+        uint256 z = (x + 1) / 2;
         y = x;
         while (z < y) {
             y = z;
             z = (x / z + z) / 2;
         }
+    }
+
+    // Fallback function.
+    function () external payable {
+        buy();
     }
 
     /* Minting and burning tokens */
@@ -106,12 +102,12 @@ contract ContinuousOrganization is Ownable, StandardToken {
         require(msg.value > 0);
 
         // create tokens
-        uint invest = msg.value;
-        uint tokens = _sqrt(2*invest*1000/slope + totalSupply_*totalSupply_) - totalSupply_;
+        uint256 invest = msg.value;
+        uint256 tokens = _sqrt(2*invest*10**uint256(decimals)*1000/slope + totalSupply_*totalSupply_) - totalSupply_;
         _mint(msg.sender, tokens);
 
         // redistribute tokens: keep a fraction in reserve and transfer the rest.
-        uint reserve = alpha*invest;
+        uint256 reserve = (alpha*invest) / 1000;
         sellReserve_ += reserve;
         owner.transfer(invest - reserve);
 
@@ -122,7 +118,7 @@ contract ContinuousOrganization is Ownable, StandardToken {
         );
     }
 
-    function sell(uint tokens) public {
+    function sell(uint256 tokens) public {
         // check funds
         require(tokens > 0);
 
@@ -130,9 +126,9 @@ contract ContinuousOrganization is Ownable, StandardToken {
         _burn(msg.sender, tokens);
 
         // Pay out from the reserve.
-        uint withdraw = sellReserve_*tokens/totalSupply_/totalSupply_*(2*totalSupply_ - tokens);
+        uint256 withdraw = tokens*sellReserve_*(2-tokens/(10**uint256(decimals)))/(10**uint256(decimals));
+
         sellReserve_ -= withdraw;
-        withdraw /= 1000;
         msg.sender.transfer(withdraw);
 
         emit TokensSold(
@@ -148,9 +144,9 @@ contract ContinuousOrganization is Ownable, StandardToken {
         payable {
 
         require(msg.value > 0);
-        uint rev = msg.value;
+        uint256 rev = msg.value;
         // create tokens
-        uint tokens = _sqrt(2*rev*1000/slope + totalSupply_*totalSupply_) - totalSupply_;
+        uint256 tokens = _sqrt(2*rev*1000/slope + totalSupply_*totalSupply_) - totalSupply_;
         _mint(owner, tokens);
 
         // redistribute tokens

@@ -193,12 +193,20 @@ contract ContinuousOrganization is Ownable, StandardToken {
 
         require(msg.value > 0);
         uint256 rev = msg.value;
-        // create tokens
-        uint256 tokens = _sqrt(2*rev*1000/slope + totalSupply_*totalSupply_) - totalSupply_;
-        _mint(owner, tokens);
 
-        // redistribute tokens
-        sellReserve_ += beta*rev;
-        owner.transfer((1-beta)*rev/1000);
+        // transfer a part of the revenue to the owner
+        uint256 revForOwner = beta*rev/1000;
+
+
+        // and the rest as dividends (in tokens)
+        uint256 revForDividends = rev - revForOwner;
+        uint256 tokens = _etherToToken(rev)/1000;
+        _mint(address(this), tokens);
+
+        emit DividendsPurchased(
+            address(this),
+            revForDividends,
+            tokens
+        );
     }
 }

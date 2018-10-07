@@ -19,7 +19,6 @@ export default class Graph extends React.Component {
       dynamicTyping: true,
       complete: results => {
           const rows = results.data;
-          console.log (rows);
 
           function unpack(rows, key) {
               return rows.map(function(row) {
@@ -48,12 +47,9 @@ export default class Graph extends React.Component {
             xaxis: 'x',
             yaxis: 'y'
           }];
-          console.log(data);
           this.setState( {data: data} );
         }
       });
-    // console.log(csv);
-    console.log("FOO");
   }
 
   render() {

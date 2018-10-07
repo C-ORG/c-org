@@ -3,13 +3,15 @@ import "./App.css";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
+import {abi, address} from './config.js';
+
 import {Sidebar,
         Graph,
         Header,
         Page,
-        Exchange,
-        Title,
-        Logo} from "./Components";
+        Exchange
+  } from "./Components";
+
 
 const styles = theme => ({
   appFrame: {
@@ -29,6 +31,8 @@ const styles = theme => ({
 });
 
 class App extends Component {
+
+
   render() {
     const { classes } = this.props;
 

@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import green from '@material-ui/core/colors/green';
+
+import {abi, address} from '../config.js';
+
 
 
 
@@ -30,24 +32,27 @@ const styles = theme => ({
 
 class Exchange extends React.Component {
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+
+    this.handleEther = this.handleEther.bind(this);
+    this.handleToken = this.handleToken.bind(this);
+
     this.state = {
       ether: 0.0,
       token: 0.0,
       sellReserve: 5,
       slope: 1,
       supply: 10,
-      disable: false
+      disable: false,
+      isConnected: false,
+      peers: 0,
+      version: ''
     };
 
-    this.handleEther = this.handleEther.bind(this);
-    this.handleToken = this.handleToken.bind(this);
-
-    this.etherInput = React.createRef();
-    this.tokenInput = React.createRef();
 
   }
+
 
 
   handleToken(event) {

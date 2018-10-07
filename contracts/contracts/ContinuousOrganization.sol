@@ -100,13 +100,13 @@ contract ContinuousOrganization is Ownable, StandardToken {
 
     function _tokenToEther(uint256 token)
         internal
-        returns (uint256 ether) {
+        returns (uint256 y) {
 
-        uint ratio = tokens*sellReserve/totalSupply_/totalSupply_;
-        ether = ratio * (2 * totalSupply_ - tokens);
+        uint256 ratio = tokens*sellReserve/totalSupply_/totalSupply_;
+        y = ratio * (2 * totalSupply_ - tokens);
     }
 
-    function _etherToToken(uint256 ether)
+    function _etherToToken(uint256 y)
         internal
         returns (uint256 token) {
 
@@ -136,7 +136,6 @@ contract ContinuousOrganization is Ownable, StandardToken {
             dupe[keys[i]] = map[keys[i]];
         }
 
-        if addresses;
         emit TokensPurchased(
             msg.sender,
             invest,
@@ -163,7 +162,30 @@ contract ContinuousOrganization is Ownable, StandardToken {
         );
     }
 
-    
+
+    function storeDividend() public payable {
+
+        require(msg.value > 0);
+
+        // create tokens
+        uint256 invest = msg.value;
+        uint256 tokens = _etherToToken(invest);
+        _mint(msg.sender, tokens);
+
+        dividends_ += tokens;
+
+        emit DividendsPurchased(
+            msg.sender,
+            invest,
+            tokens
+        );
+    }
+
+    // redistribute tokens to hodlers
+    function askDividend() public {
+
+        uint256 dividend = balanceOf(msg.sender)*dividends_/totalSupply_;
+    }
 
 
     function revenue()

@@ -21,7 +21,7 @@ import argparse
 import re
 import random
 import web3
-from web3.auto import w3
+from c_org.providers import w3
 try:
     import cPickle as pickle
 except:

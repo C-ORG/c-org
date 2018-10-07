@@ -19,7 +19,7 @@
 '''c-org vault manager'''
 
 import os
-from web3.auto import w3
+from c_org.providers import w3
 from web3 import Web3
 from c_org.manager.base import BaseManager
 from c_org.utils import Wallet, get_c_org_path, get_vault_file

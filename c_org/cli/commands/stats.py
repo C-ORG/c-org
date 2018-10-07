@@ -17,11 +17,10 @@
 '''c_org stats command line'''
 
 import logging
-from web3.auto import w3
+from c_org.providers import w3
 from c_org.cli.command import COrgCommand
 from c_org import ContinuousOrganisationManager
 from c_org.manager import Vault
-
 
 class COrgStats(COrgCommand):
     def __init__(self):

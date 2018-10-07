@@ -27,10 +27,9 @@ except:
     import pickle
 import solc
 from web3 import Web3
-from web3.auto import w3
+from c_org.providers import w3
 import c_org.utils as utils
 from c_org.manager import *
-
 
 class ContinuousOrganisationManager(object):
     def __init__(self, name):
@@ -116,7 +115,10 @@ const abi = {};'''.format(address, str(interface['abi'])))
         tx_sign = w3.eth.account.signTransaction(
             transaction, private_key=wallet.private_key)
         tx_hash = w3.eth.sendRawTransaction(tx_sign.rawTransaction)
-        address = w3.eth.getTransactionReceipt(tx_hash)['contractAddress']
+        print("toto tx_hash %s" % tx_hash)
+        receipt = w3.eth.waitForTransactionReceipt(tx_hash, timeout=120)
+        print("toto receipt %s" % receipt)
+        address = receipt['contractAddress']
         return address
 
     def deploy(self, wallet):

@@ -169,9 +169,7 @@ contract ContinuousOrganization is Ownable, StandardToken {
         // create tokens
         uint256 invest = msg.value;
         uint256 tokens = _etherToToken(invest);
-        _mint(msg.sender, tokens);
-
-        dividendBank_ += tokens;
+        _mint(address(this), tokens);
 
         emit DividendsPurchased(
             msg.sender,
@@ -183,7 +181,9 @@ contract ContinuousOrganization is Ownable, StandardToken {
     // redistribute tokens to hodlers
     function askDividend() public {
 
-        uint256 dividend = balanceOf(msg.sender)*dividendBank_/totalSupply_;
+        uint256 dividend = balanceOf(msg.sender)*balanceOf(address(this))/totalSupply_;
+        _burn(address(this), dividend);
+        _mint(msg.sender, dividend);
     }
 
 

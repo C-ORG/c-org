@@ -10,11 +10,11 @@ def check_files():
     if not os.path.isdir(c_org):
         os.makedirs(c_org)
     contracts = os.path.join(c_org, "contracts")
-    if not os.path.isdir(contracts):
-        os.makedirs(contracts)
     rootdir = os.path.dirname(os.path.abspath(__file__))
-    contract = os.path.join(rootdir, "contracts", "ContinuousOrganisation.sol")
-    shutil.copy(contract, contracts)
+    contract = os.path.join(rootdir, "contracts", "contracts")
+    shutil.copytree(contract, contracts)
+    # except (IOError, shutil.Error, os.error) as e:
+    #     pass
     with open(os.path.join(c_org, "vault.yaml"), 'w+') as f:
         f.write('''infura: ~
 wallets: []''')

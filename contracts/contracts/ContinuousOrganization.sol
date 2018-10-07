@@ -1,8 +1,8 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+import "./openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "./openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "./openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 
 contract ContinuousOrganization is Ownable, StandardToken {
     using SafeMath for uint256;
@@ -17,9 +17,11 @@ contract ContinuousOrganization is Ownable, StandardToken {
     uint public slope; // parametrize the buying linear curve
     uint public alpha; // fraction put into selling reserves when investors buy
     uint public beta; // fraction put into selling reserves when the CO has revenues
+    uint256 public dividendBank_ = 0;
 
     /* The tokens of the Continuous Organisation */
     uint256 private sellReserve_ = 0;
+
 
     /* Events */
     event TokensPurchased(
@@ -96,6 +98,23 @@ contract ContinuousOrganization is Ownable, StandardToken {
         buy();
     }
 
+    function _tokenToEther(uint256 token)
+        internal
+        returns (uint256 ether) {
+
+        uint ratio = tokens*sellReserve/totalSupply_/totalSupply_;
+        ether = ratio * (2 * totalSupply_ - tokens);
+    }
+
+    function _etherToToken(uint256 ether)
+        internal
+        returns (uint256 token) {
+
+        uint256 ratio = 2*invest*10**uint256(decimals)*1000/slope;
+        token = _sqrt(ratio + totalSupply_**2) - totalSupply_;
+    }
+
+
     /* Minting and burning tokens */
     // #TODO protection against overflows
     function buy() public payable {
@@ -103,7 +122,7 @@ contract ContinuousOrganization is Ownable, StandardToken {
 
         // create tokens
         uint256 invest = msg.value;
-        uint256 tokens = _sqrt(2*invest*10**uint256(decimals)*1000/slope + totalSupply_*totalSupply_) - totalSupply_;
+        uint256 tokens = _etherToToken(invest);
         _mint(msg.sender, tokens);
 
         // redistribute tokens: keep a fraction in reserve and transfer the rest.
@@ -111,6 +130,13 @@ contract ContinuousOrganization is Ownable, StandardToken {
         sellReserve_ += reserve;
         owner.transfer(invest - reserve);
 
+        // add sender to look up table if the sender is not already in
+        bool found = false;
+        for(uint256 i; i < addresses.length; i++) {
+            dupe[keys[i]] = map[keys[i]];
+        }
+
+        if addresses;
         emit TokensPurchased(
             msg.sender,
             invest,
@@ -126,8 +152,7 @@ contract ContinuousOrganization is Ownable, StandardToken {
         _burn(msg.sender, tokens);
 
         // Pay out from the reserve.
-        uint256 withdraw = tokens*sellReserve_*(2-tokens/(10**uint256(decimals)))/(10**uint256(decimals));
-
+        uint256 withdraw = _tokenToEther(tokens);
         sellReserve_ -= withdraw;
         msg.sender.transfer(withdraw);
 
@@ -137,6 +162,9 @@ contract ContinuousOrganization is Ownable, StandardToken {
             tokens
         );
     }
+
+    
+
 
     function revenue()
         public

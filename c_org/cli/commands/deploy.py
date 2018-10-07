@@ -54,7 +54,10 @@ class COrgDeploy(COrgCommand):
         dirname = os.path.dirname(os.path.abspath(self.output))
 
         if not self.wallet:
-            return logging.error('No wallet has been specified. Please add --wallet NAME. Add a wallet with the wallet command.')
+            try:
+                wallet = Vault().default_wallet()
+            except ValueError:
+                return logging.error('No wallet has been specified. Please add option--wallet NAME, or add a wallet with the wallet command.')
         else:
             try:
                 wallet = Vault().find_wallet(name=self.wallet)

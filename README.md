@@ -76,6 +76,7 @@ py.test
 The tests suite is launching `ganache-cli`, but you might want to launch it by yourself if you want to check your Continuous Organisation before launching it on `mainnet`.
 
 # Usage
+=======
 
 The continuous organisation called `NAME` is built inside a separate folder. By default, this folder is `DIRECTORY = $HOME/.c-org/NAME`.
 

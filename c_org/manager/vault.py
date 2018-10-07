@@ -77,6 +77,26 @@ class Vault(BaseManager):
             raise ValueError("The wallet\'s name already exists.")
         self.add(wallet, 'wallets')
 
+
+    def default_wallet(self):
+        '''
+        Retrieve the default wallet (the one named `default` or any wallet)
+
+        >>> w = Vault().create_wallet("default")
+        >>> w.name == Vault().default_wallet().name
+        True
+        >>> Vault().remove_wallet(name="default")
+        >>> w = Vault().create_wallet("test")
+        >>> w.name == Vault().default_wallet().name
+        True
+        '''
+        if not len(self.wallets):
+            raise ValueError("No wallets are stored.")
+        if self.exist_wallet(name="default"):
+            return self.find_wallet(name="default")
+        return self.find_wallet(self.wallets[0]['name'])
+
+
     def find_wallet(self, name="", address="", private_key=""):
         '''
         Find a wallet given its name, its address or its private_key

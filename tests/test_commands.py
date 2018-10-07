@@ -45,7 +45,17 @@ class TestDeploy(TestBase):
 
     def test_deploy(self):
         config_file = os.path.join(self.my_co_path, "config.yaml")
-        sys.argv = [exe_cli] + ["deploy", config_file, "--wallet", self.wallet.name]
+        sys.argv = [exe_cli, "deploy", config_file, "--wallet", self.wallet.name]
+        main()
+        self.assertTrue(os.path.isfile(self.c_org_manager.build_file))
+        contract = self.c_org_manager.contract
+        self.assertTrue(len(contract.find_functions_by_name('buy')))
+
+
+    def test_deploy_default_wallet(self):
+        Vault().default_wallet().add_ether(init_ether)
+        config_file = os.path.join(self.my_co_path, "config.yaml")
+        sys.argv = [exe_cli, "deploy", config_file]
         main()
         self.assertTrue(os.path.isfile(self.c_org_manager.build_file))
         contract = self.c_org_manager.contract
@@ -62,7 +72,16 @@ class TestDeploy(TestBase):
         self.assertEqual(out, b'')
         self.assertIn(wallet.address.encode('utf-8'), err)
 
-
+    def test_no_enough_funds(self):
+        config_file = os.path.join(self.my_co_path, "config.yaml")
+        wallet = Vault().create_wallet('poor-wallet')
+        command = [exe_cli, "deploy", config_file, "--wallet", wallet.name]
+        p = subprocess.Popen(command,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        (out, err) = p.communicate()
+        self.assertEqual(out, b'')
+        self.assertIn(wallet.address.encode('utf-8'), err)
 
 
 class TestCommandWallet(TestBase):

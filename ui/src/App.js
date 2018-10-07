@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 
 import {Sidebar,
@@ -29,7 +28,7 @@ const styles = theme => ({
   },
 });
 
-class App extends React.Component {
+class App extends Component {
   render() {
     const { classes } = this.props;
 
@@ -39,8 +38,6 @@ class App extends React.Component {
       <div className="app">
         <div className={classes.appFrame}>
           <Sidebar>
-            <Logo />
-            <Title />
             <Exchange />
           </Sidebar>
 

@@ -1,33 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-
+import Typography from '@material-ui/core/Typography';
+import Badge from '@material-ui/core/Badge';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
-  },
-  "appBar-left": {
-    marginLeft: drawerWidth,
-  },
-  "appBar-right": {
-    marginRight: drawerWidth,
-  },
   drawerPaper: {
     position: "relative",
     width: drawerWidth,
+    marginTop: "80px"
   },
   toolbar: theme.mixins.toolbar,
   content: {
@@ -35,29 +21,40 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
   },
+  margin: {
+   margin: theme.spacing.unit * 2,
+ },
 });
 
 class Sidebar extends React.Component {
+
+
   render() {
-    const { classes } = this.props;
-
-
+    const { classes, children } = this.props;
 
     return (
-
         <Drawer
           variant="permanent"
           classes={{
             paper: classes.drawerPaper,
           }}
-          anchor='left'
         >
-
-
+          { children }
           <Divider />
-      <List>Menu1</List>
-          <Divider />
-      <List>Menu2</List>
+          <Typography variant="title" align="center" noWrap>
+            Balance
+          </Typography>
+      <List style={{padding: "15px"}}>
+          <Typography align="center" noWrap>ETH
+          <Badge className={classes.margin} badgeContent={4} color="primary"/>
+          </Typography>
+      </List>
+
+      <List style={{padding: "15px"}}>
+        <Typography align="center" noWrap>TOK
+        <Badge className={classes.margin} badgeContent={10} color="secondary"/>
+        </Typography>
+      </List>
         </Drawer>
 
 

@@ -13,7 +13,8 @@ const drawerWidth = 240;
 
 const styles = theme => ({
   appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
+    width: '100%',
+  zIndex: theme.zIndex.drawer + 10,
   },
   'appBar-left': {
     marginLeft: drawerWidth,
@@ -33,11 +34,11 @@ class Header extends React.Component {
 
       <AppBar
         position="absolute"
-        className={classNames(classes.appBar, classes[`appBar-left`])}
+        className={classes.appBar}
       >
         <Toolbar>
           <Typography variant="title" color="inherit" noWrap>
-            Continuous Organizations
+            ACME - Continuous Organizations
           </Typography>
         </Toolbar>
       </AppBar>

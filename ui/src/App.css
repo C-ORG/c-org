@@ -5,4 +5,8 @@ html, body, .app, .app>div {
 
 .app {
     flexGrow: 1;
+    zIndex: 1;
+    overflow: 'hidden';
+    position: 'relative';
+    display: 'flex';
 }

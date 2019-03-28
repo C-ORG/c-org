@@ -80,7 +80,7 @@ The tests suite is launching `ganache-cli`, but you might want to launch it by y
 
 The continuous organisation called `NAME` is built inside a separate folder. By default, this folder is `DIRECTORY = $HOME/.c-org/NAME`.
 
-1. Create a `config.yaml` as given in [example](../master/example.yaml) or run `c-org init` to generate one.
+1. Create a `config.yaml` as given in [example](./config.yaml) or run `c-org init` to generate one.
 
 2. Create a wallet containing enough gas to deploy the continuous organisation on the ethereum blockchain. Please note that this wallet is the admin wallet, used to deploy the smart-contract, it is **not** the wallet of the Continuous Organization (which is specified in the config.yaml file).
 

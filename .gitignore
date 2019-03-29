@@ -14,3 +14,5 @@ bin/
 *.egg-info
 *.eggs
 .pytest_cache/
+test.txt
+ganache.log

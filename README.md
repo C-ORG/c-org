@@ -51,7 +51,7 @@ brew tap ethereum/ethereum
 brew install solidity
 ```
 
-
+Current version of py-solc is not compatible with `solc` version 0.5.0. Please [see a fix](https://github.com/ethereum/py-solc/issues/61#issuecomment-456169259)
 Then, you can easily install `c-org` with the following command (make sure you have the latest version of pip installed):
 
 ```bash

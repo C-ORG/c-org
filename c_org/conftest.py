@@ -18,7 +18,7 @@ def _docdir(request):
     if isinstance(request.node, doctest_plugin.DoctestItem):
 
         # Get the fixture dynamically by its name.
-        tmpdir = request.getfuncargvalue('tmpdir')
+        tmpdir = request.getfixturevalue('tmpdir')
         c_org = tmpdir.mkdir('.c-org')
         vault = c_org.join("vault.yaml")
         vault.write('''infura: 'YOUR-INFURA-KEY'

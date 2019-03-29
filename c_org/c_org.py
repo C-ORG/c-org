@@ -91,7 +91,11 @@ class ContinuousOrganisationManager(object):
     def _compile(self):
         with open(utils.get_source_file(), 'r') as f:
             source_code = f.read()
-        compiled_sol = solc.compile_source(source_code)
+        # fix incompatibility between pysolc and solc 0.5.0
+#        fix =("abi", "asm", "ast", "bin", "bin-runtime",\
+ #             "devdoc", "interface", "opcodes","userdoc") 
+        compiled_sol = solc.compile_source(
+                source_code)#,output_values=fix)
         return compiled_sol
 
     def _store_build(self, interface, address):

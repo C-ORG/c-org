@@ -17,16 +17,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''c_org configuration manager'''
-
 
 from c_org.manager.vault import Vault
 from c_org.manager.global_params import GlobalParams
 from c_org.manager.local_params import LocalParams
 from c_org.manager.base import BaseManager
 
-__all__ = ['Vault',
-           'GlobalParams',
-           'BaseManager',
-           'LocalParams']
+__all__ = ['Vault', 'GlobalParams', 'BaseManager', 'LocalParams']

@@ -27,7 +27,6 @@ from c_org.manager import GlobalParams
 from .test_base import TestBase
 
 
-
 class TestGlobalParam(TestBase):
     '''Param mixin tests'''
 
@@ -67,7 +66,6 @@ class TestGlobalParam(TestBase):
         self.g.data = {'c-orgs': []}
         self.g.save()
         self.assertFalse(self.g.exists('My C-Org', 'name', 'c-orgs'))
-
 
 
 if __name__ == '__main__':

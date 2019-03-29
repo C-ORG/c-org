@@ -42,7 +42,8 @@ class TestArgs(TestBase):
         self.assertIn(b'--amount', out)
 
     def test_no_command(self):
-        p = subprocess.Popen([exe_cli], stdout=subprocess.PIPE,
+        p = subprocess.Popen([exe_cli],
+                             stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         (out, err) = p.communicate()
         self.assertEqual(out, b'')

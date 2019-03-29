@@ -24,9 +24,7 @@ import c_org.utils as utils
 from .test_base import TestBase
 
 
-
 class TestContinuousOrganisationManager(TestBase):
-
     def setUp(self):
         self.generate_c_org()
         self.generate_manager()
@@ -35,9 +33,9 @@ class TestContinuousOrganisationManager(TestBase):
     def test_local_params(self):
         self.assertIn('slope', self.c_org_manager.params.data)
         self.assertIn('version', self.c_org_manager.params.data)
-        self.assertEqual(1000000, self.c_org_manager.params.get('initial_tokens'))
+        self.assertEqual(1000000,
+                         self.c_org_manager.params.get('initial_tokens'))
         self.assertNotIn('c-org', self.c_org_manager.params.data)
-
 
     def test_generate_ui(self):
         pass
@@ -46,9 +44,11 @@ class TestContinuousOrganisationManager(TestBase):
         self.c_org_manager.deploy(self.wallet)
         abi = self.c_org_manager.interface.get('abi')
         functions = [i['name'] for i in abi if i['type'] == 'function']
-        self.assertEqual(len(functions), len(self.c_org_manager.contract.all_functions()))
+        self.assertEqual(
+            len(functions), len(self.c_org_manager.contract.all_functions()))
         self.assertIn('buy', functions)
-        self.assertNotIn('UpdateTokens', functions) # this is an event not a function
+        self.assertNotIn('UpdateTokens',
+                         functions)  # this is an event not a function
 
     def test_deploy(self):
         self.c_org_manager.deploy(self.wallet)

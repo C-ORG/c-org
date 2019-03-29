@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''c-org base manager'''
 
 import yaml
@@ -25,7 +24,6 @@ import os
 
 
 class BaseManager(object):
-
     def __init__(self, filename=""):
         # _data is assumed to be a dict
         self._data = None

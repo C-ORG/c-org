@@ -38,6 +38,7 @@ from .test_base import TestBase
 exe_cli = "c-org"
 init_ether = 2000000000000000000
 
+
 def sed(pattern, replace, source):
     """ Copy the sed bash function. Details on  https://stackoverflow.com/a/40843600/4986615 """
     fin = open(source, 'r')
@@ -50,7 +51,6 @@ def sed(pattern, replace, source):
 
 
 class TestNewIssuer(TestBase):
-
     def setUp(self):
         # we assume Edith has correctly installed the utility
         self.generate_c_org()
@@ -65,10 +65,13 @@ class TestNewIssuer(TestBase):
         # Edith creates a new folder, jumps on it and downloads the config.yaml given in the repository.
         os.makedirs("my-co")
         os.chdir("my-co")
-        urlretrieve ("https://raw.githubusercontent.com/C-ORG/c-org/master/config.yaml", "config.yaml")
+        urlretrieve(
+            "https://raw.githubusercontent.com/C-ORG/c-org/master/config.yaml",
+            "config.yaml")
 
         # Edith edits the config.yaml
-        sed("summary: ''", "summary: 'My CO is the best in the world!'", "config.yaml")
+        sed("summary: ''", "summary: 'My CO is the best in the world!'",
+            "config.yaml")
 
         # Edith creates a wallet and adds Ether on it
         sys.argv = [exe_cli] + ["wallet", "create", "edith-wallet"]
@@ -82,20 +85,25 @@ class TestNewIssuer(TestBase):
         self.assertEqual(init_ether, wallet.balance)
 
         # Edith deploys her continuous organisation
-        sys.argv = [exe_cli] + ["deploy", "config.yaml", "--wallet", wallet.name, "--output", os.getcwd()]
+        sys.argv = [exe_cli] + [
+            "deploy", "config.yaml", "--wallet", wallet.name, "--output",
+            os.getcwd()
+        ]
         main()
         self.assertTrue(os.path.isfile("build.yaml"))
 
         # Edith buys and sells some tokens
-        sys.argv = [exe_cli] + ["buy", "my-co", "--wallet", wallet.name, "--amount", "1"]
+        sys.argv = [exe_cli] + [
+            "buy", "my-co", "--wallet", wallet.name, "--amount", "1"
+        ]
         main()
         self.assertTrue(init_ether > wallet.balance)
 
-        sys.argv = [exe_cli] + ["sell", "my-co", "--wallet", wallet.name, "--amount", "1"]
+        sys.argv = [exe_cli] + [
+            "sell", "my-co", "--wallet", wallet.name, "--amount", "1"
+        ]
         main()
 
 
-
-
 if __name__ == '__main__':
-   unittest.main()
+    unittest.main()

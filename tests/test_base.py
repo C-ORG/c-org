@@ -24,13 +24,11 @@ import c_org.utils as utils
 from c_org import ContinuousOrganisationManager
 from c_org.manager import GlobalParams, Vault
 
-
 init_ether = 2000000000000000000
 exe_cli = "c-org"
 
+
 class TestBase(unittest.TestCase):
-
-
     def generate_wallet(self):
         if not self.has_temporary_files():
             self.temp_files()
@@ -52,20 +50,13 @@ class TestBase(unittest.TestCase):
         os.makedirs(c_orgs)
         contracts = os.path.join(c_orgs, "contracts")
         os.makedirs(contracts)
-        contract = os.path.join(rootdir,
-                                "ressources",
-                                ".c-org",
-                                "contracts",
+        contract = os.path.join(rootdir, "ressources", ".c-org", "contracts",
                                 "ContinuousOrganisation.sol")
         shutil.copy(contract, contracts)
-        global_file = os.path.join(rootdir,
-                                   "ressources",
-                                   ".c-org",
+        global_file = os.path.join(rootdir, "ressources", ".c-org",
                                    "global.yaml")
         shutil.copy(global_file, c_orgs)
-        vault_file = os.path.join(rootdir,
-                                  "ressources",
-                                  ".c-org",
+        vault_file = os.path.join(rootdir, "ressources", ".c-org",
                                   "vault.yaml")
         shutil.copy(vault_file, c_orgs)
 

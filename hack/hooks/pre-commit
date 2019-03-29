@@ -1,0 +1,4 @@
+#!/bin/sh
+
+files=$(git ls-files -m)
+[ -n "$files" ] && yapf -i $files

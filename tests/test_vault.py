@@ -57,15 +57,18 @@ class TestVault(TestBase):
 
     def test_store_wallet_dict(self):
         self.assertFalse(self.v.exist_wallet('dict-wallet'))
-        wallet = {'name': "dict-wallet",
-                  'private_key': utils.generate_random_private_key()}
+        wallet = {
+            'name': "dict-wallet",
+            'private_key': utils.generate_random_private_key()
+        }
         self.v.store_wallet(wallet)
         self.assertTrue(self.v.exist_wallet('dict-wallet'))
 
     def test_store_wallet(self):
         self.assertFalse(self.v.exist_wallet('wallet-wallet'))
-        wallet = utils.Wallet(name="wallet-wallet",
-                              private_key=utils.generate_random_private_key())
+        wallet = utils.Wallet(
+            name="wallet-wallet",
+            private_key=utils.generate_random_private_key())
         self.v.store_wallet(wallet)
         self.assertTrue(self.v.exist_wallet('wallet-wallet'))
 
@@ -78,7 +81,6 @@ class TestVault(TestBase):
         self.v.data['wallets'] = []
         self.v.save()
         self.assertFalse(self.v.exist_wallet('my-wallet'))
-
 
 
 if __name__ == '__main__':

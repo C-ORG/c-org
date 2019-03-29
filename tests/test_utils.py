@@ -26,6 +26,7 @@ import c_org.utils as utils
 from .test_base import TestBase
 import pickle
 
+
 class TestUtils(TestBase):
     '''Utils tests'''
 

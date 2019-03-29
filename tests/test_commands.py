@@ -32,12 +32,12 @@ import c_org.utils as utils
 from c_org.manager import Vault
 
 from web3.auto import w3
+
 # from web3.providers.eth_tester import EthereumTesterProvider
 # w3 = Web3(EthereumTesterProvider(backend=MockBackend()))
 
 
 class TestDeploy(TestBase):
-
     def setUp(self):
         self.generate_c_org()
         self.generate_manager()
@@ -45,12 +45,13 @@ class TestDeploy(TestBase):
 
     def test_deploy(self):
         config_file = os.path.join(self.my_co_path, "config.yaml")
-        sys.argv = [exe_cli, "deploy", config_file, "--wallet", self.wallet.name]
+        sys.argv = [
+            exe_cli, "deploy", config_file, "--wallet", self.wallet.name
+        ]
         main()
         self.assertTrue(os.path.isfile(self.c_org_manager.build_file))
         contract = self.c_org_manager.contract
         self.assertTrue(len(contract.find_functions_by_name('buy')))
-
 
     def test_deploy_default_wallet(self):
         Vault().default_wallet().add_ether(init_ether)
@@ -65,34 +66,24 @@ class TestDeploy(TestBase):
         config_file = os.path.join(self.my_co_path, "config.yaml")
         wallet = Vault().create_wallet('poor-wallet')
         command = [exe_cli, "deploy", config_file, "--wallet", wallet.name]
-        p = subprocess.Popen(command,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
+        p = subprocess.Popen(
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (out, err) = p.communicate()
         self.assertEqual(out, b'')
         self.assertIn(wallet.address.encode('utf-8'), err)
 
-    def test_no_enough_funds(self):
-        config_file = os.path.join(self.my_co_path, "config.yaml")
-        wallet = Vault().create_wallet('poor-wallet')
-        command = [exe_cli, "deploy", config_file, "--wallet", wallet.name]
-        p = subprocess.Popen(command,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-        (out, err) = p.communicate()
-        self.assertEqual(out, b'')
-        self.assertIn(wallet.address.encode('utf-8'), err)
 
 
 class TestCommandWallet(TestBase):
-
     def setUp(self):
         self.generate_c_org()
         self.generate_manager()
 
     def test_add_wallet(self):
-        sys.argv = [exe_cli] + ["wallet", "add", "test",
-                                utils.generate_random_private_key()]
+        sys.argv = [exe_cli] + [
+            "wallet", "add", "test",
+            utils.generate_random_private_key()
+        ]
         main()
         self.assertTrue(Vault().exist_wallet("test"))
 
@@ -123,7 +114,6 @@ class TestCommandWallet(TestBase):
 
 
 class TestOtherCommands(TestBase):
-
     def setUp(self):
         self.generate_c_org()
         self.generate_manager()
@@ -131,16 +121,20 @@ class TestOtherCommands(TestBase):
         self.c_org_manager.deploy(self.wallet)
 
     def test_buy(self):
-        sys.argv = [exe_cli] + [ "buy", "my-co",  "--wallet", self.wallet.name, "--amount", "0.1"]
+        sys.argv = [exe_cli] + [
+            "buy", "my-co", "--wallet", self.wallet.name, "--amount", "0.1"
+        ]
         main()
 
     def test_sell(self):
         self.c_org_manager.buy(0.1, self.wallet)
-        sys.argv = [exe_cli] + ["sell", "my-co", "--wallet", self.wallet.name, "--amount", "1"]
+        sys.argv = [exe_cli] + [
+            "sell", "my-co", "--wallet", self.wallet.name, "--amount", "1"
+        ]
         main()
 
     def test_revenue(self):
-        sys.argv = [exe_cli] + ["revenue",  "my-co", "--revenue", "0.1"]
+        sys.argv = [exe_cli] + ["revenue", "my-co", "--revenue", "0.1"]
         main()
 
     def test_stats(self):
@@ -149,7 +143,5 @@ class TestOtherCommands(TestBase):
         main()
 
 
-
-
 if __name__ == '__main__':
-   unittest.main()
+    unittest.main()

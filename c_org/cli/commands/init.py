@@ -14,7 +14,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''c_org wallet command line'''
 
 import logging
@@ -26,26 +25,29 @@ from c_org.manager import GlobalParams
 
 
 class COrgInit(COrgCommand):
-
     def __init__(self):
-        super().__init__(command_id='init', leaf=True,
-                         description='Initialize a Continuous Organisation')
+        super().__init__(
+            command_id='init',
+            leaf=True,
+            description='Initialize a Continuous Organisation')
         self.subcommand = True
 
     def run(self):
-        self.parser.add_argument('name',
-                                 help='Continuous Organisation\'s name',
-                                 type=str,
-                                 metavar="name")
-        self.parser.add_argument('--output',
-                                  help='Folder to save the continuous organisation',
-                                  type=str)
+        self.parser.add_argument(
+            'name',
+            help='Continuous Organisation\'s name',
+            type=str,
+            metavar="name")
+        self.parser.add_argument(
+            '--output',
+            help='Folder to save the continuous organisation',
+            type=str)
         self.parse_args()
         self.func = self.command_init
         self.run_command()
 
     def command_init(self):
-        directory = self.output if self.output else os.getcwd() 
+        directory = self.output if self.output else os.getcwd()
         global_params = GlobalParams()
         global_params.create_or_update(self.name, directory)
 
@@ -63,4 +65,6 @@ initial_tokens: 1000000 # the number of tokens initially available
         with open(c_org_manager.param_file, 'w+') as f:
             f.write(configs)
 
-        logging.info("Please configure your continuous organisation in the file {}".format(c_org_manager.param_file))
+        logging.info(
+            "Please configure your continuous organisation in the file {}".
+            format(c_org_manager.param_file))

@@ -27,13 +27,12 @@ try:
 except:
     import pickle
 
-
-
 rootdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def clean_name(name):
-    return re.sub('\W+','', name.lower())
+    return re.sub('\W+', '', name.lower())
+
 
 def get_c_org_path():
     """ Folder containing the Continuous Organisations' configuration file """
@@ -42,20 +41,28 @@ def get_c_org_path():
     #    os.makedirs(path)
     return path
 
+
 def get_default_path(name):
     name = clean_name(name)
     return os.path.join(get_c_org_path(), name)
 
+
 def get_source_file():
-    return os.path.join(get_c_org_path(), "contracts", "ContinuousOrganisation.sol")
+    return os.path.join(get_c_org_path(), "contracts",
+                        "ContinuousOrganisation.sol")
+
 
 def get_vault_file():
     return os.path.join(get_c_org_path(), "vault.yaml")
 
+
 def get_global_params_file():
     return os.path.join(get_c_org_path(), "global.yaml")
 
+
 hex = "0123456789ABCDEF"
+
+
 def generate_random_private_key():
     ''' Create a random private key
 
@@ -68,15 +75,14 @@ def generate_random_private_key():
 
 
 class Wallet(object):
-
     def __init__(self, name="", address="", private_key=""):
         self.private_key = private_key
         if address:
             self.address = address
         else:
-            self.address = web3.eth.Account.privateKeyToAccount(private_key).address
+            self.address = web3.eth.Account.privateKeyToAccount(
+                private_key).address
         self.name = name if name != "" else self.address
-
 
     @property
     def balance(self):
@@ -94,22 +100,24 @@ class Wallet(object):
         sender = w3.eth.coinbase
         if amount > w3.eth.getBalance(sender):
             raise ValueError("The sender does not have enough coins.")
-        w3.eth.sendTransaction({'from': sender,
-                                  'to': self.address,
-                                  'value': amount})
+        w3.eth.sendTransaction({
+            'from': sender,
+            'to': self.address,
+            'value': amount
+        })
 
     @classmethod
     def from_dict(cls, dict):
-        return cls(dict.get('name'),
-                   dict.get('address'),
-                   dict.get('private_key'))
+        return cls(
+            dict.get('name'), dict.get('address'), dict.get('private_key'))
 
     @staticmethod
     def to_dict(wallet):
         return vars(wallet)
 
     def __repr__(self):
-        return "<class 'Wallet': name={}, address={}, private_key={}>".format(self.name, self.address, self.private_key)
+        return "<class 'Wallet': name={}, address={}, private_key={}>".format(
+            self.name, self.address, self.private_key)
 
 
 class RestrictedUnpickler(pickle.Unpickler):
@@ -125,8 +133,9 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "builtins" and name in self.safe_builtins:
             return getattr(builtins, name)
         # Forbid everything else.
-        raise pickle.UnpicklingError("global '%s.%s' is forbidden" %
-                                     (module, name))
+        raise pickle.UnpicklingError(
+            "global '%s.%s' is forbidden" % (module, name))
+
 
 def restricted_unpickle(filename):
     """Helper function analogous to pickle.load()."""
@@ -134,17 +143,16 @@ def restricted_unpickle(filename):
         return RestrictedUnpickler(f).load()
 
 
-
 class BaseError(Exception):
     """Base class for exceptions in this module."""
     pass
+
 
 class ConfigurationError(BaseError):
     """
     Configuration could not be parsed or has otherwise failed to apply
     """
     pass
-
 
 
 if __name__ == "__main__":

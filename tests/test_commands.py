@@ -73,6 +73,7 @@ class TestDeploy(TestBase):
         self.assertIn(wallet.address.encode('utf-8'), err)
 
 
+
 class TestCommandWallet(TestBase):
     def setUp(self):
         self.generate_c_org()

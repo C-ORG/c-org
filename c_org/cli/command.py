@@ -25,6 +25,7 @@ import c_org.utils as utils
 
 class COrgCommand(argparse.Namespace):
     def __init__(self, command_id, description, testing=False, leaf=False):
+        utils.check_files()
         self.command_id = command_id
         self.description = description
         self.testing = testing

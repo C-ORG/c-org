@@ -17,6 +17,7 @@
 
 import sys
 import os
+import shutil
 import argparse
 import re
 import random
@@ -158,3 +159,25 @@ class ConfigurationError(BaseError):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+
+
+def check_files():
+    c_org = os.path.join(os.path.expanduser("~"), '.c-org/')
+    if not os.path.isdir(c_org):
+        os.makedirs(c_org)
+    contracts = os.path.join(c_org, "contracts")
+    if not os.path.isdir(contracts):
+        os.makedirs(contracts)
+        contract = os.path.join(rootdir, "contracts", "ContinuousOrganisation.sol")
+        shutil.copy(contract, contracts)
+    vault_file = os.path.join(c_org, "vault.yaml")
+    if not os.path.isfile(vault_file):
+        with open(vault_file, 'w+') as f:
+            f.write('''infura: ~
+wallets: []''')
+    global_file = os.path.join(c_org, "global.yaml")
+    if not os.path.isfile(global_file):
+        with open(global_file, 'w+') as f:
+            f.write('c-orgs: []')
+
+

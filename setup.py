@@ -3,24 +3,9 @@ from setuptools.command.develop import develop
 from setuptools.command.install import install
 import shutil
 import os
-
-
-def check_files():
-    c_org = os.path.join(os.path.expanduser("~"), '.c-org/')
-    if not os.path.isdir(c_org):
-        os.makedirs(c_org)
-    contracts = os.path.join(c_org, "contracts")
-    if not os.path.isdir(contracts):
-        os.makedirs(contracts)
-    rootdir = os.path.dirname(os.path.abspath(__file__))
-    contract = os.path.join(rootdir, "contracts", "ContinuousOrganisation.sol")
-    shutil.copy(contract, contracts)
-    with open(os.path.join(c_org, "vault.yaml"), 'w+') as f:
-        f.write('''infura: ~
-wallets: []''')
-    with open(os.path.join(c_org, "global.yaml"), 'w+') as f:
-        f.write('c-orgs: []')
-
+import sys
+sys.path.append("c_org")
+from utils import check_files
 
 class PostDevelopCommand(develop):
     """Post-installation for development mode.

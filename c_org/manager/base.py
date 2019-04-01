@@ -19,7 +19,7 @@
 '''c-org base manager'''
 
 import yaml
-from c_org.utils import get_c_org_path
+from c_org.utils import get_c_org_path, check_files
 import os
 
 
